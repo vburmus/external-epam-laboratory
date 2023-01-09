@@ -32,7 +32,7 @@ public class GiftCertificateService {
             return result;
 
         } else
-            throw new Exception("Such certificate has already existed");
+            throw new ServerException("Such certificate has already existed");
 
     }
 
@@ -40,7 +40,7 @@ public class GiftCertificateService {
         if (giftCertificateRepository.deleteGiftCertificate(id))
             return true;
         else
-            throw new Exception("There is no such certificate");
+            throw new ServerException("There is no such certificate");
 
     }
     public List<GiftCertificate> getAllGiftCertificates(){
@@ -51,8 +51,15 @@ public class GiftCertificateService {
         if(giftCertificateRepository.updateGiftCertificate(id,updatedGiftCertificate))
             return true;
         else
-            throw new Exception("There is no such certificate");
+            throw new ServerException("There is no such certificate");
 
+    }
+    public GiftCertificate getCertificateById(long id) throws Exception {
+        GiftCertificate giftCertificate = giftCertificateRepository.getGiftCertificateByID(id);
+        if (!giftCertificate.equals(null)) {
+            return giftCertificate;
+        }
+        throw new Exception("There are no gift certificate with id= " + id);
     }
 
 }
