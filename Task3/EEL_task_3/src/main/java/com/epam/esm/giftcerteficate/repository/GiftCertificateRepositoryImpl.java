@@ -51,7 +51,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository{
 
     @Override
     public boolean isGiftCertificateExist(GiftCertificate giftCertificate) {
-        GiftCertificate g = giftCertificate;
+
         return jdbcTemplate.queryForObject(AppQuery.GiftCertificate.IS_CERTIFICATE_EXISTS,Integer.class,
                 new Object[]{giftCertificate.getName(),giftCertificate.getDescription(),giftCertificate.getPrice(),giftCertificate.getDuration()})==1;
 

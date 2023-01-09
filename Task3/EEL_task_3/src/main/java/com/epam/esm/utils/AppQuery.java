@@ -6,7 +6,7 @@ public class AppQuery {
         public static final String DELETE_TAG = "DELETE  FROM tag WHERE id=?";
         public static final String GET_ALL_TAGS = "SELECT * FROM tag";
         public static final String GET_TAG_BY_ID = "SELECT * FROM tag WHERE id = ?";
-        public static final String IS_TAG_EXISTS = "SELECT EXISTS(SELECT * FROM tag WHERE name=?)";
+        public static final String IS_TAG_EXISTS = "SELECT count(*) FROM tag WHERE name=?)";
         public static final String GET_TAGS_ID = "SELECT id FROM tag WHERE name = ?";
 
 
