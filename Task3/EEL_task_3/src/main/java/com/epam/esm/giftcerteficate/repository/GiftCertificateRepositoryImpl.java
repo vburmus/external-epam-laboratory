@@ -28,7 +28,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository{
                 giftCertificate.getDescription(),
                 giftCertificate.getPrice(),
                 //TODO duration
-                1,
+                giftCertificate.getDuration(),
                 createTime,
                 updateTime)==1;
     }
@@ -51,6 +51,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository{
 
     @Override
     public boolean isGiftCertificateExist(GiftCertificate giftCertificate) {
+        GiftCertificate g = giftCertificate;
         return jdbcTemplate.queryForObject(AppQuery.GiftCertificate.IS_CERTIFICATE_EXISTS,Integer.class,
                 new Object[]{giftCertificate.getName(),giftCertificate.getDescription(),giftCertificate.getPrice(),giftCertificate.getDuration()})==1;
 
@@ -63,9 +64,9 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository{
 
     @Override
     public boolean updateGiftCertificate(long id, GiftCertificate updatedGiftCertificate) {
-        return jdbcTemplate.update("UPDATE certificate SET name = ?, description = ?, price = ?, duration = ? WHERE id = ?",updatedGiftCertificate.getName(),updatedGiftCertificate.getDescription(),updatedGiftCertificate.getPrice(),updatedGiftCertificate.getDuration(),id)==1;
+        return jdbcTemplate.update(AppQuery.GiftCertificate.UPDATE_CERTIFICATE,updatedGiftCertificate.getName(),updatedGiftCertificate.getDescription(),updatedGiftCertificate.getPrice(),updatedGiftCertificate.getDuration(),LocalDateTime.now(),id)==1;
     }
-
+//TODO
     @Override
     public boolean deleteTagDependencyForGiftCertificate(List<Long> tags, long giftCertificateID) {
         return false;

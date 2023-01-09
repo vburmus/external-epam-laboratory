@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<form th:method="POST" th:action="@{/certificate}" th:object="${certificate}">
+<form th:method="POST" th:action="@{/certificate/new}" th:object="${certificate}">
   <br/>
   <label for="name">Enter name: </label>
   <input type="text" th:field="*{name}" id="name"/>
@@ -16,6 +16,9 @@
   <br/>
   <label for="price">Enter price: </label>
   <input type="text" th:field="*{price}" id="price"/>
+  <br/>
+  <label for="duration">Enter duration: </label>
+  <input type="text" th:field="*{duration}" id="duration"/>
 
 
   <br/>

@@ -13,11 +13,12 @@ public class AppQuery {
     }
     public static class GiftCertificate{
         public static final String CREATE_CERTIFICATE = "INSERT INTO gift_certificate(name,description,price,duration,create_date,last_update_date) VALUES(?,?,?,?,?,?)";
-        public static final String GET_ALL_CERTIFICATES = "SELECT * FROM certificate";
-        public static final String GET_CERTIFICATE_BY_ID = "SELECT * FROM certificate WHERE id=?";
+        public static final String GET_ALL_CERTIFICATES = "SELECT * FROM gift_certificate";
+        public static final String GET_CERTIFICATE_BY_ID = "SELECT * FROM gift_certificate WHERE id=?";
         public static final String DELETE_CERTIFICATE_BY_ID = "DELETE FROM gift_certificate WHERE id=?";
         public static final String GET_CERTIFICATES_ID = "SELECT id FROM gift_certificate WHERE name = ? AND description = ? AND price = ? AND duration = ?";
-        public static final String IS_CERTIFICATE_EXISTS = "SELECT count(*) FROM certificate WHERE name = ? AND description = ? AND price = ? AND duration = ?";
+        public static final String IS_CERTIFICATE_EXISTS = "SELECT count(*) FROM gift_certificate WHERE name = ? AND description = ? AND price = ? AND duration = ?";
+        public static final String UPDATE_CERTIFICATE = "UPDATE certificate SET name = ?, description = ?, price = ?, duration = ?,last_update_date = ? WHERE id = ?";
     }
 
 }

@@ -5,6 +5,13 @@
   <title>New certificate</title>
 </head>
 <body>
-<p>Certificate</p>
+<p>Certificates</p>
+<div th:each="certificate:${certificates}">
+  <h4 th:text="${certificate.getId()}">certificate</h4>
+  <form th:method="DELETE" th:action="@{/certificate/{id}(id =${certificate.getId()})}">
+    <input type="submit" value="Delete!"/>
+  </form>
+
+</div>
 </body>
 </html>
