@@ -1,5 +1,5 @@
 <html>
 <body>
-<h2>Hello World!</h2>
+<h2><a href="/certificate/new">Hello World!</a></h2>
 </body>
 </html>
