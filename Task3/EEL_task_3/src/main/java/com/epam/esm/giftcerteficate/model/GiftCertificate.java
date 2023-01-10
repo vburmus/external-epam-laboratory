@@ -19,70 +19,90 @@ public class GiftCertificate {
     private String createDate;
     private String lastUpdateDate;
 
+    public GiftCertificate() {
+    }
+
+    public GiftCertificate(Long id, String name, List<Tag> tags, String description, Integer price, Integer duration) {
+        this.id = id;
+        this.name = name;
+        this.tags = tags;
+        this.description = description;
+        this.price = price;
+        this.duration = duration;
+    }
+
+
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public GiftCertificate setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public GiftCertificate setName(String name) {
         this.name = name;
+        return this;
     }
 
     public List<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(List<Tag> tags) {
+    public GiftCertificate setTags(List<Tag> tags) {
         this.tags = tags;
+        return this;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public GiftCertificate setDescription(String description) {
         this.description = description;
+        return this;
     }
 
     public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public GiftCertificate setPrice(Integer price) {
         this.price = price;
+        return this;
     }
 
     public Integer getDuration() {
         return duration;
     }
 
-    public void setDuration(Integer duration) {
+    public GiftCertificate setDuration(Integer duration) {
         this.duration = duration;
+        return this;
     }
 
     public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(String createDate) {
+    public GiftCertificate setCreateDate(String createDate) {
         this.createDate = createDate;
+        return this;
     }
 
     public String getLastUpdateDate() {
         return lastUpdateDate;
     }
 
-    public void setLastUpdateDate(String lastUpdateDate) {
+    public GiftCertificate setLastUpdateDate(String lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
+        return this;
     }
-
     private String moveDateToISO(Date date){
         TimeZone tz = TimeZone.getTimeZone("UTC");
         DateFormat df = new SimpleDateFormat("yyy-MM-dd'T'HH:mm:'Z'");
