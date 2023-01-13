@@ -1,9 +1,9 @@
-package com.epam.esm.giftcerteficate.controller;
+package com.epam.esm.giftcertificate.controller;
 
 
-import com.epam.esm.giftcerteficate.model.GiftCertificate;
+import com.epam.esm.giftcertificate.model.GiftCertificate;
 
-import com.epam.esm.giftcerteficate.service.GiftCertificateService;
+import com.epam.esm.giftcertificate.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +17,7 @@ import java.util.Map;
 @RequestMapping(value ="/certificate",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class GiftCertificateController {
     private final GiftCertificateService giftCertificateService;
+
 
     @Autowired
     public GiftCertificateController(GiftCertificateService giftCertificateService) {
@@ -46,9 +47,8 @@ public class GiftCertificateController {
     }
     //TODO
     @PatchMapping("/{id}")
-    public String updateCertificate(@PathVariable("id") long id) throws Exception {
-       //TODO TODO
-        return "redirect:/certificate";
+    public ResponseEntity<?> updateCertificate(@PathVariable("id") long id, @RequestBody Map<String,String> updatedGiftCertificate) throws Exception {
+        return ResponseEntity.ok(Map.of("result",giftCertificateService.updateCertificate(id, updatedGiftCertificate)));
     }
 
 
