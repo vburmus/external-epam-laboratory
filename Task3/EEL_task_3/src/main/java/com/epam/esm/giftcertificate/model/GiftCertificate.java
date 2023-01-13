@@ -1,4 +1,4 @@
-package com.epam.esm.giftcerteficate.model;
+package com.epam.esm.giftcertificate.model;
 
 import com.epam.esm.tag.model.Tag;
 

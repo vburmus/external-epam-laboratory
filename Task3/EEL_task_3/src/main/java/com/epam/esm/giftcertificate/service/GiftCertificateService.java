@@ -1,36 +1,36 @@
-package com.epam.esm.giftcerteficate.service;
+package com.epam.esm.giftcertificate.service;
 
-import com.epam.esm.giftcerteficate.model.GiftCertificate;
-import com.epam.esm.giftcerteficate.repository.GiftCertificateRepository;
+import com.epam.esm.giftcertificate.model.GiftCertificate;
+import com.epam.esm.giftcertificate.repository.GiftCertificateRepository;
+import com.epam.esm.tag.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.rmi.ServerException;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class GiftCertificateService {
-    private GiftCertificateRepository giftCertificateRepository;
+    private final GiftCertificateRepository giftCertificateRepository;
+    private final TagService tagService;
     //TODO
     @Autowired
-    public GiftCertificateService(GiftCertificateRepository giftCertificateRepository) {
+    public GiftCertificateService(GiftCertificateRepository giftCertificateRepository, TagService tagService) {
         this.giftCertificateRepository = giftCertificateRepository;
-
+        this.tagService = tagService;
     }
-    /*@Transactional*/
+    @Transactional
     public boolean createCertificate(GiftCertificate giftCertificate) throws Exception {
         if (!giftCertificateRepository.isGiftCertificateExist(giftCertificate)) {
-            boolean result = giftCertificateRepository.createGiftCertificate(giftCertificate);
-
-           /* if (giftCertificate.getTags() != null) {
-                tagService.isTagsExistOrElseCreate(giftCertificate.getTags());
-
-                List<Long> listTagsId = tagService.getTagsIdByTags(giftCertificate.getTags());
-                giftCertificateRepository.createGiftCertificateTagRelationship(listTagsId, getGiftCertificateId(giftCertificate));
-            }*/
-            return result;
-
+             boolean res = giftCertificateRepository.createGiftCertificate(giftCertificate);
+             if(res) {
+                 List<Long> listTagsId = tagService.getTagsIds(giftCertificate.getTags());
+                 giftCertificateRepository.createTagDependenciesForGiftCertificate(listTagsId, giftCertificateRepository.getGiftCertificatesID(giftCertificate));
+                 return res;
+             }
+             throw new Exception();
         } else
             throw new ServerException("Such certificate has already existed");
 
@@ -46,9 +46,9 @@ public class GiftCertificateService {
     public List<GiftCertificate> getAllGiftCertificates(){
         return giftCertificateRepository.getAllGiftCertificates();
     }
-
-    public boolean updateCertificate(long id,GiftCertificate updatedGiftCertificate) throws Exception {
-        if(giftCertificateRepository.updateGiftCertificate(id,updatedGiftCertificate))
+//TODO
+    public boolean updateCertificate(long id, Map<String,String> updateMap) throws Exception {
+        if(giftCertificateRepository.updateGiftCertificate(id,updateMap))
             return true;
         else
             throw new Error("There is no such certificate");
