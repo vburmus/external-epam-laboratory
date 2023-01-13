@@ -6,7 +6,7 @@ public class AppQuery {
         public static final String DELETE_TAG = "DELETE  FROM tag WHERE id=?";
         public static final String GET_ALL_TAGS = "SELECT * FROM tag";
         public static final String GET_TAG_BY_ID = "SELECT * FROM tag WHERE id = ?";
-        public static final String IS_TAG_EXISTS = "SELECT count(*) FROM tag WHERE name=?)";
+        public static final String IS_TAG_EXISTS = "SELECT count(*) FROM tag WHERE name=?";
         public static final String GET_TAGS_ID = "SELECT id FROM tag WHERE name = ?";
 
 
@@ -18,7 +18,10 @@ public class AppQuery {
         public static final String DELETE_CERTIFICATE_BY_ID = "DELETE FROM gift_certificate WHERE id=?";
         public static final String GET_CERTIFICATES_ID = "SELECT id FROM gift_certificate WHERE name = ? AND description = ? AND price = ? AND duration = ?";
         public static final String IS_CERTIFICATE_EXISTS = "SELECT count(*) FROM gift_certificate WHERE name = ? AND description = ? AND price = ? AND duration = ?";
-        public static final String UPDATE_CERTIFICATE = "UPDATE certificate SET name = ?, description = ?, price = ?, duration = ?,last_update_date = ? WHERE id = ?";
+        public static final String UPDATE_CERTIFICATE = "UPDATE gift_certificate SET";
     }
-
+    public static class GiftCertificateHasTag{
+        public final static String ADD_CERTIFICATE_TO_TAG = "INSERT INTO gift_certificate_has_tag (gift_certificate_id,tag_id) VALUES (?,?)";
+        public final static String DELETE_CERTIFICATE_FROM_TAG = "DELETE  FROM gift_certificate_has_tag WHERE gift_certificate_id = ? AND tag_id = ?";
+    }
 }
