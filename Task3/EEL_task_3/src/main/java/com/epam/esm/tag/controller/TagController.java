@@ -34,7 +34,6 @@ public class TagController {
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") long id) throws Exception {
-
             tagService.deleteTag(id);
             return new ResponseEntity<>(Map.of("status", HttpStatus.NO_CONTENT), HttpStatus.NO_CONTENT);
 
