@@ -2,8 +2,10 @@ package com.epam.esm.tag.service;
 
 import com.epam.esm.tag.model.Tag;
 import com.epam.esm.tag.repository.TagRepository;
+import com.epam.esm.utils.datavalidation.ParamsValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.ArrayList;
@@ -18,14 +20,16 @@ public class TagService {
     public TagService(TagRepository tagRepository) {
         this.tagRepository = tagRepository;
     }
-
+    @Transactional
     public boolean createTag(Tag tag) {
         if (!tagRepository.isTagExists(tag.getName())) {
-            return tagRepository.createTag(tag);
-        } else {
+            if(ParamsValidation.isTagValid(tag))
+                return tagRepository.createTag(tag);
+            throw new Error("Tag isnt valid");
+        } else
             //TODO
             throw new Error("This tag has already existed");
-        }
+
     }
 
     public List<Tag> getAllTags() {

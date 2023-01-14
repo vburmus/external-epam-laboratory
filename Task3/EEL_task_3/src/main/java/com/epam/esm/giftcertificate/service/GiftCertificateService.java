@@ -29,15 +29,15 @@ public class GiftCertificateService {
     }
 
     @Transactional
-    public boolean createCertificate(GiftCertificate giftCertificate) throws Exception {
+    public boolean createCertificate(GiftCertificate giftCertificate)  {
         if (!giftCertificateRepository.isGiftCertificateExist(giftCertificate)) {
-            boolean res = giftCertificateRepository.createGiftCertificate(giftCertificate);
-            if (res) {
-                List<Long> listTagsId = tagService.getTagsIds(giftCertificate.getTags());
-                giftCertificateRepository.createTagDependenciesForGiftCertificate(listTagsId, giftCertificateRepository.getGiftCertificatesID(giftCertificate));
-                return res;
+            if(ParamsValidation.isValidCertificate(giftCertificate)) {
+                    giftCertificateRepository.createGiftCertificate(giftCertificate);
+                    List<Long> listTagsId = tagService.getTagsIds(giftCertificate.getTags());
+                    giftCertificateRepository.createTagDependenciesForGiftCertificate(listTagsId, giftCertificateRepository.getGiftCertificatesID(giftCertificate));
+                    return true;
             }
-            throw new Exception();
+            throw new Error("Error fields in certificate");
         } else throw new Error("Such certificate has already existed");
 
     }
@@ -90,7 +90,7 @@ public class GiftCertificateService {
         throw new Error("Check your params");
     }
 
-    public GiftCertificate getCertificateById(long id) throws Exception {
+    public GiftCertificate getCertificateById(long id)  {
 
         GiftCertificate giftCertificate = giftCertificateRepository.getGiftCertificateByID(id);
         if (giftCertificate == null)

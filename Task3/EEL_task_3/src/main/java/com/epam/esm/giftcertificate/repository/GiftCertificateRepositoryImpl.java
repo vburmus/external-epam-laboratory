@@ -67,7 +67,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     public boolean updateGiftCertificate(long id, Map<String, String> updatedGiftCertificate) {
         StringBuilder updateQuery = new StringBuilder(AppQuery.GiftCertificate.UPDATE_CERTIFICATE);
         List<String> updateValues = new ArrayList<>();
-        updatedGiftCertificate.forEach((key,value) -> {
+        updatedGiftCertificate.forEach((key, value) -> {
             updateQuery.append(" ").append(key).append("= ?,");
             updateValues.add(value);
         });
@@ -89,19 +89,17 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     @Override
     public void deleteTagDependenciesForGiftCertificate(List<Long> tags, long giftCertificateID) {
         tags.forEach(tagID -> deleteTagDependency(giftCertificateID, tagID));
-
     }
-
 
     @Override
     public void createTagDependenciesForGiftCertificate(List<Long> tags, long giftCertificateID) {
-
         tags.forEach(tagID -> {
             addTagDependency(giftCertificateID, tagID);
         });
     }
+
     @Override
     public List<Tag> getAllTagsIdByCertificateId(long id) {
-        return jdbcTemplate.query(AppQuery.GiftCertificateHasTag.GET_ALL_TAGS_BY_CERTIFICATE_ID,new Long[]{id}, new BeanPropertyRowMapper<>(Tag.class));
+        return jdbcTemplate.query(AppQuery.GiftCertificateHasTag.GET_ALL_TAGS_BY_CERTIFICATE_ID, new Long[]{id}, new BeanPropertyRowMapper<>(Tag.class));
     }
 }
