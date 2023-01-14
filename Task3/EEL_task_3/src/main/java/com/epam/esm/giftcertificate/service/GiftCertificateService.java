@@ -1,7 +1,7 @@
 package com.epam.esm.giftcertificate.service;
 
 import com.epam.esm.exceptionhandler.exceptions.NoSuchItemException;
-import com.epam.esm.exceptionhandler.exceptions.ObjectAlreadyExists;
+import com.epam.esm.exceptionhandler.exceptions.ObjectAlreadyExistsException;
 import com.epam.esm.exceptionhandler.exceptions.ObjectIsInvalidException;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.giftcertificate.repository.GiftCertificateRepository;
@@ -37,7 +37,7 @@ public class GiftCertificateService {
             }
             throw new ObjectIsInvalidException("Gift certificate with id = " + giftCertificate.getName() + ", duration = " + giftCertificate.getDuration() + "is invalid, please check your params");
         } else
-            throw new ObjectAlreadyExists("Gift certificate with id = " + giftCertificate.getName() + ", duration = " + giftCertificate.getDuration() + " already exists");
+            throw new ObjectAlreadyExistsException("Gift certificate with id = " + giftCertificate.getName() + ", duration = " + giftCertificate.getDuration() + " already exists");
 
     }
 
