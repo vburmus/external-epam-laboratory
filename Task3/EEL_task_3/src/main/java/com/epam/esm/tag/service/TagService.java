@@ -1,5 +1,8 @@
 package com.epam.esm.tag.service;
 
+import com.epam.esm.exceptionhandler.exceptions.NoSuchItemException;
+import com.epam.esm.exceptionhandler.exceptions.ObjectAlreadyExists;
+import com.epam.esm.exceptionhandler.exceptions.ObjectIsUnvalidException;
 import com.epam.esm.tag.model.Tag;
 import com.epam.esm.tag.repository.TagRepository;
 import com.epam.esm.utils.datavalidation.ParamsValidation;
@@ -25,10 +28,9 @@ public class TagService {
         if (!tagRepository.isTagExists(tag.getName())) {
             if(ParamsValidation.isTagValid(tag))
                 return tagRepository.createTag(tag);
-            throw new Error("Tag isnt valid");
+            throw new ObjectIsUnvalidException("Tag with name = " + tag.getName() + " isn't valid");
         } else
-            //TODO
-            throw new Error("This tag has already existed");
+            throw new ObjectAlreadyExists("Tag with name = " + tag.getName() + " already exists");
 
     }
 
@@ -36,12 +38,12 @@ public class TagService {
         return tagRepository.getAllTags();
     }
 
-    public Tag getTagById(long id) throws Exception {
+    public Tag getTagById(long id) {
         Tag tag = tagRepository.getTagByID(id);
         if (!tag.equals(null))
             return tag;
         else
-            throw new Exception("There are no tags with id= " + id);
+            throw new NoSuchItemException( "Tag with id = " + id + "doesn't exist");
     }
     public List<Tag> getTagsByNames(List<String> names) throws Exception {
         List<Tag> tags = new ArrayList<>();
@@ -53,14 +55,14 @@ public class TagService {
         if (!tags.isEmpty())
             return tags;
         else
-            throw new Exception("There are no tags with any of this names " + names.toArray());
+            throw new NoSuchItemException("There are no tags with any of this names " + names.toArray());
     }
 
     public boolean deleteTag(long id) throws Exception {
         if (tagRepository.deleteTagByID(id)) {
             return true;
         }
-        throw new Exception("There is no tag with id= " + id);
+        throw new NoSuchItemException("There is no tag with id= " + id);
     }
 
     public long getTagsID(Tag tag) {
