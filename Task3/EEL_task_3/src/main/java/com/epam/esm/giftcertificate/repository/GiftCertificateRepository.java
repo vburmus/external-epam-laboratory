@@ -1,6 +1,7 @@
 package com.epam.esm.giftcertificate.repository;
 
 import com.epam.esm.giftcertificate.model.GiftCertificate;
+import com.epam.esm.tag.model.Tag;
 
 import java.util.List;
 import java.util.Map;
@@ -23,4 +24,5 @@ public interface GiftCertificateRepository {
     boolean isGiftCertificateExist(GiftCertificate giftCertificate);
     long getGiftCertificatesID(GiftCertificate giftCertificate);
 
+    List<Tag> getAllTagsIdByCertificateId(long id);
 }

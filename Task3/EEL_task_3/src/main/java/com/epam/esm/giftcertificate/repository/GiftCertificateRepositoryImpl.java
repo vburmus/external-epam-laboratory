@@ -1,6 +1,7 @@
 package com.epam.esm.giftcertificate.repository;
 
 import com.epam.esm.giftcertificate.model.GiftCertificate;
+import com.epam.esm.tag.model.Tag;
 import com.epam.esm.utils.AppQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -91,8 +92,16 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
 
     }
 
+
     @Override
     public void createTagDependenciesForGiftCertificate(List<Long> tags, long giftCertificateID) {
-        tags.forEach(tagID -> addTagDependency(giftCertificateID, tagID));
+
+        tags.forEach(tagID -> {
+            addTagDependency(giftCertificateID, tagID);
+        });
+    }
+    @Override
+    public List<Tag> getAllTagsIdByCertificateId(long id) {
+        return jdbcTemplate.query(AppQuery.GiftCertificateHasTag.GET_ALL_TAGS_BY_CERTIFICATE_ID,new Long[]{id}, new BeanPropertyRowMapper<>(Tag.class));
     }
 }
