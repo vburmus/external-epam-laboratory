@@ -12,6 +12,9 @@ public interface TagRepository {
     Tag getTagByID(long id);
     List<Tag> getAllTagsByCertificateID(long id);
     long getTagsID(Tag tag);
+
+    Tag getTagByName(String name);
+
     boolean deleteTagByID(long id);
 
     boolean isTagExists(String tagName);

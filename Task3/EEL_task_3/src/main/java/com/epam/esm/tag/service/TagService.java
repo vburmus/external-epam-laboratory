@@ -5,7 +5,7 @@ import com.epam.esm.tag.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.rmi.ServerException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,12 +19,12 @@ public class TagService {
         this.tagRepository = tagRepository;
     }
 
-    public boolean createTag(Tag tag) throws ServerException {
+    public boolean createTag(Tag tag) {
         if (!tagRepository.isTagExists(tag.getName())) {
             return tagRepository.createTag(tag);
         } else {
             //TODO
-            throw new ServerException("This tag has already existed");
+            throw new Error("This tag has already existed");
         }
     }
 
@@ -39,6 +39,18 @@ public class TagService {
         else
             throw new Exception("There are no tags with id= " + id);
     }
+    public List<Tag> getTagsByNames(List<String> names) throws Exception {
+        List<Tag> tags = new ArrayList<>();
+        for(String name :names) {
+            Tag tag = tagRepository.getTagByName(name);
+            if(tag!=null)
+                tags.add(tag);
+        }
+        if (!tags.isEmpty())
+            return tags;
+        else
+            throw new Exception("There are no tags with any of this names " + names.toArray());
+    }
 
     public boolean deleteTag(long id) throws Exception {
         if (tagRepository.deleteTagByID(id)) {
@@ -52,5 +64,17 @@ public class TagService {
     }
     public List<Long> getTagsIds(List<Tag> tags) {
          return tags.stream().map(tag -> getTagsID(tag)).collect(Collectors.toList());
+    }
+    public boolean isTagsExistOrElseCreate(List<Tag> tags)  {
+        for (Tag tag : tags) {
+            if (!isTagWithNameExists(tag.getName())) {
+                createTag(tag);
+            }
+        }
+        return true;
+    }
+
+    private boolean isTagWithNameExists(String name) {
+        return tagRepository.isTagExists(name);
     }
 }

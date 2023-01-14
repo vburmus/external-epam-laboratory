@@ -31,6 +31,11 @@ public class TagRepositoryImpl implements TagRepository{
         return jdbcTemplate.query(AppQuery.Tag.GET_TAG_BY_ID,new Object[]{id},new BeanPropertyRowMapper<>(Tag.class))
                 .stream().findAny().orElse(null);
     }
+    @Override
+    public Tag getTagByName(String name) {
+        return jdbcTemplate.query(AppQuery.Tag.GET_TAG_BY_NAME,new Object[]{name},new BeanPropertyRowMapper<>(Tag.class))
+                .stream().findAny().orElse(null);
+    }
 
     @Override
     public boolean deleteTagByID(long id) {
@@ -51,4 +56,5 @@ public class TagRepositoryImpl implements TagRepository{
     public List<Tag> getAllTagsByCertificateID(long id) {
         return null;
     }
+
 }
