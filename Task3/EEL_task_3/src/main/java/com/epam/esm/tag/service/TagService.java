@@ -45,7 +45,7 @@ public class TagService {
         else
             throw new NoSuchItemException( "Tag with id = " + id + "doesn't exist");
     }
-    public List<Tag> getTagsByNames(List<String> names) throws Exception {
+    public List<Tag> getTagsByNames(List<String> names)   {
         List<Tag> tags = new ArrayList<>();
         for(String name :names) {
             Tag tag = tagRepository.getTagByName(name);
@@ -58,7 +58,7 @@ public class TagService {
             throw new NoSuchItemException("There are no tags with any of this names " + names.toArray());
     }
 
-    public boolean deleteTag(long id) throws Exception {
+    public boolean deleteTag(long id) {
         if (tagRepository.deleteTagByID(id)) {
             return true;
         }
