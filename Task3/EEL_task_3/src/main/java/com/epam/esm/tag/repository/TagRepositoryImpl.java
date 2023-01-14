@@ -8,9 +8,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
 @Repository
-public class TagRepositoryImpl implements TagRepository{
+public class TagRepositoryImpl implements TagRepository {
     private final JdbcTemplate jdbcTemplate;
+
     @Autowired
     public TagRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -18,22 +20,23 @@ public class TagRepositoryImpl implements TagRepository{
 
     @Override
     public boolean createTag(Tag tag) {
-        return jdbcTemplate.update(AppQuery.Tag.CREATE_TAG, tag.getName()) == 1 ;
+        return jdbcTemplate.update(AppQuery.Tag.CREATE_TAG, tag.getName()) == 1;
     }
 
     @Override
     public List<Tag> getAllTags() {
-        return jdbcTemplate.query(AppQuery.Tag.GET_ALL_TAGS,new BeanPropertyRowMapper<>(Tag.class));
+        return jdbcTemplate.query(AppQuery.Tag.GET_ALL_TAGS, new BeanPropertyRowMapper<>(Tag.class));
     }
 
     @Override
     public Tag getTagByID(long id) {
-        return jdbcTemplate.query(AppQuery.Tag.GET_TAG_BY_ID,new Object[]{id},new BeanPropertyRowMapper<>(Tag.class))
+        return jdbcTemplate.query(AppQuery.Tag.GET_TAG_BY_ID, new Object[]{id}, new BeanPropertyRowMapper<>(Tag.class))
                 .stream().findAny().orElse(null);
     }
+
     @Override
     public Tag getTagByName(String name) {
-        return jdbcTemplate.query(AppQuery.Tag.GET_TAG_BY_NAME,new Object[]{name},new BeanPropertyRowMapper<>(Tag.class))
+        return jdbcTemplate.query(AppQuery.Tag.GET_TAG_BY_NAME, new Object[]{name}, new BeanPropertyRowMapper<>(Tag.class))
                 .stream().findAny().orElse(null);
     }
 
@@ -41,13 +44,15 @@ public class TagRepositoryImpl implements TagRepository{
     public boolean deleteTagByID(long id) {
         return jdbcTemplate.update(AppQuery.Tag.DELETE_TAG, id) == 1;
     }
+
     @Override
     public boolean isTagExists(String tagName) {
-        return jdbcTemplate.queryForObject(AppQuery.Tag.IS_TAG_EXISTS,Integer.class,new Object[]{tagName})==1;
+        return jdbcTemplate.queryForObject(AppQuery.Tag.IS_TAG_EXISTS, Integer.class, new Object[]{tagName}) == 1;
     }
+
     @Override
     public long getTagsID(Tag tag) {
-        return jdbcTemplate.queryForObject(AppQuery.Tag.GET_TAGS_ID,Long.class,new Object[]{tag.getName()});
+        return jdbcTemplate.queryForObject(AppQuery.Tag.GET_TAGS_ID, Long.class, new Object[]{tag.getName()});
     }
 
 //TODO
