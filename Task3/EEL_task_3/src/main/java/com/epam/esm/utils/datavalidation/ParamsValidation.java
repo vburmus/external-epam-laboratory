@@ -1,7 +1,9 @@
 package com.epam.esm.utils.datavalidation;
 
+import com.epam.esm.exceptionhandler.exceptions.ObjectIsInvalidException;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.tag.model.Tag;
+import org.springframework.lang.NonNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,12 +32,10 @@ public class ParamsValidation {
                 giftCertificate.getPrice() >= 0 && isCertificateHaveValidTags(giftCertificate.getTags());
     }
 
-    public static Optional<Map<String, String>> isPatchCertificateValid(GiftCertificate giftCertificate) {
+    public static Optional<Map<String, String>> isPatchCertificateValid(@NonNull GiftCertificate giftCertificate) {
 
         Map<String, String> map = new HashMap<>();
 
-
-        if (giftCertificate!=null) {
             if (giftCertificate.getName() != null)
                 map.put("name", giftCertificate.getName());
 
@@ -48,10 +48,12 @@ public class ParamsValidation {
             if (giftCertificate.getDuration() != null && giftCertificate.getDuration() >= 0)
                 map.put("duration", String.valueOf(giftCertificate.getDuration()));
 
-            return Optional.of(map);
-        }
-        //TODO error
-        throw new Error("Please check params for certificate id = " + giftCertificate.getId() );
+            if(map.isEmpty())
+                throw new ObjectIsInvalidException("Please check params for certificate name = " + giftCertificate.getName());
+
+             return Optional.of(map);
+
+
     }
 
 
