@@ -1,7 +1,7 @@
 package com.epam.esm.tag.service;
 
 import com.epam.esm.exceptionhandler.exceptions.NoSuchItemException;
-import com.epam.esm.exceptionhandler.exceptions.ObjectAlreadyExists;
+import com.epam.esm.exceptionhandler.exceptions.ObjectAlreadyExistsException;
 import com.epam.esm.exceptionhandler.exceptions.ObjectIsInvalidException;
 import com.epam.esm.tag.model.Tag;
 import com.epam.esm.tag.repository.TagRepository;
@@ -30,7 +30,7 @@ public class TagService {
                 return tagRepository.createTag(tag);
             throw new ObjectIsInvalidException("Tag with name = " + tag.getName() + " isn't valid");
         } else
-            throw new ObjectAlreadyExists("Tag with name = " + tag.getName() + " already exists");
+            throw new ObjectAlreadyExistsException("Tag with name = " + tag.getName() + " already exists");
 
     }
 
