@@ -45,10 +45,10 @@ public class GiftCertificateController {
     public ResponseEntity<?> getById(@PathVariable("id") long id) throws Exception {
             return ResponseEntity.ok(Map.of("gift certificate", giftCertificateService.getCertificateById(id)));
     }
-    //TODO
+
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateCertificate(@PathVariable("id") long id, @RequestBody Map<String,String> updatedGiftCertificate) throws Exception {
-        return ResponseEntity.ok(Map.of("result",giftCertificateService.updateCertificate(id, updatedGiftCertificate)));
+    public ResponseEntity<?> updateCertificate(@PathVariable("id") long id, @RequestBody GiftCertificate giftCertificate) throws Exception {
+        return ResponseEntity.ok(Map.of("result",giftCertificateService.updateCertificate(id, giftCertificate)));
     }
 
 
