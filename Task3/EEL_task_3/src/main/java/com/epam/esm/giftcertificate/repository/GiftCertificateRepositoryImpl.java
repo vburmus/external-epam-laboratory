@@ -93,9 +93,9 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
 
     @Override
     public void createTagDependenciesForGiftCertificate(List<Long> tags, long giftCertificateID) {
-        tags.forEach(tagID -> {
-            addTagDependency(giftCertificateID, tagID);
-        });
+        tags.forEach(tagID ->
+                addTagDependency(giftCertificateID, tagID)
+        );
     }
 
     @Override
