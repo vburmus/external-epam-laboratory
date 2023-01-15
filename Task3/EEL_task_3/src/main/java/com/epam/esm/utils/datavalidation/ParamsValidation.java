@@ -1,14 +1,13 @@
 package com.epam.esm.utils.datavalidation;
 
+import com.epam.esm.exceptionhandler.exceptions.NoSuchItemException;
 import com.epam.esm.exceptionhandler.exceptions.ObjectIsInvalidException;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.tag.model.Tag;
+import com.epam.esm.taggiftcertificate.direction.DirectionEnum;
 import org.springframework.lang.NonNull;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class ParamsValidation {
     public static boolean isTagValid(Tag tag) {
@@ -56,6 +55,16 @@ public class ParamsValidation {
 
     }
 
+    public static List<GiftCertificate> isCertificatesArentEmptyOrElseThrowNoSuchItem(List<GiftCertificate> giftCertificates, String message){
+        if(!giftCertificates.isEmpty())
+            return giftCertificates;
+        throw new NoSuchItemException(message);
+
+    }
+    public static  boolean isDirectionValid(String direction){
+            return direction.equals("ASC") || direction.equals("DESC");
+
+    }
 
 
 }
