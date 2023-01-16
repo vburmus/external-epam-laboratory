@@ -19,20 +19,19 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @ExceptionHandler(NoSuchItemException.class)
-    public ResponseEntity<Object> handleNoSuchItemException(RuntimeException ex, WebRequest request){
-        return handleExceptionInternal(ex,ex.getMessage(), new HttpHeaders(), HttpStatus.NO_CONTENT,request);
-      }
+    public ResponseEntity<Object> handleNoSuchItemException(RuntimeException ex, WebRequest request) {
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NO_CONTENT, request);
+    }
 
     @ResponseStatus(value = HttpStatus.CONFLICT)
     @ExceptionHandler(ObjectAlreadyExistsException.class)
-    public ResponseEntity<Object> handleObjectAlreadyExists(RuntimeException ex, WebRequest request){
-        return handleExceptionInternal(ex,ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT,request);
+    public ResponseEntity<Object> handleObjectAlreadyExists(RuntimeException ex, WebRequest request) {
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
+
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ObjectIsInvalidException.class)
-    public ResponseEntity<Object> handleObjectIsInvalid(RuntimeException ex, WebRequest request){
-        return handleExceptionInternal(ex,ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST,request);
+    public ResponseEntity<Object> handleObjectIsInvalid(RuntimeException ex, WebRequest request) {
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
-
-
 }

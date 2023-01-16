@@ -26,11 +26,13 @@ import javax.sql.DataSource;
 public class SpringConfig implements WebMvcConfigurer {
     private final ApplicationContext applicationContext;
     private final Environment environment;
+
     @Autowired
-    public SpringConfig(Environment environment, ApplicationContext applicationContext){
+    public SpringConfig(Environment environment, ApplicationContext applicationContext) {
         this.environment = environment;
         this.applicationContext = applicationContext;
     }
+
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
@@ -54,8 +56,9 @@ public class SpringConfig implements WebMvcConfigurer {
         resolver.setTemplateEngine(templateEngine());
         registry.viewResolver(resolver);
     }
+
     @Bean
-    public DataSource dataSource(){
+    public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(environment.getProperty("driver"));
         dataSource.setUrl(environment.getProperty("url"));
@@ -63,8 +66,9 @@ public class SpringConfig implements WebMvcConfigurer {
         dataSource.setPassword(environment.getProperty("password"));
         return dataSource;
     }
+
     @Bean
-    public JdbcTemplate jdbcTemplate(){
+    public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(dataSource());
     }
 }
