@@ -25,9 +25,9 @@ public class TagGiftCertificateController {
 
     }
 
-    @GetMapping("/{nameOrDescriptionPart}")
+    @GetMapping("/byPart/{nameOrDescriptionPart}")
     public ResponseEntity<?> getCertificateByPartOfNameOrDescription(@PathVariable("nameOrDescriptionPart") String nameOrDescriptionPart){
-        return ResponseEntity.ok(Map.of("gift certificates" , tagGiftCertificateService.getGiftCertificatesByPartOfDescription(nameOrDescriptionPart)));
+        return ResponseEntity.ok(Map.of("gift certificates" , tagGiftCertificateService.getGiftCertificatesByPart(nameOrDescriptionPart)));
     }
     @GetMapping("/sorted-by-date/{direction}")
     public ResponseEntity<?> getCertificatesSortedByDate(@PathVariable("direction") String direction){

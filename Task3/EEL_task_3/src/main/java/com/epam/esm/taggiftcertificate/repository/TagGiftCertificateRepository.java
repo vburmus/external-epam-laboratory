@@ -18,4 +18,6 @@ public interface TagGiftCertificateRepository {
 
     List<GiftCertificate> getCertificatesSortedByDateName(DirectionEnum directionDate, DirectionEnum directionName);
 
+
+
 }
