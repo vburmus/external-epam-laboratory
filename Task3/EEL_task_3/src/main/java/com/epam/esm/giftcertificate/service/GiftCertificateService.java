@@ -35,13 +35,14 @@ public class GiftCertificateService {
                 giftCertificateRepository.createTagDependenciesForGiftCertificate(listTagsId, giftCertificateRepository.getGiftCertificatesID(giftCertificate));
                 return true;
             }
-            throw new ObjectIsInvalidException("Gift certificate with id = " + giftCertificate.getName() + ", duration = " + giftCertificate.getDuration() + "is invalid, please check your params");
+            throw new ObjectIsInvalidException("Gift certificate with name = " + giftCertificate.getName() + ", duration = " + giftCertificate.getDuration() + "is invalid, please check your params");
         } else
-            throw new ObjectAlreadyExistsException("Gift certificate with id = " + giftCertificate.getName() + ", duration = " + giftCertificate.getDuration() + " already exists");
+            throw new ObjectAlreadyExistsException("Gift certificate with name = " + giftCertificate.getName() + ", duration = " + giftCertificate.getDuration() + " already exists");
 
     }
 
     public boolean deleteCertificate(long id) {
+
         if (giftCertificateRepository.deleteGiftCertificate(id)) return true;
         else throw new NoSuchItemException("Gift certificate with id =" + id + "doesn't exist");
 
@@ -54,7 +55,7 @@ public class GiftCertificateService {
     @Transactional
     public boolean updateCertificate(long id, GiftCertificate giftCertificate) {
         Optional<Map<String, String>> updatingMap = ParamsValidation.isPatchCertificateValid(giftCertificate);
-        if (updatingMap.isPresent()) {
+
             List<Tag> tagsToUpdate = giftCertificate.getTags();
             if (tagsToUpdate == null) return giftCertificateRepository.updateGiftCertificate(id, updatingMap.get());
             else {
@@ -83,11 +84,9 @@ public class GiftCertificateService {
                         return true;
                     }
                 }
-                throw new ObjectIsInvalidException("Some tags from : " + Arrays.toString(tagsToUpdate.stream().map(Tag::getName).collect(Collectors.toList()).toArray()) + " are invalid");
+                throw new ObjectIsInvalidException("Some tags are invalid");
             }
-        }
-        throw new ObjectIsInvalidException("Check your params for gift certificate with id = " + id);
-    }
+       }
 
     public GiftCertificate getCertificateById(long id) {
 

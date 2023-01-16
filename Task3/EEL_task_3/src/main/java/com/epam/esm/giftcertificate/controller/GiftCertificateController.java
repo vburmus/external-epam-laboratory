@@ -26,12 +26,10 @@ public class GiftCertificateController {
     public ResponseEntity<?> createCertificate(@RequestBody GiftCertificate giftCertificate) {
         giftCertificateService.createCertificate(giftCertificate);
         return new ResponseEntity<>(Map.of("status", HttpStatus.CREATED), HttpStatus.CREATED);
-
     }
 
     @GetMapping
     public ResponseEntity<?> showAll() {
-        ;
         return ResponseEntity.ok(Map.of("gift certificate", giftCertificateService.getAllGiftCertificates()));
     }
 
@@ -50,7 +48,5 @@ public class GiftCertificateController {
     public ResponseEntity<?> updateCertificate(@PathVariable("id") long id, @RequestBody GiftCertificate giftCertificate) {
         return ResponseEntity.ok(Map.of("result", giftCertificateService.updateCertificate(id, giftCertificate)));
     }
-
-
 }
 
