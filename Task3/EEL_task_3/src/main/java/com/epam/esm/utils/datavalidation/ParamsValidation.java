@@ -11,7 +11,7 @@ import java.util.*;
 
 public class ParamsValidation {
     public static boolean isTagValid(Tag tag) {
-        return tag != null && !tag.getName().isEmpty();
+        return tag != null && tag.getName()!=null && !tag.getName().isEmpty() ;
     }
     public static boolean isCertificateHaveValidTags(List<Tag> tags) {
         if (tags != null) {
@@ -24,9 +24,9 @@ public class ParamsValidation {
         return true;
     }
     public static boolean isValidCertificate(GiftCertificate giftCertificate) {
-        return !giftCertificate.getName().isEmpty() &&
+        return giftCertificate.getName()!=null && !giftCertificate.getName().isEmpty() &&
                 giftCertificate.getDuration() != null && giftCertificate.getDuration() >= 0 &&
-                !giftCertificate.getDescription().isEmpty() &&
+                giftCertificate.getDescription()!= null && !giftCertificate.getDescription().isEmpty() &&
                 giftCertificate.getPrice() != null &&
                 giftCertificate.getPrice() >= 0 && isCertificateHaveValidTags(giftCertificate.getTags());
     }
@@ -62,7 +62,7 @@ public class ParamsValidation {
 
     }
     public static  boolean isDirectionValid(String direction){
-            return direction.equals("ASC") || direction.equals("DESC");
+            return direction.equals(DirectionEnum.ASC.name()) || direction.equals(DirectionEnum.DESC.name());
 
     }
 
