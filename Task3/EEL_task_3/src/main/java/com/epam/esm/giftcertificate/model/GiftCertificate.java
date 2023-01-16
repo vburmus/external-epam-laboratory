@@ -2,12 +2,10 @@ package com.epam.esm.giftcertificate.model;
 
 import com.epam.esm.tag.model.Tag;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import java.util.List;
 import java.util.Objects;
-import java.util.TimeZone;
+
 
 public class GiftCertificate {
     private Long id;
@@ -104,12 +102,6 @@ public class GiftCertificate {
         return this;
     }
 
-    private String moveDateToISO(Date date) {
-        TimeZone tz = TimeZone.getTimeZone("UTC");
-        DateFormat df = new SimpleDateFormat("yyy-MM-dd'T'HH:mm:'Z'");
-        df.setTimeZone(tz);
-        return df.format(date);
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -118,6 +110,12 @@ public class GiftCertificate {
         GiftCertificate that = (GiftCertificate) o;
         return id.equals(that.id) && Objects.equals(name, that.name) && Objects.equals(tags, that.tags) && Objects.equals(description, that.description) && Objects.equals(price, that.price) && Objects.equals(duration, that.duration) && Objects.equals(createDate, that.createDate) && Objects.equals(lastUpdateDate, that.lastUpdateDate);
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
 
 
     @Override

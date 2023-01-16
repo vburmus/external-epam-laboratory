@@ -57,7 +57,7 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public List<Tag> getAllTagsByCertificateID(long id) {
-        return jdbcTemplate.query(AppQuery.GiftCertificateHasTag.GET_ALL_TAGS_BY_CERTIFICATE_ID,new BeanPropertyRowMapper<>(Tag.class),id);
+        return jdbcTemplate.query(AppQuery.GiftCertificateHasTag.GET_ALL_TAGS_BY_CERTIFICATE_ID, new BeanPropertyRowMapper<>(Tag.class), id);
     }
 
 }

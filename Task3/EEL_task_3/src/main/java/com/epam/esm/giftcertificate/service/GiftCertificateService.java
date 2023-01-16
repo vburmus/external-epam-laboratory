@@ -12,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,37 +59,37 @@ public class GiftCertificateService {
     public boolean updateCertificate(long id, GiftCertificate giftCertificate) {
         Optional<Map<String, String>> updatingMap = ParamsValidation.isPatchCertificateValid(giftCertificate);
 
-            List<Tag> tagsToUpdate = giftCertificate.getTags();
-            if (tagsToUpdate == null) return giftCertificateRepository.updateGiftCertificate(id, updatingMap.get());
-            else {
-                if (ParamsValidation.isCertificateHaveValidTags(tagsToUpdate)) {
-                    if (giftCertificateRepository.updateGiftCertificate(id, updatingMap.get())) {
-                        List<Tag> alreadyUsedTags = giftCertificateRepository.getAllTagsIdByCertificateId(id);
-                        List<Tag> tagsToDelete;
+        List<Tag> tagsToUpdate = giftCertificate.getTags();
+        if (tagsToUpdate == null) return giftCertificateRepository.updateGiftCertificate(id, updatingMap.get());
+        else {
+            if (ParamsValidation.isCertificateHaveValidTags(tagsToUpdate)) {
+                if (giftCertificateRepository.updateGiftCertificate(id, updatingMap.get())) {
+                    List<Tag> alreadyUsedTags = giftCertificateRepository.getAllTagsIdByCertificateId(id);
+                    List<Tag> tagsToDelete;
 
-                        List<String> tagsToUpdateNames = tagsToUpdate.stream().map(Tag::getName).collect(Collectors.toList());
-                        List<String> alreadyUsedTagNames = alreadyUsedTags.stream().map(Tag::getName).collect(Collectors.toList());
-                        List<String> tagsToDeleteNames = new ArrayList<>(alreadyUsedTagNames);
-                        tagsToDeleteNames.removeAll(tagsToUpdateNames);
-                        tagsToUpdateNames.removeAll(alreadyUsedTagNames);
+                    List<String> tagsToUpdateNames = tagsToUpdate.stream().map(Tag::getName).collect(Collectors.toList());
+                    List<String> alreadyUsedTagNames = alreadyUsedTags.stream().map(Tag::getName).collect(Collectors.toList());
+                    List<String> tagsToDeleteNames = new ArrayList<>(alreadyUsedTagNames);
+                    tagsToDeleteNames.removeAll(tagsToUpdateNames);
+                    tagsToUpdateNames.removeAll(alreadyUsedTagNames);
 
-                        if (!tagsToDeleteNames.isEmpty()) {
-                            tagsToDelete = tagService.getTagsByNames(tagsToDeleteNames);
-                            giftCertificateRepository.deleteTagDependenciesForGiftCertificate(tagsToDelete.stream().map(Tag::getId).collect(Collectors.toList()), id);
-                            alreadyUsedTags.removeAll(tagsToDelete);
-                        }
-                        if (!tagsToUpdateNames.isEmpty()) {
-                            tagsToUpdate = tagsToUpdate.stream().filter(tag -> tagsToUpdateNames.contains(tag.getName())).collect(Collectors.toList());
-                            tagService.isTagsExistOrElseCreate(tagsToUpdate);
-                            tagsToUpdate = tagService.getTagsByNames(tagsToUpdateNames);
-                            giftCertificateRepository.createTagDependenciesForGiftCertificate(tagsToUpdate.stream().map(Tag::getId).collect(Collectors.toList()), id);
-                        }
-                        return true;
+                    if (!tagsToDeleteNames.isEmpty()) {
+                        tagsToDelete = tagService.getTagsByNames(tagsToDeleteNames);
+                        giftCertificateRepository.deleteTagDependenciesForGiftCertificate(tagsToDelete.stream().map(Tag::getId).collect(Collectors.toList()), id);
+                        alreadyUsedTags.removeAll(tagsToDelete);
                     }
+                    if (!tagsToUpdateNames.isEmpty()) {
+                        tagsToUpdate = tagsToUpdate.stream().filter(tag -> tagsToUpdateNames.contains(tag.getName())).collect(Collectors.toList());
+                        tagService.isTagsExistOrElseCreate(tagsToUpdate);
+                        tagsToUpdate = tagService.getTagsByNames(tagsToUpdateNames);
+                        giftCertificateRepository.createTagDependenciesForGiftCertificate(tagsToUpdate.stream().map(Tag::getId).collect(Collectors.toList()), id);
+                    }
+                    return true;
                 }
-                throw new ObjectIsInvalidException("Some tags are invalid");
             }
-       }
+            throw new ObjectIsInvalidException("Some tags are invalid");
+        }
+    }
 
     public GiftCertificate getCertificateById(long id) {
 
