@@ -87,15 +87,17 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     }
 
     @Override
-    public void deleteTagDependenciesForGiftCertificate(List<Long> tags, long giftCertificateID) {
+    public boolean deleteTagDependenciesForGiftCertificate(List<Long> tags, long giftCertificateID) {
         tags.forEach(tagID -> deleteTagDependency(giftCertificateID, tagID));
+        return true;
     }
 
     @Override
-    public void createTagDependenciesForGiftCertificate(List<Long> tags, long giftCertificateID) {
+    public boolean createTagDependenciesForGiftCertificate(List<Long> tags, long giftCertificateID) {
         tags.forEach(tagID ->
                 addTagDependency(giftCertificateID, tagID)
         );
+        return true;
     }
 
     @Override

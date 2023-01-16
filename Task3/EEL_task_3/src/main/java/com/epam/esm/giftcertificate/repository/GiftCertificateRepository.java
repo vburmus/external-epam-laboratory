@@ -9,7 +9,7 @@ import java.util.Map;
 public interface GiftCertificateRepository {
 
     boolean createGiftCertificate(GiftCertificate giftCertificate);
-    void createTagDependenciesForGiftCertificate(List<Long> tags, long giftCertificateID);
+    boolean createTagDependenciesForGiftCertificate(List<Long> tags, long giftCertificateID);
 
 
     List<GiftCertificate> getAllGiftCertificates();
@@ -18,7 +18,7 @@ public interface GiftCertificateRepository {
     boolean updateGiftCertificate(long id, Map<String,String> updatedCertificate);
 
     boolean deleteGiftCertificate(long id);
-    void deleteTagDependenciesForGiftCertificate(List<Long> tags, long giftCertificateID);
+    boolean deleteTagDependenciesForGiftCertificate(List<Long> tags, long giftCertificateID);
 
 
     boolean isGiftCertificateExist(GiftCertificate giftCertificate);
