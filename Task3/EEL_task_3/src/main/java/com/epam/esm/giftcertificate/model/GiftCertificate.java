@@ -103,12 +103,14 @@ public class GiftCertificate {
         this.lastUpdateDate = lastUpdateDate;
         return this;
     }
-    private String moveDateToISO(Date date){
+
+    private String moveDateToISO(Date date) {
         TimeZone tz = TimeZone.getTimeZone("UTC");
         DateFormat df = new SimpleDateFormat("yyy-MM-dd'T'HH:mm:'Z'");
         df.setTimeZone(tz);
         return df.format(date);
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
