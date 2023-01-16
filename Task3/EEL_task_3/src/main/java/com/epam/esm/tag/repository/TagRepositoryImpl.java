@@ -55,11 +55,9 @@ public class TagRepositoryImpl implements TagRepository {
         return jdbcTemplate.queryForObject(AppQuery.Tag.GET_TAGS_ID, Long.class, new Object[]{tag.getName()});
     }
 
-//TODO
-
     @Override
     public List<Tag> getAllTagsByCertificateID(long id) {
-        return null;
+        return jdbcTemplate.query(AppQuery.GiftCertificateHasTag.GET_ALL_TAGS_BY_CERTIFICATE_ID,new BeanPropertyRowMapper<>(Tag.class),id);
     }
 
 }
