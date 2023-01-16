@@ -39,11 +39,5 @@ Jsrc/main/java/com/epam/esm/taggiftcertificate/direction/DirectionEnum.java,7\4
 Zsrc/main/java/com/epam/esm/taggiftcertificate/repository/TagGiftCertificateRepository.java,d\c\dc7cb9a15bd79bcfa11041393a8dc6f968a4fd48
 ^
 .src/main/java/com/epam/esm/utils/AppQuery.java,8\3\83e2bb944957336eb1e15080ced792a9cba55a28
-c
-3src/main/java/com/epam/esm/config/SpringConfig.java,b\9\b902b6f9faa35832406e6fbf065ca78839db9db1
-~
-Nsrc/main/java/com/epam/esm/config/MySpringMvcDispatcherServletInitializer.java,e\4\e4ea06572af0977a551b9cafc34698567c39c49d
-„
-Tsrc/main/java/com/epam/esm/giftcertificate/controller/GiftCertificateController.java,a\0\a068a502177c5c53589f2f561fc87538ab0dfc75
 „
 Tsrc/main/java/com/epam/esm/taggiftcertificate/service/TagGiftCertificateService.java,2\6\2640fcb4db66d0cb405c3daea3d0ea68e9da5771
