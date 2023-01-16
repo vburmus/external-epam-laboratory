@@ -16,10 +16,12 @@ import java.util.Locale;
 
 @Service
 public class TagGiftCertificateService {
+    public static final String DONT_EXIST = "don't exist";
+    public static final String IS_INVALID = " is invalid";
     private final GiftCertificateRepository giftCertificateRepository;
     private final TagRepository tagRepository;
     private final TagGiftCertificateRepository tagGiftCertificateRepository;
-    String EMPTY_MESSAGE = "Gift certificates are empty!";
+    public static final String EMPTY_MESSAGE = "Gift certificates are empty!";
 
     @Autowired
     public TagGiftCertificateService(GiftCertificateRepository giftCertificateRepository, TagRepository tagRepository, TagGiftCertificateRepository tagGiftCertificateRepository) {
@@ -37,27 +39,27 @@ public class TagGiftCertificateService {
     }
 
     public List<GiftCertificate> getGiftCertificatesByTagName(String tagName) {
-        if (tagName!=null && !tagName.isEmpty() ) {
+        if (tagName != null && !tagName.isEmpty()) {
             if (tagRepository.isTagExists(tagName)) {
-                List<GiftCertificate> gc = ParamsValidation.isCertificatesArentEmptyOrElseThrowNoSuchItem(tagGiftCertificateRepository.getGiftCertificatesByTagName(tagName), "Gift Certificates with tag " + tagName + "dont exist");
+                List<GiftCertificate> gc = ParamsValidation.isCertificatesArentEmptyOrElseThrowNoSuchItem(tagGiftCertificateRepository.getGiftCertificatesByTagName(tagName), "Gift Certificates with tag " + tagName + DONT_EXIST);
                 return setTagsInCertificate(gc);
             }
             throw new NoSuchItemException("Tag with name " + tagName + " doesn't exist");
         }
-        throw new ObjectIsInvalidException("Tag name " + tagName + " is invalid");
+        throw new ObjectIsInvalidException("Tag name " + tagName + IS_INVALID);
     }
 
     public List<GiftCertificate> getGiftCertificatesByPart(String part) {
-        if (part!=null && !part.isEmpty()) {
+        if (part != null && !part.isEmpty()) {
             List<GiftCertificate> certificates = tagGiftCertificateRepository.getGiftCertificatesByPartOfDescription(part);
             if (certificates.isEmpty()) {
-                List<GiftCertificate> gc = ParamsValidation.isCertificatesArentEmptyOrElseThrowNoSuchItem(tagGiftCertificateRepository.getGiftCertificatesByPartOfName(part), "Gift Certificates with part of name -> " + part + "dont exist");
+                List<GiftCertificate> gc = ParamsValidation.isCertificatesArentEmptyOrElseThrowNoSuchItem(tagGiftCertificateRepository.getGiftCertificatesByPartOfName(part), "Gift Certificates with part of name -> " + part + DONT_EXIST);
                 return setTagsInCertificate(gc);
             }
-            List<GiftCertificate> gc = ParamsValidation.isCertificatesArentEmptyOrElseThrowNoSuchItem(certificates, "Gift Certificates with part of description -> " + part + "dont exist");
+            List<GiftCertificate> gc = ParamsValidation.isCertificatesArentEmptyOrElseThrowNoSuchItem(certificates, "Gift Certificates with part of description -> " + part + DONT_EXIST);
             return setTagsInCertificate(gc);
         }
-        throw new ObjectIsInvalidException("Part of description -> " + part + " is invalid");
+        throw new ObjectIsInvalidException("Part of description -> " + part + IS_INVALID);
     }
 
 
@@ -68,10 +70,10 @@ public class TagGiftCertificateService {
                 List<GiftCertificate> gc = ParamsValidation.isCertificatesArentEmptyOrElseThrowNoSuchItem(tagGiftCertificateRepository.getCertificatesSortedByDate(DirectionEnum.ASC), EMPTY_MESSAGE);
                 return setTagsInCertificate(gc);
             }
-                List<GiftCertificate> gc = ParamsValidation.isCertificatesArentEmptyOrElseThrowNoSuchItem(tagGiftCertificateRepository.getCertificatesSortedByDate(DirectionEnum.DESC), EMPTY_MESSAGE);
-                return setTagsInCertificate(gc);
+            List<GiftCertificate> gc = ParamsValidation.isCertificatesArentEmptyOrElseThrowNoSuchItem(tagGiftCertificateRepository.getCertificatesSortedByDate(DirectionEnum.DESC), EMPTY_MESSAGE);
+            return setTagsInCertificate(gc);
         }
-        throw new ObjectIsInvalidException("Direction " + direction + " is invalid");
+        throw new ObjectIsInvalidException("Direction " + direction + IS_INVALID);
     }
 
 
@@ -79,13 +81,13 @@ public class TagGiftCertificateService {
 
         if (ParamsValidation.isDirectionValid(direction)) {
             if (direction.toUpperCase(Locale.ROOT).equals(DirectionEnum.ASC.name())) {
-                List<GiftCertificate> gc =  ParamsValidation.isCertificatesArentEmptyOrElseThrowNoSuchItem(tagGiftCertificateRepository.getCertificatesSortedByName(DirectionEnum.ASC), EMPTY_MESSAGE);
+                List<GiftCertificate> gc = ParamsValidation.isCertificatesArentEmptyOrElseThrowNoSuchItem(tagGiftCertificateRepository.getCertificatesSortedByName(DirectionEnum.ASC), EMPTY_MESSAGE);
                 return setTagsInCertificate(gc);
             }
             List<GiftCertificate> gc = ParamsValidation.isCertificatesArentEmptyOrElseThrowNoSuchItem(tagGiftCertificateRepository.getCertificatesSortedByName(DirectionEnum.DESC), EMPTY_MESSAGE);
             return setTagsInCertificate(gc);
         }
-        throw new ObjectIsInvalidException("Direction " + direction + " is invalid");
+        throw new ObjectIsInvalidException("Direction " + direction + IS_INVALID);
     }
 
 

@@ -62,30 +62,29 @@ public class GiftCertificateService {
         List<Tag> tagsToUpdate = giftCertificate.getTags();
         if (tagsToUpdate == null) return giftCertificateRepository.updateGiftCertificate(id, updatingMap.get());
         else {
-            if (ParamsValidation.isCertificateHaveValidTags(tagsToUpdate)) {
-                if (giftCertificateRepository.updateGiftCertificate(id, updatingMap.get())) {
-                    List<Tag> alreadyUsedTags = giftCertificateRepository.getAllTagsIdByCertificateId(id);
-                    List<Tag> tagsToDelete;
+            if (ParamsValidation.isCertificateHaveValidTags(tagsToUpdate) && giftCertificateRepository.updateGiftCertificate(id, updatingMap.get())) {
+                List<Tag> alreadyUsedTags = giftCertificateRepository.getAllTagsIdByCertificateId(id);
+                List<Tag> tagsToDelete;
 
-                    List<String> tagsToUpdateNames = tagsToUpdate.stream().map(Tag::getName).collect(Collectors.toList());
-                    List<String> alreadyUsedTagNames = alreadyUsedTags.stream().map(Tag::getName).collect(Collectors.toList());
-                    List<String> tagsToDeleteNames = new ArrayList<>(alreadyUsedTagNames);
-                    tagsToDeleteNames.removeAll(tagsToUpdateNames);
-                    tagsToUpdateNames.removeAll(alreadyUsedTagNames);
+                List<String> tagsToUpdateNames = tagsToUpdate.stream().map(Tag::getName).collect(Collectors.toList());
+                List<String> alreadyUsedTagNames = alreadyUsedTags.stream().map(Tag::getName).collect(Collectors.toList());
+                List<String> tagsToDeleteNames = new ArrayList<>(alreadyUsedTagNames);
+                tagsToDeleteNames.removeAll(tagsToUpdateNames);
+                tagsToUpdateNames.removeAll(alreadyUsedTagNames);
 
-                    if (!tagsToDeleteNames.isEmpty()) {
-                        tagsToDelete = tagService.getTagsByNames(tagsToDeleteNames);
-                        giftCertificateRepository.deleteTagDependenciesForGiftCertificate(tagsToDelete.stream().map(Tag::getId).collect(Collectors.toList()), id);
-                        alreadyUsedTags.removeAll(tagsToDelete);
-                    }
-                    if (!tagsToUpdateNames.isEmpty()) {
-                        tagsToUpdate = tagsToUpdate.stream().filter(tag -> tagsToUpdateNames.contains(tag.getName())).collect(Collectors.toList());
-                        tagService.isTagsExistOrElseCreate(tagsToUpdate);
-                        tagsToUpdate = tagService.getTagsByNames(tagsToUpdateNames);
-                        giftCertificateRepository.createTagDependenciesForGiftCertificate(tagsToUpdate.stream().map(Tag::getId).collect(Collectors.toList()), id);
-                    }
-                    return true;
+                if (!tagsToDeleteNames.isEmpty()) {
+                    tagsToDelete = tagService.getTagsByNames(tagsToDeleteNames);
+                    giftCertificateRepository.deleteTagDependenciesForGiftCertificate(tagsToDelete.stream().map(Tag::getId).collect(Collectors.toList()), id);
+                    alreadyUsedTags.removeAll(tagsToDelete);
                 }
+                if (!tagsToUpdateNames.isEmpty()) {
+                    tagsToUpdate = tagsToUpdate.stream().filter(tag -> tagsToUpdateNames.contains(tag.getName())).collect(Collectors.toList());
+                    tagService.isTagsExistOrElseCreate(tagsToUpdate);
+                    tagsToUpdate = tagService.getTagsByNames(tagsToUpdateNames);
+                    giftCertificateRepository.createTagDependenciesForGiftCertificate(tagsToUpdate.stream().map(Tag::getId).collect(Collectors.toList()), id);
+                }
+                return true;
+
             }
             throw new ObjectIsInvalidException("Some tags are invalid");
         }

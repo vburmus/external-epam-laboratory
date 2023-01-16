@@ -7,12 +7,20 @@ import com.epam.esm.tag.model.Tag;
 import com.epam.esm.taggiftcertificate.direction.DirectionEnum;
 import org.springframework.lang.NonNull;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class ParamsValidation {
-    public static boolean isTagValid(Tag tag) {
-        return tag != null && tag.getName()!=null && !tag.getName().isEmpty() ;
+    private ParamsValidation() {
+
     }
+
+    public static boolean isTagValid(Tag tag) {
+        return tag != null && tag.getName() != null && !tag.getName().isEmpty();
+    }
+
     public static boolean isCertificateHaveValidTags(List<Tag> tags) {
         if (tags != null) {
             for (Tag tag : tags) {
@@ -23,10 +31,11 @@ public class ParamsValidation {
         }
         return true;
     }
+
     public static boolean isValidCertificate(GiftCertificate giftCertificate) {
-        return giftCertificate.getName()!=null && !giftCertificate.getName().isEmpty() &&
+        return giftCertificate.getName() != null && !giftCertificate.getName().isEmpty() &&
                 giftCertificate.getDuration() != null && giftCertificate.getDuration() >= 0 &&
-                giftCertificate.getDescription()!= null && !giftCertificate.getDescription().isEmpty() &&
+                giftCertificate.getDescription() != null && !giftCertificate.getDescription().isEmpty() &&
                 giftCertificate.getPrice() != null &&
                 giftCertificate.getPrice() >= 0 && isCertificateHaveValidTags(giftCertificate.getTags());
     }
@@ -35,34 +44,35 @@ public class ParamsValidation {
 
         Map<String, String> map = new HashMap<>();
 
-            if (giftCertificate.getName() != null)
-                map.put("name", giftCertificate.getName());
+        if (giftCertificate.getName() != null)
+            map.put("name", giftCertificate.getName());
 
-            if (giftCertificate.getDescription() != null)
-                map.put("description", giftCertificate.getDescription());
+        if (giftCertificate.getDescription() != null)
+            map.put("description", giftCertificate.getDescription());
 
-            if (giftCertificate.getPrice() != null && giftCertificate.getPrice() >= 0)
-                map.put("price", String.valueOf(giftCertificate.getPrice()));
+        if (giftCertificate.getPrice() != null && giftCertificate.getPrice() >= 0)
+            map.put("price", String.valueOf(giftCertificate.getPrice()));
 
-            if (giftCertificate.getDuration() != null && giftCertificate.getDuration() >= 0)
-                map.put("duration", String.valueOf(giftCertificate.getDuration()));
+        if (giftCertificate.getDuration() != null && giftCertificate.getDuration() >= 0)
+            map.put("duration", String.valueOf(giftCertificate.getDuration()));
 
-            if(map.isEmpty())
-                throw new ObjectIsInvalidException("Please check params for certificate name = " + giftCertificate.getName());
+        if (map.isEmpty())
+            throw new ObjectIsInvalidException("Please check params for certificate name = " + giftCertificate.getName());
 
-             return Optional.of(map);
+        return Optional.of(map);
 
 
     }
 
-    public static List<GiftCertificate> isCertificatesArentEmptyOrElseThrowNoSuchItem(List<GiftCertificate> giftCertificates, String message){
-        if(!giftCertificates.isEmpty())
+    public static List<GiftCertificate> isCertificatesArentEmptyOrElseThrowNoSuchItem(List<GiftCertificate> giftCertificates, String message) {
+        if (!giftCertificates.isEmpty())
             return giftCertificates;
         throw new NoSuchItemException(message);
 
     }
-    public static  boolean isDirectionValid(String direction){
-            return direction.equals(DirectionEnum.ASC.name()) || direction.equals(DirectionEnum.DESC.name());
+
+    public static boolean isDirectionValid(String direction) {
+        return direction.equals(DirectionEnum.ASC.name()) || direction.equals(DirectionEnum.DESC.name());
 
     }
 

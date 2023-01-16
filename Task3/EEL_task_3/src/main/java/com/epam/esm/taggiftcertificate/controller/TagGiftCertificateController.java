@@ -14,6 +14,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/tag-gift-certificate",produces = MediaType.APPLICATION_JSON_VALUE)
 public class TagGiftCertificateController {
+    public static final String GIFT_CERTIFICATES = "gift certificates";
     private final TagGiftCertificateService tagGiftCertificateService;
     @Autowired
     public TagGiftCertificateController(TagGiftCertificateService tagGgiftCertificateService) {
@@ -21,27 +22,27 @@ public class TagGiftCertificateController {
     }
     @GetMapping("/{name}")
     public ResponseEntity<?> getCertificateByTagsName(@PathVariable("name") String name){
-        return ResponseEntity.ok(Map.of("gift certificates" , tagGiftCertificateService.getGiftCertificatesByTagName(name)));
+        return ResponseEntity.ok(Map.of(GIFT_CERTIFICATES, tagGiftCertificateService.getGiftCertificatesByTagName(name)));
 
     }
 
     @GetMapping("/byPart/{nameOrDescriptionPart}")
     public ResponseEntity<?> getCertificateByPartOfNameOrDescription(@PathVariable("nameOrDescriptionPart") String nameOrDescriptionPart){
-        return ResponseEntity.ok(Map.of("gift certificates" , tagGiftCertificateService.getGiftCertificatesByPart(nameOrDescriptionPart)));
+        return ResponseEntity.ok(Map.of(GIFT_CERTIFICATES, tagGiftCertificateService.getGiftCertificatesByPart(nameOrDescriptionPart)));
     }
     @GetMapping("/sorted-by-date/{direction}")
     public ResponseEntity<?> getCertificatesSortedByDate(@PathVariable("direction") String direction){
-        return ResponseEntity.ok(Map.of("gift certificates" , tagGiftCertificateService.getCertificatesSortedByDate(direction)));
+        return ResponseEntity.ok(Map.of(GIFT_CERTIFICATES, tagGiftCertificateService.getCertificatesSortedByDate(direction)));
 
     }
     @GetMapping("/sorted-by-name/{direction}")
     public ResponseEntity<?> getCertificatesSortedByName(@PathVariable("direction") String direction){
-        return ResponseEntity.ok(Map.of("gift certificates" , tagGiftCertificateService.getCertificatesSortedByName(direction)));
+        return ResponseEntity.ok(Map.of(GIFT_CERTIFICATES, tagGiftCertificateService.getCertificatesSortedByName(direction)));
 
     }
     @GetMapping("/sorted-by-date-and-name/{directionDate}/{directionName}")
     public ResponseEntity<?> getCertificatesSortedByDateName(@PathVariable("directionDate") String directionDate, @PathVariable("directionName") String directionName){
-        return ResponseEntity.ok(Map.of("gift certificates" , tagGiftCertificateService.getCertificatesSortedByDateName(directionDate,directionName)));
+        return ResponseEntity.ok(Map.of(GIFT_CERTIFICATES, tagGiftCertificateService.getCertificatesSortedByDateName(directionDate,directionName)));
 
     }
 

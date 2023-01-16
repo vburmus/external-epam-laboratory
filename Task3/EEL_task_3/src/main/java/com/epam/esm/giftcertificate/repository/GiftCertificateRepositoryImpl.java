@@ -26,13 +26,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     public boolean createGiftCertificate(GiftCertificate giftCertificate) {
         LocalDateTime createTime = LocalDateTime.now();
         LocalDateTime updateTime = LocalDateTime.now();
-        return jdbcTemplate.update(AppQuery.GiftCertificate.CREATE_CERTIFICATE,
-                giftCertificate.getName(),
-                giftCertificate.getDescription(),
-                giftCertificate.getPrice(),
-                giftCertificate.getDuration(),
-                createTime,
-                updateTime) == 1;
+        return jdbcTemplate.update(AppQuery.GiftCertificate.CREATE_CERTIFICATE, giftCertificate.getName(), giftCertificate.getDescription(), giftCertificate.getPrice(), giftCertificate.getDuration(), createTime, updateTime) == 1;
     }
 
     @Override
@@ -42,8 +36,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
 
     @Override
     public GiftCertificate getGiftCertificateByID(long id) {
-        return jdbcTemplate.query(AppQuery.GiftCertificate.GET_CERTIFICATE_BY_ID, new Object[]{id}, new BeanPropertyRowMapper<>(GiftCertificate.class))
-                .stream().findAny().orElse(null);
+        return jdbcTemplate.query(AppQuery.GiftCertificate.GET_CERTIFICATE_BY_ID, new Object[]{id}, new BeanPropertyRowMapper<>(GiftCertificate.class)).stream().findAny().orElse(null);
     }
 
     @Override
@@ -53,14 +46,13 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
 
     @Override
     public boolean isGiftCertificateExist(GiftCertificate giftCertificate) {
-        return jdbcTemplate.queryForObject(AppQuery.GiftCertificate.IS_CERTIFICATE_EXISTS, Integer.class,
-                new Object[]{giftCertificate.getName(), giftCertificate.getDescription(), giftCertificate.getPrice(), giftCertificate.getDuration()}) == 1;
+        return jdbcTemplate.queryForObject(AppQuery.GiftCertificate.IS_CERTIFICATE_EXISTS, Integer.class, giftCertificate.getName(), giftCertificate.getDescription(), giftCertificate.getPrice(), giftCertificate.getDuration()) == 1;
 
     }
 
     @Override
     public long getGiftCertificatesID(GiftCertificate giftCertificate) {
-        return jdbcTemplate.queryForObject(AppQuery.GiftCertificate.GET_CERTIFICATES_ID, Long.class, new Object[]{giftCertificate.getName(), giftCertificate.getDescription(), giftCertificate.getPrice(), giftCertificate.getDuration()});
+        return jdbcTemplate.queryForObject(AppQuery.GiftCertificate.GET_CERTIFICATES_ID, Long.class, giftCertificate.getName(), giftCertificate.getDescription(), giftCertificate.getPrice(), giftCertificate.getDuration());
     }
 
     @Override
@@ -94,9 +86,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
 
     @Override
     public boolean createTagDependenciesForGiftCertificate(List<Long> tags, long giftCertificateID) {
-        tags.forEach(tagID ->
-                addTagDependency(giftCertificateID, tagID)
-        );
+        tags.forEach(tagID -> addTagDependency(giftCertificateID, tagID));
         return true;
     }
 

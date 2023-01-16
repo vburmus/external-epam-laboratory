@@ -65,11 +65,11 @@ public class TagService {
     }
 
     public List<Long> getTagsIds(List<Tag> tags) {
-        return tags.stream().map(tag -> getTagsID(tag)).collect(Collectors.toList());
+        return tags.stream().map(this::getTagsID).collect(Collectors.toList());
 
 
     }
-
+    @Transactional
     public boolean isTagsExistOrElseCreate(List<Tag> tags) {
         for (Tag tag : tags) {
             if (!isTagWithNameExists(tag.getName())) {

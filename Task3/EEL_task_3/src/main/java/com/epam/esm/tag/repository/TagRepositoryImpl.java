@@ -47,12 +47,12 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public boolean isTagExists(String tagName) {
-        return jdbcTemplate.queryForObject(AppQuery.Tag.IS_TAG_EXISTS, Integer.class, new Object[]{tagName}) == 1;
+        return jdbcTemplate.queryForObject(AppQuery.Tag.IS_TAG_EXISTS, Integer.class, tagName) == 1;
     }
 
     @Override
     public long getTagsID(Tag tag) {
-        return jdbcTemplate.queryForObject(AppQuery.Tag.GET_TAGS_ID, Long.class, new Object[]{tag.getName()});
+        return jdbcTemplate.queryForObject(AppQuery.Tag.GET_TAGS_ID, Long.class, tag.getName());
     }
 
     @Override

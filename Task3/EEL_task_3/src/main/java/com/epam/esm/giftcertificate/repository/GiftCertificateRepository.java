@@ -23,7 +23,6 @@ public interface GiftCertificateRepository {
 
     boolean deleteTagDependenciesForGiftCertificate(List<Long> tags, long giftCertificateID);
 
-
     boolean isGiftCertificateExist(GiftCertificate giftCertificate);
 
     long getGiftCertificatesID(GiftCertificate giftCertificate);
