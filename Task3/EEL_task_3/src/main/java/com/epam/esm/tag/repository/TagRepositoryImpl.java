@@ -13,7 +13,7 @@ import java.util.List;
 public class TagRepositoryImpl implements TagRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
+
     public TagRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }

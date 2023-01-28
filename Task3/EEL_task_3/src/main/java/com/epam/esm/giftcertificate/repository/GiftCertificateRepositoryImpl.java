@@ -17,7 +17,7 @@ import java.util.Map;
 public class GiftCertificateRepositoryImpl implements GiftCertificateRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
+
     public GiftCertificateRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }

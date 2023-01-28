@@ -17,7 +17,7 @@ public class TagGiftCertificateRepositoryImpl implements TagGiftCertificateRepos
 
     private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
+
     public TagGiftCertificateRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }

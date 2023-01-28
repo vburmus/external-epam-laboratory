@@ -4,6 +4,7 @@ import com.epam.esm.exceptionhandler.exceptions.NoSuchItemException;
 import com.epam.esm.exceptionhandler.exceptions.ObjectIsInvalidException;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.giftcertificate.repository.GiftCertificateRepository;
+import com.epam.esm.tag.model.Tag;
 import com.epam.esm.tag.repository.TagRepository;
 import com.epam.esm.taggiftcertificate.direction.DirectionEnum;
 import com.epam.esm.taggiftcertificate.repository.TagGiftCertificateRepository;
@@ -23,7 +24,7 @@ public class TagGiftCertificateService {
     private final TagGiftCertificateRepository tagGiftCertificateRepository;
     public static final String EMPTY_MESSAGE = "Gift certificates are empty!";
 
-    @Autowired
+
     public TagGiftCertificateService(GiftCertificateRepository giftCertificateRepository, TagRepository tagRepository, TagGiftCertificateRepository tagGiftCertificateRepository) {
         this.giftCertificateRepository = giftCertificateRepository;
         this.tagRepository = tagRepository;
@@ -31,13 +32,16 @@ public class TagGiftCertificateService {
     }
 
 
-    private List<GiftCertificate> setTagsInCertificate(List<GiftCertificate> gc) {
-        for (GiftCertificate giftCertificate : gc) {
-            giftCertificate.setTags(tagRepository.getAllTagsByCertificateID(giftCertificateRepository.getGiftCertificatesID(giftCertificate)));
+    private List<GiftCertificate> setTagsInCertificate(List<GiftCertificate> gcs) {
+        for (GiftCertificate giftCertificate : gcs) {
+            giftCertificate.setTags(getAllTagsByCertificate(giftCertificate));
         }
-        return gc;
+        return gcs;
     }
 
+    public List<Tag> getAllTagsByCertificate(GiftCertificate gc){
+        return tagRepository.getAllTagsByCertificateID(giftCertificateRepository.getGiftCertificatesID(gc));
+    }
     public List<GiftCertificate> getGiftCertificatesByTagName(String tagName) {
         if (tagName != null && !tagName.isEmpty()) {
             if (tagRepository.isTagExists(tagName)) {
