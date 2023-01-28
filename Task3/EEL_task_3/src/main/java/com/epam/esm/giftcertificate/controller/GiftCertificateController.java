@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/certificate", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/certificate")
 public class GiftCertificateController {
     private final GiftCertificateService giftCertificateService;
 
@@ -24,8 +24,7 @@ public class GiftCertificateController {
 
     @PostMapping
     public ResponseEntity<?> createCertificate(@RequestBody GiftCertificate giftCertificate) {
-        giftCertificateService.createCertificate(giftCertificate);
-        return new ResponseEntity<>(Map.of("status", HttpStatus.CREATED), HttpStatus.CREATED);
+        return new ResponseEntity<>(Map.of("Certificate:",  giftCertificateService.createCertificate(giftCertificate)), HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -41,7 +40,7 @@ public class GiftCertificateController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") long id) {
-        return ResponseEntity.ok(Map.of("gift certificate", giftCertificateService.getCertificateById(id)));
+        return ResponseEntity.ok(giftCertificateService.getCertificateById(id));
     }
 
     @PatchMapping("/{id}")

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/tags", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/tags")
 public class TagController {
     private final TagService tagService;
 
