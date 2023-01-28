@@ -56,7 +56,7 @@ class GiftCertificateServiceTest {
 
         when(giftCertificateRepositoryMocked.getGiftCertificatesID(gc)).thenReturn(gc.getId());
         when(giftCertificateRepositoryMocked.createTagDependenciesForGiftCertificate(List.of(ID), ID)).thenReturn(true);
-        assertTrue(giftCertificateServiceMocked.createCertificate(gc));
+        assertEquals(gc,giftCertificateServiceMocked.createCertificate(gc));
     }
     @Test
     void createCertificateIsInvalid() {

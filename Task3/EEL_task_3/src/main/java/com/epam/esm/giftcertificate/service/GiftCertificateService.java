@@ -7,6 +7,8 @@ import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.giftcertificate.repository.GiftCertificateRepository;
 import com.epam.esm.tag.model.Tag;
 import com.epam.esm.tag.service.TagService;
+import com.epam.esm.taggiftcertificate.repository.TagGiftCertificateRepository;
+import com.epam.esm.taggiftcertificate.service.TagGiftCertificateService;
 import com.epam.esm.utils.datavalidation.ParamsValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,25 +24,29 @@ import java.util.stream.Collectors;
 public class GiftCertificateService {
     private final GiftCertificateRepository giftCertificateRepository;
     private final TagService tagService;
+    private final TagGiftCertificateService tagGiftCertificateService;
 
-    @Autowired
-    public GiftCertificateService(GiftCertificateRepository giftCertificateRepository, TagService tagService) {
+    public GiftCertificateService(GiftCertificateRepository giftCertificateRepository, TagService tagService, TagGiftCertificateRepository tagGiftCertificateRepository, TagGiftCertificateService tagGiftCertificateService) {
         this.giftCertificateRepository = giftCertificateRepository;
         this.tagService = tagService;
+        this.tagGiftCertificateService = tagGiftCertificateService;
+
     }
 
     @Transactional
-    public boolean createCertificate(GiftCertificate giftCertificate) {
-        if (!giftCertificateRepository.isGiftCertificateExist(giftCertificate)) {
-            if (ParamsValidation.isValidCertificate(giftCertificate)) {
-                giftCertificateRepository.createGiftCertificate(giftCertificate);
-                List<Long> listTagsId = tagService.getTagsIds(giftCertificate.getTags());
-                giftCertificateRepository.createTagDependenciesForGiftCertificate(listTagsId, giftCertificateRepository.getGiftCertificatesID(giftCertificate));
-                return true;
-            }
-            throw new ObjectIsInvalidException("Gift certificate with name = " + giftCertificate.getName() + ", duration = " + giftCertificate.getDuration() + "is invalid, please check your params");
-        } else
+    public GiftCertificate createCertificate(GiftCertificate giftCertificate) {
+        if (giftCertificateRepository.isGiftCertificateExist(giftCertificate))
             throw new ObjectAlreadyExistsException("Gift certificate with name = " + giftCertificate.getName() + ", duration = " + giftCertificate.getDuration() + " already exists");
+
+        if (!ParamsValidation.isValidCertificate(giftCertificate))
+            throw new ObjectIsInvalidException("Gift certificate with name = " + giftCertificate.getName() + ", duration = " + giftCertificate.getDuration() + "is invalid, please check your params");
+
+
+        giftCertificateRepository.createGiftCertificate(giftCertificate);
+        List<Long> listTagsId = tagService.getTagsIds(giftCertificate.getTags());
+        giftCertificateRepository.createTagDependenciesForGiftCertificate(listTagsId, giftCertificateRepository.getGiftCertificatesID(giftCertificate));
+        //get created
+        return getCertificateById(giftCertificateRepository.getGiftCertificatesID(giftCertificate));
 
     }
 
@@ -93,6 +99,7 @@ public class GiftCertificateService {
     public GiftCertificate getCertificateById(long id) {
 
         GiftCertificate giftCertificate = giftCertificateRepository.getGiftCertificateByID(id);
+        giftCertificate.setTags(tagGiftCertificateService.getAllTagsByCertificate(giftCertificate));
         if (giftCertificate == null)
             throw new NoSuchItemException("GiftCertificate with id = " + id + " doesn't exist");
         return giftCertificate;
