@@ -1,0 +1,354 @@
+{
+	"info": {
+		"_postman_id": "2ad833dd-23e0-4b15-aca5-9d5b5876aa0b",
+		"name": "MyColection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25250646"
+	},
+	"item": [
+		{
+			"name": "Certificate and tag",
+			"item": [
+				{
+					"name": "CreateTag1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"TestTag1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/tags",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tags"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateTag2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"TestTag2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/tags",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tags"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreatingCertificate1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"TestCertificate1\",\r\n    \"description\": \"TestDescription\",\r\n    \"price\": 1001,\r\n    \"duration\": 21,\r\n    \"tags\":[{\r\n        \"name\": \"TestTag1\"\r\n    }]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/certificate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"certificate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreatingCertificate2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"TestCertificate2\",\r\n    \"description\": \"TestDescription\",\r\n    \"price\": 1002,\r\n    \"duration\": 22,\r\n    \"tags\":[{\r\n        \"name\": \"TestTag2\"\r\n    }]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/certificate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"certificate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ShowAllCerificates",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/certificate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"certificate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ShowAllTags",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/tags",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tags"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateCertificate1",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"UpdatedFirstCertificate\",\r\n    \"description\": \"UpdatedTest\",\r\n    \"tags\":[\r\n       {\r\n            \"name\":\"TestTag2\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/certificate/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"certificate",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateCertificate2",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"UpdatedSecondCertificate\",\r\n    \"description\": \"UpdatedTest\",\r\n    \"tags\":[\r\n       {\r\n            \"name\":\"TestTag1\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/certificate/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"certificate",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sort",
+			"item": [
+				{
+					"name": "CertificatesByTagName",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/tag-gift-certificate/TestTag1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tag-gift-certificate",
+								"TestTag1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CertificateByNamePart",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/tag-gift-certificate/byPart/Upda",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tag-gift-certificate",
+								"byPart",
+								"Upda"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CertificateByDescriptionPart",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/tag-gift-certificate/byPart/Upd",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tag-gift-certificate",
+								"byPart",
+								"Upd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CertificateSortedByDate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/tag-gift-certificate/sorted-by-date/ASC",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tag-gift-certificate",
+								"sorted-by-date",
+								"ASC"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CertificateSortedByName",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/tag-gift-certificate/sorted-by-name/ASC",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tag-gift-certificate",
+								"sorted-by-name",
+								"ASC"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CertificateSortedByDateName",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/tag-gift-certificate/sorted-by-date-and-name/ASC/ASC",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tag-gift-certificate",
+								"sorted-by-date-and-name",
+								"ASC",
+								"ASC"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

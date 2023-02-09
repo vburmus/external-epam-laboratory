@@ -34,7 +34,7 @@ ENGINE = InnoDB;
 -- Table `lab_task`.`tag`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lab_task`.`tag` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
