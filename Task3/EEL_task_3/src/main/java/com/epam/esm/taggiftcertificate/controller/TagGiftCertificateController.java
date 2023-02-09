@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/tag-gift-certificate",produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/tag-gift-certificate")
 public class TagGiftCertificateController {
     public static final String GIFT_CERTIFICATES = "gift certificates";
     private final TagGiftCertificateService tagGiftCertificateService;
