@@ -21,7 +21,7 @@ public class TagGiftCertificateController {
         this.tagGiftCertificateService = tagGgiftCertificateService;
     }
     @GetMapping("/{name}")
-    public ResponseEntity<?> getCertificateByTagsName(@PathVariable("name") String name){
+    public ResponseEntity<?> getCertificatesByTagName(@PathVariable("name") String name){
         return ResponseEntity.ok(Map.of(GIFT_CERTIFICATES, tagGiftCertificateService.getGiftCertificatesByTagName(name)));
 
     }
