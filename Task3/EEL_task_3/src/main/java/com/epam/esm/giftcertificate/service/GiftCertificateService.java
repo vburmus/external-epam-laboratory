@@ -30,7 +30,6 @@ public class GiftCertificateService {
         this.giftCertificateRepository = giftCertificateRepository;
         this.tagService = tagService;
         this.tagGiftCertificateService = tagGiftCertificateService;
-
     }
 
     @Transactional
@@ -99,9 +98,10 @@ public class GiftCertificateService {
     public GiftCertificate getCertificateById(long id) {
 
         GiftCertificate giftCertificate = giftCertificateRepository.getGiftCertificateByID(id);
-        giftCertificate.setTags(tagGiftCertificateService.getAllTagsByCertificate(giftCertificate));
-        if (giftCertificate == null)
+        if (giftCertificate == null) {
             throw new NoSuchItemException("GiftCertificate with id = " + id + " doesn't exist");
+        }
+        giftCertificate.setTags(tagGiftCertificateService.getAllTagsByCertificate(giftCertificate));
         return giftCertificate;
 
     }

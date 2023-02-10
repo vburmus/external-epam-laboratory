@@ -30,7 +30,6 @@ public class SpringConfig implements WebMvcConfigurer {
     private final ApplicationContext applicationContext;
     private final Environment environment;
 
-    @Autowired
     public SpringConfig(Environment environment, ApplicationContext applicationContext) {
         this.environment = environment;
         this.applicationContext = applicationContext;
