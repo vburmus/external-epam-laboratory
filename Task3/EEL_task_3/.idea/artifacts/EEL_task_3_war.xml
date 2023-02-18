@@ -7,7 +7,7 @@
         <packaging>war</packaging>
       </options>
     </properties>
-    <root id="archive" name="untitled.war">
+    <root id="archive" name="EEL_task_3-1.0-SNAPSHOT.war">
       <element id="artifact" artifact-name="EEL_task_3:war exploded" />
     </root>
   </artifact>
