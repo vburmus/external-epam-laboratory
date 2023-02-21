@@ -95,7 +95,7 @@ class GiftCertificateServiceTest {
 
     }
     @Test
-    void deleteCertificateSucces() {
+    void deleteCertificateSuccess() {
         GiftCertificate gc = new GiftCertificate();
         Tag t = new Tag();
         t.setName(TEST_TAG);
@@ -111,7 +111,7 @@ class GiftCertificateServiceTest {
 
     }
     @Test
-    void deleteCertificateNoSuchItem() {
+    void deleteCertificateFalse() {
         GiftCertificate gc = new GiftCertificate();
         Tag t = new Tag();
         t.setName(TEST_TAG);
@@ -123,9 +123,8 @@ class GiftCertificateServiceTest {
         gc.setDescription(TEST_CERT);
         gc.setTags(List.of(t));
         when(giftCertificateRepositoryMocked.deleteGiftCertificate(gc.getId())).thenReturn(false);
-        NoSuchItemException thrown = assertThrows(NoSuchItemException.class,
-                () -> giftCertificateServiceMocked.deleteCertificate(ID));
-        assertEquals("Gift certificate with id =" + ID + "doesn't exist", thrown.getMessage());
+
+        assertFalse(giftCertificateServiceMocked.deleteCertificate(ID));
 
     }
 

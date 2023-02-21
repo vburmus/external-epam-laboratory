@@ -27,5 +27,3 @@ u
 Esrc/main/java/com/epam/esm/utils/datavalidation/ParamsValidation.java,a\7\a76ffdf91e59d5e1220d2b671eef7c86cc3df59b
 z
 Jsrc/main/java/com/epam/esm/taggiftcertificate/direction/DirectionEnum.java,7\4\742d93e1549a18eff422306c5b7832f5fbfb8816
-‚
-Rsrc/test/java/com/epam/esm/giftcertificate/service/GiftCertificateServiceTest.java,5\0\50594c39b0e03a02cfe12f9ee9865f1bc669dd71

@@ -52,7 +52,7 @@ public class GiftCertificateService {
     public boolean deleteCertificate(long id) {
 
         if (giftCertificateRepository.deleteGiftCertificate(id)) return true;
-        else throw new NoSuchItemException("Gift certificate with id =" + id + "doesn't exist");
+        return false;
 
     }
 

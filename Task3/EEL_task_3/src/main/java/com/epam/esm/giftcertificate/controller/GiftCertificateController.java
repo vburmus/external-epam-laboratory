@@ -1,8 +1,10 @@
 package com.epam.esm.giftcertificate.controller;
 
 
+import com.epam.esm.exceptionhandler.exceptions.NoSuchItemException;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.giftcertificate.service.GiftCertificateService;
+import org.hibernate.persister.walking.internal.StandardAnyTypeDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,8 +36,11 @@ public class GiftCertificateController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCertificate(@PathVariable("id") long id) {
-        giftCertificateService.deleteCertificate(id);
-        return new ResponseEntity<>(Map.of("status", HttpStatus.NO_CONTENT), HttpStatus.NO_CONTENT);
+        HttpStatus status;
+        if(giftCertificateService.deleteCertificate(id)) status = HttpStatus.OK;
+        else status = HttpStatus.NOT_FOUND;
+
+        return new ResponseEntity<>(Map.of("status",status),status);
     }
 
     @GetMapping(value = "/{id}")
