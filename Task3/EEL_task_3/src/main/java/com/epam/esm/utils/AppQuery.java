@@ -44,4 +44,9 @@ public class AppQuery {
         }
 
     }
+    public static class User {
+        public static final String GET_ALL_USERS = "SELECT * FROM user";
+        public static final String GET_USER_BY_ID = "SELECT * FROM user WHERE id = ?";
+
+    }
 }
