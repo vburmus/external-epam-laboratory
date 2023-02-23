@@ -1,14 +1,18 @@
 package com.epam.esm.user.model;
 
 
+import com.epam.esm.order.model.Order;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import java.util.List;
 
 public class User {
     private Long id;
     private String name;
     private String surname;
     private String number;
+    private List<Order> orders;
 
     public User(){}
 

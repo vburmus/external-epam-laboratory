@@ -49,4 +49,9 @@ public class AppQuery {
         public static final String GET_USER_BY_ID = "SELECT * FROM user WHERE id = ?";
 
     }
+    public static class Order {
+        public static final String GET_ALL_ORDERS= "SELECT * FROM order";
+        public static final String GET_ORDERS_BY_USER_ID = "SELECT * FROM order WHERE users_id = ?";
+        public static final String GET_ORDER_COST_AND_TIMESTAMP_BY_ID = "SELECT cost,create_date FROM order WHERE id = ?";
+    }
 }
