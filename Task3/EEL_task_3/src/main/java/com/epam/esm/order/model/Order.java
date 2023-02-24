@@ -15,7 +15,7 @@ public class Order {
     private List<GiftCertificate> certificates;
     private String description;
     private boolean isClosed;
-    private int cost;
+    private Integer cost;
     private String createDate;
     private String lastUpdateDate;
     public Order() {
@@ -77,7 +77,7 @@ public class Order {
         return this;
     }
 
-    public int getCost() {
+    public Integer getCost() {
         return cost;
     }
 

@@ -3,6 +3,7 @@ package com.epam.esm.utils.datavalidation;
 import com.epam.esm.exceptionhandler.exceptions.NoSuchItemException;
 import com.epam.esm.exceptionhandler.exceptions.ObjectIsInvalidException;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
+import com.epam.esm.order.model.Order;
 import com.epam.esm.tag.model.Tag;
 import com.epam.esm.taggiftcertificate.direction.DirectionEnum;
 import org.springframework.lang.NonNull;
@@ -77,4 +78,8 @@ public class ParamsValidation {
     }
 
 
+    public static boolean isValidOrder(Order order) {
+        return order.getUser().getId() != null && order.getCost() != null
+                && order.getCost() >= 0 && !order.getCertificates().isEmpty();
+    }
 }
