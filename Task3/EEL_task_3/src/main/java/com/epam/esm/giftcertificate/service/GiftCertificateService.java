@@ -10,7 +10,6 @@ import com.epam.esm.tag.service.TagService;
 import com.epam.esm.taggiftcertificate.repository.TagGiftCertificateRepository;
 import com.epam.esm.taggiftcertificate.service.TagGiftCertificateService;
 import com.epam.esm.utils.datavalidation.ParamsValidation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,7 +56,7 @@ public class GiftCertificateService {
     }
 
     public List<GiftCertificate> getAllGiftCertificates() {
-        return giftCertificateRepository.getAllGiftCertificates();
+        return tagGiftCertificateService.setTagsInCertificates(giftCertificateRepository.getAllGiftCertificates());
     }
 
     @Transactional
