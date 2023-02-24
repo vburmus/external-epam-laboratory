@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 @Repository
 public class OrderRepositoryImpl implements OrderRepository{
@@ -26,7 +27,18 @@ public class OrderRepositoryImpl implements OrderRepository{
     }
 
     @Override
-    public String getOrdersInfoByID(long id) {
-        return jdbcTemplate.queryForObject(AppQuery.Order.GET_ORDER_COST_AND_TIMESTAMP_BY_ID, String.class,id);
+    public Order getOrderByID(long id) {
+        return jdbcTemplate.queryForObject(AppQuery.Order.GET_ORDER_COST_AND_TIMESTAMP_BY_ID, new BeanPropertyRowMapper<>(Order.class),id);
+    }
+
+    @Override
+    public boolean isOrderExist(Order order) {
+        return jdbcTemplate.queryForObject(AppQuery.Order.IS_ORDER_EXIST, Integer.class,order.getDescription(),order.getCost()) >=1;
+    }
+
+    @Override
+    public boolean createOrder(Order order) {
+        LocalDateTime time = LocalDateTime.now();
+        return jdbcTemplate.update(AppQuery.Order.CREATE_ORDER,order.getUser().getId(),order.getCost(),order.getDescription(),time,time)==1;
     }
 }

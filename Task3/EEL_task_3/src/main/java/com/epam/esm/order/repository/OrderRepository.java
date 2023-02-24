@@ -7,5 +7,8 @@ import java.util.List;
 public interface OrderRepository {
     List<Order> getAllOrders();
     List<Order> getOrdersByUsersID(long id);
-    String getOrdersInfoByID(long id);
+    Order getOrderByID(long id);
+    boolean isOrderExist(Order order);
+
+    boolean createOrder(Order order);
 }

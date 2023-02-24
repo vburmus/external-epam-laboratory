@@ -12,6 +12,7 @@ public class User {
     private String name;
     private String surname;
     private String number;
+
     private List<Order> orders;
 
     public User(){}
@@ -29,6 +30,15 @@ public class User {
 
     public User setId(Long id) {
         this.id = id;
+        return this;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public User setOrders(List<Order> orders) {
+        this.orders = orders;
         return this;
     }
 
