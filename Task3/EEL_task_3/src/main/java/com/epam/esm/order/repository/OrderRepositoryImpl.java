@@ -1,5 +1,6 @@
 package com.epam.esm.order.repository;
 
+import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.order.model.Order;
 import com.epam.esm.utils.AppQuery;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -32,13 +33,23 @@ public class OrderRepositoryImpl implements OrderRepository{
     }
 
     @Override
+    public long getOrdersID(Order order) {
+        return jdbcTemplate.queryForObject(AppQuery.Order.GET_ORDERS_ID, Long.class, order.getUser().getId(), order.getDescription(),order.getCost());
+    }
+
+    @Override
     public boolean isOrderExist(Order order) {
-        return jdbcTemplate.queryForObject(AppQuery.Order.IS_ORDER_EXIST, Integer.class,order.getDescription(),order.getCost()) >=1;
+        return jdbcTemplate.queryForObject(AppQuery.Order.IS_ORDER_EXIST, Integer.class,order.getUser().getId(),order.getDescription(),order.getCost()) >=1;
     }
 
     @Override
     public boolean createOrder(Order order) {
         LocalDateTime time = LocalDateTime.now();
         return jdbcTemplate.update(AppQuery.Order.CREATE_ORDER,order.getUser().getId(),order.getCost(),order.getDescription(),time,time)==1;
+    }
+
+    @Override
+    public boolean setCertificateIntoOrder(GiftCertificate gc, Order order) {
+        return jdbcTemplate.update(AppQuery.Order.ADD_GC_INTO_ORDER,gc.getId(),order.getId()) == 1;
     }
 }

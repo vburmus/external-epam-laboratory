@@ -53,8 +53,9 @@ public class AppQuery {
         public static final String GET_ALL_ORDERS= "SELECT * FROM purchase";
         public static final String GET_ORDERS_BY_USER_ID = "SELECT * FROM purchase WHERE users_id = ?";
         public static final String GET_ORDER_COST_AND_TIMESTAMP_BY_ID = "SELECT cost,create_date FROM purchase WHERE id = ?";
-        public static final String IS_ORDER_EXIST = "SELECT count(*) FROM purchase WHERE description = ? AND cost = ?";
+        public static final String IS_ORDER_EXIST = "SELECT count(*) FROM purchase WHERE user_id = ? AND description = ? AND cost = ?";
         public static final String CREATE_ORDER = "INSERT INTO purchase(user_id,cost,description,create_date,last_update_date) VALUES(?,?,?,?,?)";
-
+        public static final String ADD_GC_INTO_ORDER = "INSERT INTO gift_certificate_has_order(gift_certificate_id, order_id) VALUES(?,?)";
+        public static final String GET_ORDERS_ID = "SELECT id FROM purchase WHERE user_id = ? AND description = ? AND cost = ?";
     }
 }

@@ -1,6 +1,7 @@
 package com.epam.esm.order.service;
 
 import com.epam.esm.exceptionhandler.exceptions.ObjectIsInvalidException;
+import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.order.model.Order;
 import com.epam.esm.order.repository.OrderRepository;
 import com.epam.esm.utils.datavalidation.ParamsValidation;
@@ -31,13 +32,17 @@ public class OrderService {
       }
     @Transactional
     public Order createOrder(Order order) {
-        if(orderRepository.isOrderExist(order)){
+        boolean t = orderRepository.isOrderExist(order);
+        if(t){
             throw new ObjectIsInvalidException("Order already exists!");
         }
         if(!ParamsValidation.isValidOrder(order)){
             throw new ObjectIsInvalidException("Order is invalid!");
         }
         orderRepository.createOrder(order);
+        order.setId(orderRepository.getOrdersID(order));
+        for (GiftCertificate gc: order.getCertificates())
+            orderRepository.setCertificateIntoOrder(gc,order);
         return order;
     }
 }
