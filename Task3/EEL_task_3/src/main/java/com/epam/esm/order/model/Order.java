@@ -9,14 +9,15 @@ import java.util.List;
 
 public class Order {
     private long id;
+
     private User user;
+
     private List<GiftCertificate> certificates;
     private String description;
     private boolean isClosed;
     private int cost;
     private String createDate;
     private String lastUpdateDate;
-
     public Order() {
     }
 
@@ -38,6 +39,15 @@ public class Order {
     public Order setId(long id) {
         this.id = id;
         return this;
+    }
+
+    public Order setUser(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public List<GiftCertificate> getCertificates() {
@@ -112,11 +122,8 @@ public class Order {
 
     @Override
     public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", certificates=" + certificates +
-                ", description='" + description + '\'' +
-                ", isClosed=" + isClosed +
-                '}';
+        return "Cost:" + cost +
+                ", datetime:" + createDate;
+
     }
 }
