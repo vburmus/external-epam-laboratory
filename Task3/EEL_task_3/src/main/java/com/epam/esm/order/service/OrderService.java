@@ -32,8 +32,8 @@ public class OrderService {
       }
     @Transactional
     public Order createOrder(Order order) {
-        boolean t = orderRepository.isOrderExist(order);
-        if(t){
+
+        if(orderRepository.isOrderExist(order)){
             throw new ObjectIsInvalidException("Order already exists!");
         }
         if(!ParamsValidation.isValidOrder(order)){
