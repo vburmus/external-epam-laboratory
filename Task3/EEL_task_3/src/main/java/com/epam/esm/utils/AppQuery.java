@@ -1,6 +1,6 @@
 package com.epam.esm.utils;
 
-import com.epam.esm.taggiftcertificate.direction.DirectionEnum;
+import com.epam.esm.giftcertificate.direction.DirectionEnum;
 
 
 public class AppQuery {

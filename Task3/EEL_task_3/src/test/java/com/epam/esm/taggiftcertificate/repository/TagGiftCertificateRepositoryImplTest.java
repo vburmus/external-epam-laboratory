@@ -3,7 +3,7 @@ package com.epam.esm.taggiftcertificate.repository;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.giftcertificate.repository.GiftCertificateRepository;
 import com.epam.esm.giftcertificate.repository.GiftCertificateRepositoryImpl;
-import com.epam.esm.taggiftcertificate.direction.DirectionEnum;
+import com.epam.esm.giftcertificate.direction.DirectionEnum;
 import org.junit.jupiter.api.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
@@ -15,7 +15,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TagGiftCertificateRepositoryImplTest {
-    private TagGiftCertificateRepository tagGiftCertificateRepository;
+    private GiftCertificateRepository tagGiftCertificateRepository;
     private EmbeddedDatabase embeddedDatabase;
 
     @BeforeEach
@@ -25,7 +25,7 @@ class TagGiftCertificateRepositoryImplTest {
                 .addScript("embeddedDB/task_3.sql")
                 .addScript("embeddedDB/insert-some-data.sql")
                 .build();
-        this.tagGiftCertificateRepository = new TagGiftCertificateRepositoryImpl(new JdbcTemplate(embeddedDatabase));
+        this.tagGiftCertificateRepository = new GiftCertificateRepositoryImpl(new JdbcTemplate(embeddedDatabase));
     }
 
 

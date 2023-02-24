@@ -6,19 +6,18 @@ import com.epam.esm.exceptionhandler.exceptions.ObjectIsInvalidException;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.giftcertificate.repository.GiftCertificateRepository;
 import com.epam.esm.tag.model.Tag;
-import com.epam.esm.tag.repository.TagRepository;
+
 import com.epam.esm.tag.service.TagService;
-import com.epam.esm.taggiftcertificate.service.TagGiftCertificateService;
-import com.epam.esm.utils.datavalidation.ParamsValidation;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
+
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -35,8 +34,7 @@ class GiftCertificateServiceTest {
 
     @Mock
     private TagService tagServiceMocked;
-    @Mock
-    private TagGiftCertificateService tagGiftCertificateService;
+
     @InjectMocks
     private GiftCertificateService giftCertificateServiceMocked;
 
@@ -60,7 +58,7 @@ class GiftCertificateServiceTest {
 
         when(giftCertificateRepositoryMocked.getGiftCertificatesID(gc)).thenReturn(gc.getId());
         when(giftCertificateRepositoryMocked.createTagDependenciesForGiftCertificate(List.of(ID), ID)).thenReturn(true);
-        when(tagGiftCertificateService.getAllTagsByCertificate(gc)).thenReturn(gc.getTags());
+        when(giftCertificateServiceMocked.getAllTagsByCertificate(gc)).thenReturn(gc.getTags());
         when(giftCertificateRepositoryMocked.getGiftCertificatesID(gc)).thenReturn(gc.getId());
         when(giftCertificateRepositoryMocked.getGiftCertificateByID(ID)).thenReturn(gc);
         assertEquals(gc,giftCertificateServiceMocked.createCertificate(gc));

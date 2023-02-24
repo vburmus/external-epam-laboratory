@@ -5,8 +5,10 @@ import com.epam.esm.exceptionhandler.exceptions.ObjectAlreadyExistsException;
 import com.epam.esm.exceptionhandler.exceptions.ObjectIsInvalidException;
 import com.epam.esm.tag.model.Tag;
 import com.epam.esm.tag.repository.TagRepository;
+import com.epam.esm.utils.AppQuery;
 import com.epam.esm.utils.datavalidation.ParamsValidation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,5 +85,8 @@ public class TagService {
         return tagRepository.isTagExists(name);
     }
 
+    public List<Tag> getAllTagsByCertificateID(long id) {
+        return tagRepository.getAllTagsByCertificateID(id);
+    }
 
 }
