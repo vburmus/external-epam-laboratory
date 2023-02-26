@@ -47,7 +47,7 @@ public class GiftCertificateController {
         return new ResponseEntity<>(Map.of("status",status),status);
     }
 
-    @GetMapping( "/search/byId{id}")
+    @GetMapping( "/search/byId/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") long id) {
         return ResponseEntity.ok(giftCertificateService.getCertificateById(id));
     }
