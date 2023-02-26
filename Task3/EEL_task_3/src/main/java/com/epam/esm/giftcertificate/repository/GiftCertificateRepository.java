@@ -15,7 +15,7 @@ public interface GiftCertificateRepository {
     boolean createTagDependenciesForGiftCertificate(List<Long> tags, long giftCertificateID);
 
 
-    List<GiftCertificate> getAllGiftCertificates();
+    List<GiftCertificate> getAllGiftCertificates(Integer page);
 
     GiftCertificate getGiftCertificateByID(long id);
 
@@ -31,17 +31,17 @@ public interface GiftCertificateRepository {
 
     List<Tag> getAllTagsIdByCertificateId(long id);
 
-    List<GiftCertificate> getGiftCertificatesByTagName(String tagName);
+    List<GiftCertificate> getGiftCertificatesByTagName(String tagName,Integer page);
 
     List<GiftCertificate> getGiftCertificatesByPartOfName(String part);
 
-    List<GiftCertificate> getGiftCertificatesByPartOfDescription(String part);
+    List<GiftCertificate> getGiftCertificatesByPartOfDescription(String part,Integer page);
 
-    List<GiftCertificate> getCertificatesSortedByDate(DirectionEnum direction);
+    List<GiftCertificate> getCertificatesSortedByDate(DirectionEnum direction,Integer page);
 
-    List<GiftCertificate> getCertificatesSortedByName(DirectionEnum direction);
+    List<GiftCertificate> getCertificatesSortedByName(DirectionEnum direction,Integer page);
 
-    List<GiftCertificate> getCertificatesSortedByDateName(DirectionEnum directionDate, DirectionEnum directionName);
+    List<GiftCertificate> getCertificatesSortedByDateName(DirectionEnum directionDate, DirectionEnum directionName,Integer page);
 
-    List<GiftCertificate> getCertificatesBySeveralTags(List<Tag> tags);
+    List<GiftCertificate> getCertificatesBySeveralTags(List<Tag> tags,Integer page);
 }
