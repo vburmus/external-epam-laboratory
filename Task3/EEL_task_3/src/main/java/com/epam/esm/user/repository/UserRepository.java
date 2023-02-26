@@ -5,6 +5,6 @@ import com.epam.esm.user.model.User;
 import java.util.List;
 
 public interface UserRepository {
-    List<User> getAllUsers();
+    List<User> getAllUsers(Integer page);
     User getUserByID(long id);
 }
