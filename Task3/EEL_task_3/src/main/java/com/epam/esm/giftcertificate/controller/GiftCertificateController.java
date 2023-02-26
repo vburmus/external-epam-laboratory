@@ -4,11 +4,13 @@ package com.epam.esm.giftcertificate.controller;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.giftcertificate.service.GiftCertificateService;
 
+import com.epam.esm.tag.model.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -43,7 +45,7 @@ public class GiftCertificateController {
         return new ResponseEntity<>(Map.of("status",status),status);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping( "/search/byId{id}")
     public ResponseEntity<?> getById(@PathVariable("id") long id) {
         return ResponseEntity.ok(giftCertificateService.getCertificateById(id));
     }
@@ -53,7 +55,7 @@ public class GiftCertificateController {
         return ResponseEntity.ok(Map.of("result", giftCertificateService.updateCertificate(id, giftCertificate)));
     }
 
-    @GetMapping("/byTag/{name}")
+    @GetMapping("/search/byTag/{name}")
     public ResponseEntity<?> getCertificatesByTagName(@PathVariable("name") String name) {
         return ResponseEntity.ok(Map.of(GIFT_CERTIFICATES, giftCertificateService.getGiftCertificatesByTagName(name)));
 
@@ -80,6 +82,10 @@ public class GiftCertificateController {
     public ResponseEntity<?> getCertificatesSortedByDateName(@PathVariable("directionDate") String directionDate, @PathVariable("directionName") String directionName) {
         return ResponseEntity.ok(Map.of(GIFT_CERTIFICATES, giftCertificateService.getCertificatesSortedByDateName(directionDate, directionName)));
 
+    }
+    @PostMapping("/search/byTags")
+    public ResponseEntity<?> searchForCertificatesBySeveralTags(@RequestBody List<Tag> tags){
+        return ResponseEntity.ok(Map.of(GIFT_CERTIFICATES, giftCertificateService.getCertificatesBySeveralTags(tags)));
     }
 }
 

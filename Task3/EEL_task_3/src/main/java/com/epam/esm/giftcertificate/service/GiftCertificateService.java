@@ -14,6 +14,7 @@ import com.epam.esm.utils.datavalidation.ParamsValidation;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -180,4 +181,7 @@ public class GiftCertificateService {
 
     }
 
+    public List<GiftCertificate> getCertificatesBySeveralTags(List<Tag> tags) {
+        return giftCertificateRepository.getCertificatesBySeveralTags(tags);
+    }
 }

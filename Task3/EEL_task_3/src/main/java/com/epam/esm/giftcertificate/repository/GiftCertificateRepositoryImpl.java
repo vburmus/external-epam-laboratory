@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.security.cert.Certificate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -128,4 +129,11 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
         return jdbcTemplate.query(AppQuery.GiftCertificateHasTag.getSortingQueryForTwoParams(directionDate, CREATE_DATE, directionName, NAME), new BeanPropertyRowMapper<>(GiftCertificate.class));
 
     }
+
+    @Override
+    public List<GiftCertificate> getCertificatesBySeveralTags(List<Tag> tags) {
+        return jdbcTemplate.query(AppQuery.GiftCertificateHasTag.getQueryForGettingSeveralTags(tags),new BeanPropertyRowMapper<>(GiftCertificate.class));
+    }
+
+
 }

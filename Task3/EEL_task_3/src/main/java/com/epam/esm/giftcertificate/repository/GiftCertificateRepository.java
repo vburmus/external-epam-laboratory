@@ -4,6 +4,7 @@ import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.tag.model.Tag;
 import com.epam.esm.giftcertificate.direction.DirectionEnum;
 
+import java.security.cert.Certificate;
 import java.util.List;
 import java.util.Map;
 
@@ -42,5 +43,5 @@ public interface GiftCertificateRepository {
 
     List<GiftCertificate> getCertificatesSortedByDateName(DirectionEnum directionDate, DirectionEnum directionName);
 
-
+    List<GiftCertificate> getCertificatesBySeveralTags(List<Tag> tags);
 }

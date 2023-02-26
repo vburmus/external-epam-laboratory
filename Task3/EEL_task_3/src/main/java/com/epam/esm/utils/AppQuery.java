@@ -1,6 +1,8 @@
 package com.epam.esm.utils;
 
 import com.epam.esm.giftcertificate.direction.DirectionEnum;
+import com.epam.esm.tag.model.Tag;
+import java.util.List;
 
 
 public class AppQuery {
@@ -34,7 +36,20 @@ public class AppQuery {
         public static final String GET_GIFT_CERTIFICATE_BY_TAGS_NAME = "SELECT  cert.id , cert.name , cert.description, cert.price, cert.duration ,cert.create_date , cert.last_update_date FROM gift_certificate_has_tag cert_tag JOIN tag t JOIN gift_certificate cert  WHERE t.id = cert_tag.tag_id AND cert.id = cert_tag.gift_certificate_id  AND t.name = ?";
         public static final String GET_GIFT_CERTIFICATE_BY_PART_OF_NAME = "SELECT  * FROM  gift_certificate  WHERE name LIKE ?";
         public static final String GET_GIFT_CERTIFICATE_BY_PART_OF_DESCRIPTION = "SELECT  * FROM  gift_certificate  WHERE description LIKE ?";
+        public static  String getQueryForGettingSeveralTags(List<com.epam.esm.tag.model.Tag> tags) {
+            StringBuilder sb = new StringBuilder("SELECT gc.id FROM gift_certificate gc");
+            String part1 = " JOIN gift_certificate_has_tag gct";
+            String part2 = " ON gc.id = gct";
+            String part3 = ".gift_certificate_id AND gct";
+            String part4 = ".tag_id = ";
+            String part5 = " GROUP BY gc.id";
 
+            for(int i = 0; i < tags.size();i++){
+                sb.append(part1 + i + part2 + i + part3 + i + part4 + tags.get(i).getId());
+            }
+            return sb.append(part5+ " ").toString();
+
+        }
         public static String getSortingQueryForOneParam(DirectionEnum direction, String param) {
             return "SELECT * FROM gift_certificate  ORDER BY " + param + " " + direction;
         }
@@ -42,6 +57,7 @@ public class AppQuery {
         public static String getSortingQueryForTwoParams(DirectionEnum direction1, String param1, DirectionEnum direction2, String param2) {
              return "SELECT * FROM gift_certificate ORDER BY " + param1 + " " + direction1 + " , " + param2 + " " +direction2;
         }
+
 
     }
     public static class User {
