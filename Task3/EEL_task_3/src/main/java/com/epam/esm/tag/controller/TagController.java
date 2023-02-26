@@ -1,5 +1,6 @@
 package com.epam.esm.tag.controller;
 
+import com.epam.esm.order.model.Order;
 import com.epam.esm.tag.model.Tag;
 import com.epam.esm.tag.service.TagService;
 import com.epam.esm.utils.datavalidation.ParamsValidation;
@@ -9,12 +10,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/tag")
 public class TagController {
+    public static final String TAGS = "Tags";
     private final TagService tagService;
 
     @Autowired
@@ -24,7 +27,10 @@ public class TagController {
 
     @GetMapping({"/{page}",""})
     public ResponseEntity<?> showAllTags(@PathVariable(required = false) Optional<Integer> page) {
-        return new ResponseEntity<>(Map.of("tags", tagService.getAllTags(ParamsValidation.isValidPage(page))), HttpStatus.OK);
+       List<Tag> tags = tagService.getAllTags(ParamsValidation.isValidPage(page));
+            if (tags.isEmpty())
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.ok(Map.of(TAGS, tags));
     }
 
     @GetMapping("/search/byId/{id}")
