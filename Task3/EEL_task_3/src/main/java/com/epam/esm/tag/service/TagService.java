@@ -35,8 +35,8 @@ public class TagService {
 
     }
 
-    public List<Tag> getAllTags() {
-        return tagRepository.getAllTags();
+    public List<Tag> getAllTags(Integer page) {
+        return tagRepository.getAllTags(page);
     }
 
     public Tag getTagById(long id) {

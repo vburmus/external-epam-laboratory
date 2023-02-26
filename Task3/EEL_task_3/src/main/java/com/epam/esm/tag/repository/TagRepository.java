@@ -8,7 +8,7 @@ public interface TagRepository {
 
     boolean createTag(Tag tag);
 
-    List<Tag> getAllTags();
+    List<Tag> getAllTags(Integer page);
 
     Tag getTagByID(long id);
 

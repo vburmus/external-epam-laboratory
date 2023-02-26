@@ -24,8 +24,8 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public List<Tag> getAllTags() {
-        return jdbcTemplate.query(AppQuery.Tag.GET_ALL_TAGS, new BeanPropertyRowMapper<>(Tag.class));
+    public List<Tag> getAllTags(Integer page) {
+        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.Tag.GET_ALL_TAGS,page), new BeanPropertyRowMapper<>(Tag.class));
     }
 
     @Override
