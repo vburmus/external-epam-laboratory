@@ -131,10 +131,7 @@ public class GiftCertificateService {
     public List<GiftCertificate> getGiftCertificatesByPart(String part) {
         if (part != null && !part.isEmpty()) {
             List<GiftCertificate> certificates = giftCertificateRepository.getGiftCertificatesByPartOfDescription(part);
-            if (certificates.isEmpty()) {
-                List<GiftCertificate> gc = ParamsValidation.isCertificatesArentEmptyOrElseThrowNoSuchItem(giftCertificateRepository.getGiftCertificatesByPartOfName(part), "Gift Certificates with part of name -> " + part + DONT_EXIST);
-                return setTagsInCertificates(gc);
-            }
+
             List<GiftCertificate> gc = ParamsValidation.isCertificatesArentEmptyOrElseThrowNoSuchItem(certificates, "Gift Certificates with part of description -> " + part + DONT_EXIST);
             return setTagsInCertificates(gc);
         }
