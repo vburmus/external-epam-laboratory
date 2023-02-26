@@ -18,13 +18,13 @@ public class OrderRepositoryImpl implements OrderRepository{
     }
 
     @Override
-    public List<Order> getAllOrders() {
-        return jdbcTemplate.query(AppQuery.Order.GET_ALL_ORDERS,new BeanPropertyRowMapper<>(Order.class));
+    public List<Order> getAllOrders(Integer page) {
+        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.Order.GET_ALL_ORDERS,page),new BeanPropertyRowMapper<>(Order.class));
     }
 
     @Override
-    public List<Order> getOrdersByUsersID(long usersId) {
-        return jdbcTemplate.query(AppQuery.Order.GET_ORDERS_BY_USER_ID,new BeanPropertyRowMapper<>(Order.class),usersId);
+    public List<Order> getOrdersByUsersID(long usersId,Integer page) {
+        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.Order.GET_ORDERS_BY_USER_ID,page),new BeanPropertyRowMapper<>(Order.class),usersId);
     }
 
     @Override

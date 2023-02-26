@@ -17,13 +17,14 @@ public class OrderService {
     public OrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
-    public List<Order> getAllOrders() {
-        return orderRepository.getAllOrders();
+
+    public List<Order> getAllOrders(Integer page) {
+        return orderRepository.getAllOrders(page);
     }
 
 
-    public List<Order> getOrdersByUsersID(long usersId) {
-        return orderRepository.getOrdersByUsersID(usersId);
+    public List<Order> getOrdersByUsersID(long usersId,Integer page) {
+        return orderRepository.getOrdersByUsersID(usersId,page);
     }
 
 

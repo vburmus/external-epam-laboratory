@@ -6,8 +6,8 @@ import com.epam.esm.order.model.Order;
 import java.util.List;
 
 public interface OrderRepository {
-    List<Order> getAllOrders();
-    List<Order> getOrdersByUsersID(long id);
+    List<Order> getAllOrders(Integer page);
+    List<Order> getOrdersByUsersID(long id,Integer page);
     Order getOrderByID(long id);
     long getOrdersID(Order order);
     boolean isOrderExist(Order order);
