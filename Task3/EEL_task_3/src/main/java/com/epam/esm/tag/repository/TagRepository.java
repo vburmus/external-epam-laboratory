@@ -21,5 +21,6 @@ public interface TagRepository {
     boolean deleteTagByID(long id);
 
     boolean isTagExists(String tagName);
+    Tag getMostUsedTag();
 
 }

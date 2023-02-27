@@ -51,6 +51,11 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
+    public Tag getMostUsedTag() {
+        return jdbcTemplate.queryForObject(AppQuery.Tag.GET_MOST_USED_TAG, new BeanPropertyRowMapper<>(Tag.class));
+    }
+
+    @Override
     public long getTagsID(Tag tag) {
         return jdbcTemplate.queryForObject(AppQuery.Tag.GET_TAGS_ID, Long.class, tag.getName());
     }

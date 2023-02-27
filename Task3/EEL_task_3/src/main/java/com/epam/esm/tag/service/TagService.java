@@ -89,4 +89,7 @@ public class TagService {
         return tagRepository.getAllTagsByCertificateID(id);
     }
 
+    public Tag getMostUsedTag(){
+        return tagRepository.getMostUsedTag();
+    }
 }

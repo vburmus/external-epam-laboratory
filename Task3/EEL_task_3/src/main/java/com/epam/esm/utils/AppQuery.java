@@ -18,7 +18,10 @@ public class AppQuery {
         public static final String GET_TAG_BY_NAME = "SELECT * FROM tag WHERE name = ?";
         public static final String IS_TAG_EXISTS = "SELECT count(*) FROM tag WHERE name=?";
         public static final String GET_TAGS_ID = "SELECT id FROM tag WHERE name = ?";
-
+        public static final String GET_MOST_USED_TAG = "SELECT tag.id,tag.name FROM (SELECT user_id, tag_id, COUNT(*) AS tag_count FROM lab_task.gift_certificate_has_tag " +
+                "  JOIN lab_task.gift_certificate_has_order ON gift_certificate_has_order.gift_certificate_id = gift_certificate_has_tag.gift_certificate_id " +
+                "  JOIN lab_task.purchase ON purchase.id = gift_certificate_has_order.order_id WHERE purchase.user_id = ( SELECT user_id FROM lab_task.purchase " +
+                "  ORDER BY cost DESC LIMIT 1 ) GROUP BY user_id, tag_id ORDER BY tag_count DESC LIMIT 1) subquery JOIN lab_task.tag ON tag.id = subquery.tag_id;";
 
     }
 

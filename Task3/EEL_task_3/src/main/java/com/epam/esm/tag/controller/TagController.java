@@ -48,7 +48,10 @@ public class TagController {
     public ResponseEntity<?> delete(@PathVariable("id") long id) {
         tagService.deleteTag(id);
         return new ResponseEntity<>(Map.of("status", HttpStatus.NO_CONTENT), HttpStatus.NO_CONTENT);
-
+    }
+    @GetMapping("search/mostUsed")
+    public ResponseEntity<?> getMostUsed(){
+        return ResponseEntity.ok(Map.of("TAG", tagService.getMostUsedTag()));
     }
 
 }
