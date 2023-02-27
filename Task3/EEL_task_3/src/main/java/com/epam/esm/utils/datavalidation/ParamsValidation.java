@@ -80,8 +80,7 @@ public class ParamsValidation {
 
 
     public static boolean isValidOrder(Order order) {
-        return order.getUser().getId() != null && order.getCost() != null
-                && order.getCost() >= 0 && !order.getCertificates().isEmpty();
+        return order.getUser().getId() != null &&  !order.getCertificates().isEmpty();
     }
     public static Integer isValidPage(Optional<Integer> page){
         if(page.orElse(1) > 0)

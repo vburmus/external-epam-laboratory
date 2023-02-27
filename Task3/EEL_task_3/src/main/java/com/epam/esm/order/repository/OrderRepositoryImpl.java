@@ -52,4 +52,14 @@ public class OrderRepositoryImpl implements OrderRepository{
     public boolean setCertificateIntoOrder(GiftCertificate gc, Order order) {
         return jdbcTemplate.update(AppQuery.Order.ADD_GC_INTO_ORDER,gc.getId(),order.getId()) == 1;
     }
+
+    @Override
+    public boolean isCertificateExistsInOrder(GiftCertificate gc, Order order) {
+        return jdbcTemplate.queryForObject(AppQuery.Order.IS_GC_IN_ORDER_EXIST,Integer.class, order.getId(), gc.getId())==1;
+    }
+
+    @Override
+    public boolean incrementQuantity(GiftCertificate gc, Order order) {
+        return jdbcTemplate.update(AppQuery.Order.INCREMENT_QUANTITY,gc.getId(),order.getId()) == 1;
+    }
 }

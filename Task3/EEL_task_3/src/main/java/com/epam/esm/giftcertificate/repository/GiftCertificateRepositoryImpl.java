@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.security.cert.Certificate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -134,6 +133,11 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     @Override
     public List<GiftCertificate> getCertificatesBySeveralTags(List<Tag> tags,Integer page,Integer size) {
         return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificateHasTag.getQueryForGettingSeveralTags(tags),page,size),new BeanPropertyRowMapper<>(GiftCertificate.class));
+    }
+
+    @Override
+    public Double getCertificatesPriceByID(long id) {
+        return jdbcTemplate.queryForObject(AppQuery.GiftCertificate.GET_CERTIFICATES_PRICE, Double.class,id);
     }
 
 

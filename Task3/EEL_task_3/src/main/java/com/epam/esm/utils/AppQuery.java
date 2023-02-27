@@ -25,11 +25,13 @@ public class AppQuery {
     public static class GiftCertificate {
         public static final String CREATE_CERTIFICATE = "INSERT INTO gift_certificate(name,description,price,duration,create_date,last_update_date) VALUES(?,?,?,?,?,?)";
         public static final String GET_ALL_CERTIFICATES = "SELECT * FROM gift_certificate";
+        public static final String GET_CERTIFICATES_PRICE = "SELECT price FROM gift_certificate WHERE id =?";
         public static final String GET_CERTIFICATE_BY_ID = "SELECT * FROM gift_certificate WHERE id=?";
         public static final String DELETE_CERTIFICATE_BY_ID = "DELETE FROM gift_certificate WHERE id=?";
         public static final String GET_CERTIFICATES_ID = "SELECT id FROM gift_certificate WHERE name = ? AND description = ? AND price = ? AND duration = ?";
         public static final String IS_CERTIFICATE_EXISTS = "SELECT count(*) FROM gift_certificate WHERE name = ? AND description = ? AND price = ? AND duration = ?";
         public static final String UPDATE_CERTIFICATE = "UPDATE gift_certificate SET";
+
     }
 
 
@@ -77,5 +79,7 @@ public class AppQuery {
         public static final String CREATE_ORDER = "INSERT INTO purchase(user_id,cost,description,create_date,last_update_date) VALUES(?,?,?,?,?)";
         public static final String ADD_GC_INTO_ORDER = "INSERT INTO gift_certificate_has_order(gift_certificate_id, order_id) VALUES(?,?)";
         public static final String GET_ORDERS_ID = "SELECT id FROM purchase WHERE user_id = ? AND description = ? AND cost = ?";
+        public static final String IS_GC_IN_ORDER_EXIST = "SELECT count(*) FROM gift_certificate_has_order WHERE order_id = ? AND gift_certificate_id = ? ";
+        public static final String INCREMENT_QUANTITY = "UPDATE gift_certificate_has_order SET quantity = quantity + 1 WHERE gift_certificate_id = ? AND order_id = ?  ";
     }
 }

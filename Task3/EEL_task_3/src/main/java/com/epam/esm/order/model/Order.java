@@ -15,19 +15,18 @@ public class Order {
     private List<GiftCertificate> certificates;
     private String description;
     private boolean isClosed;
-    private Integer cost;
+    private Double cost;
     private String createDate;
     private String lastUpdateDate;
     public Order() {
     }
 
-    public Order(long id,User user, List<GiftCertificate> certificates, String description, boolean isClosed, int cost, String createDate, String lastUpdateDate) {
+    public Order(long id,User user, List<GiftCertificate> certificates, String description, boolean isClosed,  String createDate, String lastUpdateDate) {
         this.id = id;
         this.user = user;
         this.certificates = certificates;
         this.description = description;
         this.isClosed = isClosed;
-        this.cost = cost;
         this.createDate = createDate;
         this.lastUpdateDate = lastUpdateDate;
     }
@@ -77,11 +76,11 @@ public class Order {
         return this;
     }
 
-    public Integer getCost() {
+    public Double getCost() {
         return cost;
     }
 
-    public Order setCost(int cost) {
+    public Order setCost(Double cost) {
         this.cost = cost;
         return this;
     }

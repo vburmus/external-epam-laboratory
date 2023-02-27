@@ -12,7 +12,7 @@ public class GiftCertificate {
     private String name;
     private List<Tag> tags;
     private String description;
-    private Integer price;
+    private Double price;
     private Integer duration;
     private String createDate;
     private String lastUpdateDate;
@@ -20,7 +20,7 @@ public class GiftCertificate {
     public GiftCertificate() {
     }
 
-    public GiftCertificate(Long id, String name, List<Tag> tags, String description, Integer price, Integer duration) {
+    public GiftCertificate(Long id, String name, List<Tag> tags, String description, Double price, Integer duration) {
         this.id = id;
         this.name = name;
         this.tags = tags;
@@ -66,11 +66,11 @@ public class GiftCertificate {
         return this;
     }
 
-    public Integer getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public GiftCertificate setPrice(Integer price) {
+    public GiftCertificate setPrice(Double price) {
         this.price = price;
         return this;
     }

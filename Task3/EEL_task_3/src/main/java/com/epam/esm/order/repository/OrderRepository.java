@@ -14,4 +14,7 @@ public interface OrderRepository {
 
     boolean createOrder(Order order);
     boolean setCertificateIntoOrder(GiftCertificate gc, Order order);
+    boolean isCertificateExistsInOrder(GiftCertificate gc, Order order);
+
+    boolean incrementQuantity(GiftCertificate gc, Order order);
 }
