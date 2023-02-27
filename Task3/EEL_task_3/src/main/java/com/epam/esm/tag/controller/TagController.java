@@ -25,9 +25,9 @@ public class TagController {
         this.tagService = tagService;
     }
 
-    @GetMapping({"/{page}",""})
-    public ResponseEntity<?> showAllTags(@PathVariable(required = false) Optional<Integer> page) {
-       List<Tag> tags = tagService.getAllTags(ParamsValidation.isValidPage(page));
+    @GetMapping({"","/{page}","/{page}/{size}"})
+    public ResponseEntity<?> showAllTags(@PathVariable(required = false) Optional<Integer> page,@PathVariable(required = false) Optional<Integer> size) {
+       List<Tag> tags = tagService.getAllTags(ParamsValidation.isValidPage(page),ParamsValidation.isValidSize(size));
             if (tags.isEmpty())
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             return ResponseEntity.ok(Map.of(TAGS, tags));

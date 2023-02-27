@@ -6,9 +6,9 @@ import java.util.List;
 
 
 public class AppQuery {
-    private static final Integer LIMIT = 2;
-    public static String getQueryWithPagination(String query,int page){
-        return query + " LIMIT " + LIMIT + " OFFSET " + (page-1)*LIMIT;
+
+    public static String getQueryWithPagination(String query,int page,int size){
+        return query + " LIMIT " + size + " OFFSET " + (page-1)*size;
     }
     public static class Tag {
         public static final String CREATE_TAG = "INSERT INTO tag (name) VALUES(?)";

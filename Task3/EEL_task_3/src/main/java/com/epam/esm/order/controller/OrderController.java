@@ -20,13 +20,13 @@ public class OrderController {
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
-    @GetMapping({"", "/{page}"})
-    public ResponseEntity<?> showAll(@PathVariable(required = false) Optional<Integer> page){
-        return isNotFound(orderService.getAllOrders(ParamsValidation.isValidPage(page)));
+    @GetMapping({"", "/{page}","/{page}/{size}"})
+    public ResponseEntity<?> showAll(@PathVariable(required = false) Optional<Integer> page,@PathVariable(required = false) Optional<Integer> size){
+        return isNotFound(orderService.getAllOrders(ParamsValidation.isValidPage(page),ParamsValidation.isValidSize(size)));
     }
-    @GetMapping({"/by-user-id/{id}","/by-user-id/{id}/{page}"})
-    public ResponseEntity<?> getOrdersByUsersID(@PathVariable("id") long id,@PathVariable(required = false) Optional<Integer> page){
-        return isNotFound(orderService.getOrdersByUsersID(id,ParamsValidation.isValidPage(page)));
+    @GetMapping({"/by-user-id/{id}","/by-user-id/{id}/{page}","/byUser/{id}/{page}"})
+    public ResponseEntity<?> getOrdersByUsersID(@PathVariable("id") long id,@PathVariable(required = false) Optional<Integer> page,@PathVariable(required = false) Optional<Integer> size){
+        return isNotFound(orderService.getOrdersByUsersID(id,ParamsValidation.isValidPage(page),ParamsValidation.isValidSize(size)));
     }
     @GetMapping("/info/{id}")
     public ResponseEntity<?> getOrdersInfoByID(@PathVariable("id") long id){

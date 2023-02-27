@@ -34,8 +34,8 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     }
 
     @Override
-    public List<GiftCertificate> getAllGiftCertificates(Integer page) {
-        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificate.GET_ALL_CERTIFICATES,page), new BeanPropertyRowMapper<>(GiftCertificate.class));
+    public List<GiftCertificate> getAllGiftCertificates(Integer page,Integer size) {
+        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificate.GET_ALL_CERTIFICATES,page,size), new BeanPropertyRowMapper<>(GiftCertificate.class));
     }
 
     @Override
@@ -100,40 +100,40 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     }
 
     @Override
-    public List<GiftCertificate> getGiftCertificatesByTagName(String tagName,Integer page) {
-        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificateHasTag.GET_GIFT_CERTIFICATE_BY_TAGS_NAME,page), new BeanPropertyRowMapper<>(GiftCertificate.class), tagName);
+    public List<GiftCertificate> getGiftCertificatesByTagName(String tagName,Integer page,Integer size) {
+        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificateHasTag.GET_GIFT_CERTIFICATE_BY_TAGS_NAME,page,size), new BeanPropertyRowMapper<>(GiftCertificate.class), tagName);
     }
 
     @Override
-    public List<GiftCertificate> getGiftCertificatesByPartOfName(String part) {
-        return jdbcTemplate.query(AppQuery.GiftCertificateHasTag.GET_GIFT_CERTIFICATE_BY_PART_OF_NAME, new BeanPropertyRowMapper<>(GiftCertificate.class), part + "%");
+    public List<GiftCertificate> getGiftCertificatesByPartOfName(String part,Integer page,Integer size) {
+        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificateHasTag.GET_GIFT_CERTIFICATE_BY_PART_OF_NAME,page,size), new BeanPropertyRowMapper<>(GiftCertificate.class), part + "%");
     }
 
     @Override
-    public List<GiftCertificate> getGiftCertificatesByPartOfDescription(String part,Integer page) {
-        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificateHasTag.GET_GIFT_CERTIFICATE_BY_PART_OF_DESCRIPTION, page), new BeanPropertyRowMapper<>(GiftCertificate.class), part + "%");
+    public List<GiftCertificate> getGiftCertificatesByPartOfDescription(String part,Integer page,Integer size) {
+        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificateHasTag.GET_GIFT_CERTIFICATE_BY_PART_OF_DESCRIPTION, page,size), new BeanPropertyRowMapper<>(GiftCertificate.class), part + "%");
     }
 
     @Override
-    public List<GiftCertificate> getCertificatesSortedByDate(DirectionEnum direction,Integer page) {
-        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificateHasTag.getSortingQueryForOneParam(direction, CREATE_DATE),page), new BeanPropertyRowMapper<>(GiftCertificate.class));
+    public List<GiftCertificate> getCertificatesSortedByDate(DirectionEnum direction,Integer page,Integer size) {
+        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificateHasTag.getSortingQueryForOneParam(direction, CREATE_DATE),page,size), new BeanPropertyRowMapper<>(GiftCertificate.class));
     }
 
     @Override
-    public List<GiftCertificate> getCertificatesSortedByName(DirectionEnum direction,Integer page) {
-        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificateHasTag.getSortingQueryForOneParam(direction, NAME),page), new BeanPropertyRowMapper<>(GiftCertificate.class));
-
-    }
-
-    @Override
-    public List<GiftCertificate> getCertificatesSortedByDateName(DirectionEnum directionDate, DirectionEnum directionName,Integer page) {
-        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificateHasTag.getSortingQueryForTwoParams(directionDate, CREATE_DATE, directionName, NAME),page), new BeanPropertyRowMapper<>(GiftCertificate.class));
+    public List<GiftCertificate> getCertificatesSortedByName(DirectionEnum direction,Integer page,Integer size) {
+        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificateHasTag.getSortingQueryForOneParam(direction, NAME),page,size), new BeanPropertyRowMapper<>(GiftCertificate.class));
 
     }
 
     @Override
-    public List<GiftCertificate> getCertificatesBySeveralTags(List<Tag> tags,Integer page) {
-        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificateHasTag.getQueryForGettingSeveralTags(tags),page),new BeanPropertyRowMapper<>(GiftCertificate.class));
+    public List<GiftCertificate> getCertificatesSortedByDateName(DirectionEnum directionDate, DirectionEnum directionName,Integer page,Integer size) {
+        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificateHasTag.getSortingQueryForTwoParams(directionDate, CREATE_DATE, directionName, NAME),page,size), new BeanPropertyRowMapper<>(GiftCertificate.class));
+
+    }
+
+    @Override
+    public List<GiftCertificate> getCertificatesBySeveralTags(List<Tag> tags,Integer page,Integer size) {
+        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificateHasTag.getQueryForGettingSeveralTags(tags),page,size),new BeanPropertyRowMapper<>(GiftCertificate.class));
     }
 
 

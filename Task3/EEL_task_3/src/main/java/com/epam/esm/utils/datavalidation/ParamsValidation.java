@@ -89,4 +89,10 @@ public class ParamsValidation {
         else
             throw new PageException("Wrong page provided!");
     }
+    public static Integer isValidSize(Optional<Integer> size){
+        if(size.orElse(1) > 0)
+            return size.orElse(10);
+        else
+            throw new ObjectIsInvalidException("Wrong size provided!");
+    }
 }

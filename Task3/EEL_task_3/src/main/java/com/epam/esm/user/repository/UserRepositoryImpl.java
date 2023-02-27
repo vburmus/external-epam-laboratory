@@ -16,8 +16,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> getAllUsers(Integer page) {
-        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.User.GET_ALL_USERS,page), new BeanPropertyRowMapper<>(User.class));
+    public List<User> getAllUsers(Integer page,Integer size) {
+        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.User.GET_ALL_USERS,page,size), new BeanPropertyRowMapper<>(User.class));
     }
 
     @Override

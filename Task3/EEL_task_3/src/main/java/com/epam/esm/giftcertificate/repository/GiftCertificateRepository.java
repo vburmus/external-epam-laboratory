@@ -15,7 +15,7 @@ public interface GiftCertificateRepository {
     boolean createTagDependenciesForGiftCertificate(List<Long> tags, long giftCertificateID);
 
 
-    List<GiftCertificate> getAllGiftCertificates(Integer page);
+    List<GiftCertificate> getAllGiftCertificates(Integer page,Integer size);
 
     GiftCertificate getGiftCertificateByID(long id);
 
@@ -31,17 +31,17 @@ public interface GiftCertificateRepository {
 
     List<Tag> getAllTagsIdByCertificateId(long id);
 
-    List<GiftCertificate> getGiftCertificatesByTagName(String tagName,Integer page);
+    List<GiftCertificate> getGiftCertificatesByTagName(String tagName,Integer page,Integer size);
 
-    List<GiftCertificate> getGiftCertificatesByPartOfName(String part);
+    List<GiftCertificate> getGiftCertificatesByPartOfName(String part,Integer page,Integer size);
 
-    List<GiftCertificate> getGiftCertificatesByPartOfDescription(String part,Integer page);
+    List<GiftCertificate> getGiftCertificatesByPartOfDescription(String part,Integer page,Integer size);
 
-    List<GiftCertificate> getCertificatesSortedByDate(DirectionEnum direction,Integer page);
+    List<GiftCertificate> getCertificatesSortedByDate(DirectionEnum direction,Integer page,Integer size);
 
-    List<GiftCertificate> getCertificatesSortedByName(DirectionEnum direction,Integer page);
+    List<GiftCertificate> getCertificatesSortedByName(DirectionEnum direction,Integer page,Integer size);
 
-    List<GiftCertificate> getCertificatesSortedByDateName(DirectionEnum directionDate, DirectionEnum directionName,Integer page);
+    List<GiftCertificate> getCertificatesSortedByDateName(DirectionEnum directionDate, DirectionEnum directionName,Integer page,Integer size);
 
-    List<GiftCertificate> getCertificatesBySeveralTags(List<Tag> tags,Integer page);
+    List<GiftCertificate> getCertificatesBySeveralTags(List<Tag> tags,Integer page,Integer size);
 }

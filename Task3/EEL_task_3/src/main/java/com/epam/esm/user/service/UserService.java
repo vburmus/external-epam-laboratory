@@ -14,8 +14,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> getAllUsers(Integer page) {
-        return userRepository.getAllUsers(page);
+    public List<User> getAllUsers(Integer page,Integer size) {
+        return userRepository.getAllUsers(page,size);
     }
 
     public User getUserById(long id) {

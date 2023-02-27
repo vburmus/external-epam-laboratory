@@ -24,9 +24,9 @@ public class UserController {
         this.userService = userService;
         this.orderService = orderService;
     }
-    @GetMapping({"","/{page}"})
-    public ResponseEntity<?> showAll(@PathVariable(required = false) Optional<Integer> page){
-        List<User> users = userService.getAllUsers(ParamsValidation.isValidPage(page));
+    @GetMapping({"","/{page}","/{page}/{size}"})
+    public ResponseEntity<?> showAll(@PathVariable(required = false) Optional<Integer> page,@PathVariable(required = false) Optional<Integer> size){
+        List<User> users = userService.getAllUsers(ParamsValidation.isValidPage(page),ParamsValidation.isValidSize(size));
         if (users.isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return ResponseEntity.ok(Map.of(USERS, users));
