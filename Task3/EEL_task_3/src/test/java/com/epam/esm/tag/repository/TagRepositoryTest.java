@@ -18,6 +18,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TagRepositoryTest {
 
+    public static final String TAG_NAME = "TagName";
+    public static final String TAG_1 = "Tag1";
+    public static final long ID = 1L;
+    public static final long ID1 = 2L;
+    public static final String TAG_2 = "Tag2";
     private TagRepository tagRepository;
     private EmbeddedDatabase embeddedDatabase;
 
@@ -34,21 +39,21 @@ class TagRepositoryTest {
     @Test
     void createTagGetTagByName() {
         Tag tag = new Tag();
-        tag.setName("TagName");
+        tag.setName(TAG_NAME);
         boolean result = tagRepository.createTag(tag);
         assertTrue(result);
-        Tag tagRes = tagRepository.getTagByName("TagName");
+        Tag tagRes = tagRepository.getTagByName(TAG_NAME);
         assertEquals(tag.getName(), tagRes.getName());
     }
 
     @Test
     void getAllTags() {
         Tag tag1 = new Tag();
-        tag1.setName("Tag1");
-        tag1.setId(1L);
+        tag1.setName(TAG_1);
+        tag1.setId(ID);
         Tag tag2 = new Tag();
-        tag2.setName("Tag2");
-        tag2.setId(2L);
+        tag2.setName(TAG_2);
+        tag2.setId(ID1);
         List<Tag> expectedTagList = List.of(tag1,tag2);
         List<Tag> actualTagList = tagRepository.getAllTags(1,10);
 
@@ -59,9 +64,9 @@ class TagRepositoryTest {
     @Test
     void getTagByID() {
         Tag tag1 = new Tag();
-        tag1.setName("Tag1");
-        tag1.setId(1L);
-        assertEquals(tag1,tagRepository.getTagByID(1L));
+        tag1.setName(TAG_1);
+        tag1.setId(ID);
+        assertEquals(tag1,tagRepository.getTagByID(ID));
     }
 
 
@@ -69,18 +74,18 @@ class TagRepositoryTest {
     @Test
     void isExistsGetTagsIdAndDeleteTagByID() {
         Tag tag = new Tag();
-        tag.setName("Tag1");
-        assertTrue(tagRepository.isTagExists("Tag1"));
+        tag.setName(TAG_1);
+        assertTrue(tagRepository.isTagExists(TAG_1));
         assertTrue(tagRepository.deleteTagByID(tagRepository.getTagsID(tag)));
-        assertFalse(tagRepository.isTagExists("Tag1"));
+        assertFalse(tagRepository.isTagExists(TAG_1));
     }
 
     @Test
     void getAllTagsByCertificateID() {
         Tag tag = new Tag();
-        tag.setName("Tag1");
-        tag.setId(1L);
-        assertEquals(List.of(tag), tagRepository.getAllTagsByCertificateID(1L));
+        tag.setName(TAG_1);
+        tag.setId(ID);
+        assertEquals(List.of(tag), tagRepository.getAllTagsByCertificateID(ID));
     }
     @AfterEach
     public void drop(){

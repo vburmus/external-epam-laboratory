@@ -34,7 +34,7 @@ class TagGiftCertificateServiceTest {
     public static final String TEST_CERT_2 = "Test2";
     public static final String TEST_TAG_2 = "TestTag2";
     public static final int DURATION = 1;
-    public static final int PRICE = 2;
+    public static final double PRICE = 20.0;
     @Mock
     private GiftCertificateRepository giftCertificateRepositoryMocked;
     @Mock

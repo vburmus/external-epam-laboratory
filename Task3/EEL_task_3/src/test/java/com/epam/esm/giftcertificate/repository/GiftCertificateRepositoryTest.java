@@ -17,6 +17,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GiftCertificateRepositoryTest {
 
+    public static final double PRICE = 20.0;
+    public static final int DURATION = 20;
+    public static final String DESCRIPTION = "description";
+    public static final String GIFT_CERTIFICATE_1 = "GiftCertificate1";
+    public static final long ID = 1L;
+    public static final String CREATE_DATE = "2023-01-15 00:36:20.0";
+    public static final String LAST_UPDATE_DATE = "2023-01-16 01:20:09.0";
+    public static final long ID1 = 2L;
+    public static final String GIFT_CERTIFICATE_2 = "GiftCertificate2";
+    public static final String CREATE_DATE1 = "2023-01-15 00:36:55.0";
+    public static final String LAST_UPDATE_DATE1 = "2023-01-16 01:25:34.0";
+    public static final String NAME = "Test1";
+    public static final String NAME1 = "Tag1";
+    public static final String NAME2 = "Tag2";
     private GiftCertificateRepository giftCertificateRepository;
     private EmbeddedDatabase embeddedDatabase;
 
@@ -34,10 +48,10 @@ class GiftCertificateRepositoryTest {
     void createGiftCertificate() {
         GiftCertificate giftCertificate = new GiftCertificate();
 
-        giftCertificate.setName("Test1");
-        giftCertificate.setDescription("TestDescription");
-        giftCertificate.setPrice(20);
-        giftCertificate.setDuration(20);
+        giftCertificate.setName(NAME);
+        giftCertificate.setDescription(DESCRIPTION);
+        giftCertificate.setPrice(PRICE);
+        giftCertificate.setDuration(DURATION);
         assertTrue(giftCertificateRepository.createGiftCertificate(giftCertificate));
 
     }
@@ -45,22 +59,22 @@ class GiftCertificateRepositoryTest {
     @Test
     void getAllGiftCertificates() {
         GiftCertificate gc1 = new GiftCertificate();
-        gc1.setId(1L);
-        gc1.setName("GiftCertificate1");
-        gc1.setDescription("description");
-        gc1.setDuration(20);
-        gc1.setPrice(20);
-        gc1.setCreateDate("2023-01-15 00:36:20.0");
-        gc1.setLastUpdateDate("2023-01-16 01:20:09.0");
+        gc1.setId(ID);
+        gc1.setName(GIFT_CERTIFICATE_1);
+        gc1.setDescription(DESCRIPTION);
+        gc1.setDuration(DURATION);
+        gc1.setPrice(PRICE);
+        gc1.setCreateDate(CREATE_DATE);
+        gc1.setLastUpdateDate(LAST_UPDATE_DATE);
 
         GiftCertificate gc2 = new GiftCertificate();
-        gc2.setId(2L);
-        gc2.setName("GiftCertificate2");
-        gc2.setDescription("description");
-        gc2.setDuration(20);
-        gc2.setPrice(20);
-        gc2.setCreateDate("2023-01-15 00:36:55.0");
-        gc2.setLastUpdateDate("2023-01-16 01:25:34.0");
+        gc2.setId(ID1);
+        gc2.setName(GIFT_CERTIFICATE_2);
+        gc2.setDescription(DESCRIPTION);
+        gc2.setDuration(DURATION);
+        gc2.setPrice(PRICE);
+        gc2.setCreateDate(CREATE_DATE1);
+        gc2.setLastUpdateDate(LAST_UPDATE_DATE1);
 
         assertEquals(List.of(gc1, gc2), giftCertificateRepository.getAllGiftCertificates(1,10));
     }
@@ -68,27 +82,27 @@ class GiftCertificateRepositoryTest {
     @Test
     void getGiftCertificateByID() {
         GiftCertificate gc1 = new GiftCertificate();
-        gc1.setId(1L);
-        gc1.setName("GiftCertificate1");
-        gc1.setDescription("description");
-        gc1.setDuration(20);
-        gc1.setPrice(20);
-        gc1.setCreateDate("2023-01-15 00:36:20.0");
-        gc1.setLastUpdateDate("2023-01-16 01:20:09.0");
+        gc1.setId(ID);
+        gc1.setName(GIFT_CERTIFICATE_1);
+        gc1.setDescription(DESCRIPTION);
+        gc1.setDuration(DURATION);
+        gc1.setPrice(PRICE);
+        gc1.setCreateDate(CREATE_DATE);
+        gc1.setLastUpdateDate(LAST_UPDATE_DATE);
 
-        assertEquals(gc1, giftCertificateRepository.getGiftCertificateByID(1L));
+        assertEquals(gc1, giftCertificateRepository.getGiftCertificateByID(ID));
     }
 
     @Test
     void isExistsGetIdAndDeleteGiftCertificate() {
         GiftCertificate gc1 = new GiftCertificate();
-        gc1.setId(1L);
-        gc1.setName("GiftCertificate1");
-        gc1.setDescription("description");
-        gc1.setDuration(20);
-        gc1.setPrice(20);
-        gc1.setCreateDate("2023-01-15 00:36:20.0");
-        gc1.setLastUpdateDate("2023-01-16 01:20:09.0");
+        gc1.setId(ID);
+        gc1.setName(GIFT_CERTIFICATE_1);
+        gc1.setDescription(DESCRIPTION);
+        gc1.setDuration(DURATION);
+        gc1.setPrice(PRICE);
+        gc1.setCreateDate(CREATE_DATE);
+        gc1.setLastUpdateDate(LAST_UPDATE_DATE);
         assertTrue(giftCertificateRepository.isGiftCertificateExist(gc1));
         assertTrue(giftCertificateRepository.deleteGiftCertificate(giftCertificateRepository.getGiftCertificatesID(gc1)));
         assertFalse(giftCertificateRepository.isGiftCertificateExist(gc1));
@@ -96,29 +110,29 @@ class GiftCertificateRepositoryTest {
 
     @Test
     void updateGiftCertificate() {
-        assertTrue(giftCertificateRepository.updateGiftCertificate(1L, Map.of("name", "newUpdate", "price", "222")));
-        assertEquals("newUpdate", giftCertificateRepository.getGiftCertificateByID(1L).getName());
-        assertEquals(222, giftCertificateRepository.getGiftCertificateByID(1L).getPrice());
+        assertTrue(giftCertificateRepository.updateGiftCertificate(ID, Map.of("name", "newUpdate", "price", "222")));
+        assertEquals("newUpdate", giftCertificateRepository.getGiftCertificateByID(ID).getName());
+        assertEquals(222, giftCertificateRepository.getGiftCertificateByID(ID).getPrice());
     }
 
     @Test
     void deleteTagDependenciesCreateGetAllByCertificate() {
         Tag tag1 = new Tag();
-        tag1.setName("Tag1");
-        tag1.setId(1L);
+        tag1.setName(NAME1);
+        tag1.setId(ID);
         Tag tag2 = new Tag();
-        tag2.setName("Tag2");
-        tag2.setId(2L);
-        assertEquals(List.of(tag1), giftCertificateRepository.getAllTagsIdByCertificateId(1L));
-        assertEquals(List.of(tag2), giftCertificateRepository.getAllTagsIdByCertificateId(2L));
-        assertTrue(giftCertificateRepository.deleteTagDependenciesForGiftCertificate(List.of(tag1.getId()), 1L));
-        assertTrue(giftCertificateRepository.deleteTagDependenciesForGiftCertificate(List.of(tag2.getId()), 2L));
-        assertEquals(List.of(), giftCertificateRepository.getAllTagsIdByCertificateId(1L));
-        assertEquals(List.of(), giftCertificateRepository.getAllTagsIdByCertificateId(2L));
-        assertTrue(giftCertificateRepository.createTagDependenciesForGiftCertificate(List.of(tag1.getId(), tag2.getId()), 1L));
-        assertTrue(giftCertificateRepository.createTagDependenciesForGiftCertificate(List.of(tag1.getId(), tag2.getId()), 2L));
-        assertEquals(List.of(tag1, tag2), giftCertificateRepository.getAllTagsIdByCertificateId(1L));
-        assertEquals(List.of(tag1, tag2), giftCertificateRepository.getAllTagsIdByCertificateId(2L));
+        tag2.setName(NAME2);
+        tag2.setId(ID1);
+        assertEquals(List.of(tag1), giftCertificateRepository.getAllTagsIdByCertificateId(ID));
+        assertEquals(List.of(tag2), giftCertificateRepository.getAllTagsIdByCertificateId(ID1));
+        assertTrue(giftCertificateRepository.deleteTagDependenciesForGiftCertificate(List.of(tag1.getId()), ID));
+        assertTrue(giftCertificateRepository.deleteTagDependenciesForGiftCertificate(List.of(tag2.getId()), ID1));
+        assertEquals(List.of(), giftCertificateRepository.getAllTagsIdByCertificateId(ID));
+        assertEquals(List.of(), giftCertificateRepository.getAllTagsIdByCertificateId(ID1));
+        assertTrue(giftCertificateRepository.createTagDependenciesForGiftCertificate(List.of(tag1.getId(), tag2.getId()), ID));
+        assertTrue(giftCertificateRepository.createTagDependenciesForGiftCertificate(List.of(tag1.getId(), tag2.getId()), ID1));
+        assertEquals(List.of(tag1, tag2), giftCertificateRepository.getAllTagsIdByCertificateId(ID));
+        assertEquals(List.of(tag1, tag2), giftCertificateRepository.getAllTagsIdByCertificateId(ID1));
     }
 
 
