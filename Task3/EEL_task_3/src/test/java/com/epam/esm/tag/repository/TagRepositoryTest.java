@@ -50,7 +50,7 @@ class TagRepositoryTest {
         tag2.setName("Tag2");
         tag2.setId(2L);
         List<Tag> expectedTagList = List.of(tag1,tag2);
-        List<Tag> actualTagList = tagRepository.getAllTags();
+        List<Tag> actualTagList = tagRepository.getAllTags(1,10);
 
         //then
         assertEquals(expectedTagList, actualTagList);

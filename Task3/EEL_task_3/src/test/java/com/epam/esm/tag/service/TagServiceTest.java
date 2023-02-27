@@ -60,8 +60,8 @@ class TagServiceTest {
     @Test
     void getAllTagsSuccess() {
         List<Tag> tags = List.of(new Tag(),new Tag(),new Tag());
-        when(tagRepositoryMocked.getAllTags()).thenReturn(tags);
-        assertEquals(tagServiceMocked.getAllTags(),tags);
+        when(tagRepositoryMocked.getAllTags(1,10)).thenReturn(tags);
+        assertEquals(tagServiceMocked.getAllTags(1,10),tags);
     }
 
     @Test

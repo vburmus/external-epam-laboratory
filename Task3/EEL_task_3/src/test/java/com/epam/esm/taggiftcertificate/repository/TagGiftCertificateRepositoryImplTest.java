@@ -48,17 +48,17 @@ class TagGiftCertificateRepositoryImplTest {
         gc2.setPrice(20);
         gc2.setCreateDate("2023-01-15 00:36:55.0");
         gc2.setLastUpdateDate("2023-01-16 01:25:34.0");
-        assertEquals(List.of(gc1),tagGiftCertificateRepository.getGiftCertificatesByTagName("Tag1"));
-        assertEquals(List.of(gc1,gc2),tagGiftCertificateRepository.getGiftCertificatesByPartOfName("Gift"));
-        assertEquals(List.of(gc1,gc2),tagGiftCertificateRepository.getCertificatesSortedByDate(DirectionEnum.ASC));
-        assertEquals(List.of(gc2,gc1),tagGiftCertificateRepository.getCertificatesSortedByDate(DirectionEnum.DESC));
-        assertEquals(List.of(gc1,gc2),tagGiftCertificateRepository.getGiftCertificatesByPartOfDescription("d"));
-        assertEquals(List.of(gc1,gc2),tagGiftCertificateRepository.getCertificatesSortedByName(DirectionEnum.ASC));
-        assertEquals(List.of(gc2,gc1),tagGiftCertificateRepository.getCertificatesSortedByName(DirectionEnum.DESC));
-        assertEquals(List.of(gc1,gc2),tagGiftCertificateRepository.getCertificatesSortedByDateName(DirectionEnum.ASC,DirectionEnum.ASC));
-        assertEquals(List.of(gc2,gc1),tagGiftCertificateRepository.getCertificatesSortedByDateName(DirectionEnum.DESC,DirectionEnum.ASC));
-        assertEquals(List.of(gc1,gc2),tagGiftCertificateRepository.getCertificatesSortedByDateName(DirectionEnum.ASC,DirectionEnum.DESC));
-        assertEquals(List.of(gc2,gc1),tagGiftCertificateRepository.getCertificatesSortedByDateName(DirectionEnum.DESC,DirectionEnum.DESC));
+        assertEquals(List.of(gc1),tagGiftCertificateRepository.getGiftCertificatesByTagName("Tag1",1,10));
+        assertEquals(List.of(gc1,gc2),tagGiftCertificateRepository.getGiftCertificatesByPartOfName("Gift",1,10));
+        assertEquals(List.of(gc1,gc2),tagGiftCertificateRepository.getCertificatesSortedByDate(DirectionEnum.ASC,1,10));
+        assertEquals(List.of(gc2,gc1),tagGiftCertificateRepository.getCertificatesSortedByDate(DirectionEnum.DESC,1,10));
+        assertEquals(List.of(gc1,gc2),tagGiftCertificateRepository.getGiftCertificatesByPartOfDescription("d",1,10));
+        assertEquals(List.of(gc1,gc2),tagGiftCertificateRepository.getCertificatesSortedByName(DirectionEnum.ASC,1,10));
+        assertEquals(List.of(gc2,gc1),tagGiftCertificateRepository.getCertificatesSortedByName(DirectionEnum.DESC,1,10));
+        assertEquals(List.of(gc1,gc2),tagGiftCertificateRepository.getCertificatesSortedByDateName(DirectionEnum.ASC,DirectionEnum.ASC,1,10));
+        assertEquals(List.of(gc2,gc1),tagGiftCertificateRepository.getCertificatesSortedByDateName(DirectionEnum.DESC,DirectionEnum.ASC,1,10));
+        assertEquals(List.of(gc1,gc2),tagGiftCertificateRepository.getCertificatesSortedByDateName(DirectionEnum.ASC,DirectionEnum.DESC,1,10));
+        assertEquals(List.of(gc2,gc1),tagGiftCertificateRepository.getCertificatesSortedByDateName(DirectionEnum.DESC,DirectionEnum.DESC,1,10));
 
 
     }

@@ -62,7 +62,7 @@ class GiftCertificateRepositoryTest {
         gc2.setCreateDate("2023-01-15 00:36:55.0");
         gc2.setLastUpdateDate("2023-01-16 01:25:34.0");
 
-        assertEquals(List.of(gc1, gc2), giftCertificateRepository.getAllGiftCertificates());
+        assertEquals(List.of(gc1, gc2), giftCertificateRepository.getAllGiftCertificates(1,10));
     }
 
     @Test
