@@ -2,8 +2,7 @@ package com.epam.esm.giftcertificate.controller;
 
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.giftcertificate.service.GiftCertificateService;
-import com.epam.esm.tag.model.Tag;
-import com.epam.esm.utils.datavalidation.ParamsValidation;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,13 +10,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import static com.epam.esm.utils.Constants.*;
 
 @RestController
 @RequestMapping(value = "/certificate")
 public class GiftCertificateController {
 
-    public static final String GIFT_CERTIFICATES = "gift certificates";
+
     private final GiftCertificateService giftCertificateService;
 
 
@@ -29,17 +28,16 @@ public class GiftCertificateController {
 
     @PostMapping
     public ResponseEntity<?> createCertificate(@RequestBody GiftCertificate giftCertificate) {
-        return new ResponseEntity<>(Map.of("Certificate:", giftCertificateService.createCertificate(giftCertificate)), HttpStatus.CREATED);
+        return new ResponseEntity<>(Map.of(GIFT_CERTIFICATE, giftCertificateService.createCertificate(giftCertificate)), HttpStatus.CREATED);
     }
 
-    @GetMapping({ "","/{page}","/{page}/{size}"})
-    public ResponseEntity<?> showAll(@PathVariable(required = false) Optional<Integer> page,@PathVariable(required = false) Optional<Integer> size) {
-        return isNotFound(giftCertificateService.getAllGiftCertificates(ParamsValidation.isValidPage(page),ParamsValidation.isValidSize(size)));
+    @GetMapping()
+    public ResponseEntity<?> showAll(@RequestParam(required = false,defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false,defaultValue = DEFAULT_SIZE) Integer size) {
+        return isNotFound(giftCertificateService.getAllGiftCertificates(page,size));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCertificate(@PathVariable("id") long id) {
-        HttpStatus status;
         if (giftCertificateService.deleteCertificate(id))
             return new ResponseEntity<>(HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -52,41 +50,41 @@ public class GiftCertificateController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateCertificate(@PathVariable("id") long id, @RequestBody GiftCertificate giftCertificate) {
-        return ResponseEntity.ok(Map.of("result", giftCertificateService.updateCertificate(id, giftCertificate)));
+        return ResponseEntity.ok(Map.of(STATUS, giftCertificateService.updateCertificate(id, giftCertificate)?HttpStatus.OK:HttpStatus.BAD_REQUEST));
     }
 
-    @GetMapping({"/search/byTag/{name}", "/search/byTag/{name}/{page}","/search/byTag/{name}/{page}/{size}"})
-    public ResponseEntity<?> getCertificatesByTagName(@PathVariable("name") String name, @PathVariable(required = false) Optional<Integer> page, @PathVariable(required = false) Optional<Integer> size) {
-        return isNotFound(giftCertificateService.getGiftCertificatesByTagName(name, ParamsValidation.isValidPage(page),ParamsValidation.isValidSize(size)));
+    @GetMapping("/search/byTag/{name}")
+    public ResponseEntity<?> getCertificatesByTagName(@PathVariable("name") String name, @RequestParam(required = false,defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false,defaultValue = DEFAULT_SIZE) Integer size) {
+        return isNotFound(giftCertificateService.getGiftCertificatesByTagName(name, page,size));
     }
 
-    @GetMapping({"/sort/byPart/{nameOrDescriptionPart}", "/sort/byPart/{nameOrDescriptionPart}/{page}","/sort/byPart/{nameOrDescriptionPart}/{page}/{size}"})
-    public ResponseEntity<?> getCertificatesByPartOfNameOrDescription(@PathVariable("nameOrDescriptionPart") String nameOrDescriptionPart, @PathVariable(required = false) Optional<Integer> page,@PathVariable(required = false) Optional<Integer> size) {
-        return isNotFound(giftCertificateService.getGiftCertificatesByPart(nameOrDescriptionPart, ParamsValidation.isValidPage(page),ParamsValidation.isValidSize(size)));
+    @GetMapping("/sort/byPart/{nameOrDescriptionPart}")
+    public ResponseEntity<?> getCertificatesByPartOfNameOrDescription(@PathVariable("nameOrDescriptionPart") String nameOrDescriptionPart, @RequestParam(required = false,defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false,defaultValue = DEFAULT_SIZE) Integer size) {
+        return isNotFound(giftCertificateService.getGiftCertificatesByPart(nameOrDescriptionPart, page,size));
     }
 
-    @GetMapping({"/sort/byDate/{direction}", "/sort/byDate/{direction}/{page}","/sort/byDate/{direction}/{page}/{size}"})
-    public ResponseEntity<?> getCertificatesSortedByDate(@PathVariable("direction") String direction, @PathVariable(required = false) Optional<Integer> page,@PathVariable(required = false) Optional<Integer> size) {
-        return isNotFound(giftCertificateService.getCertificatesSortedByDate(direction, ParamsValidation.isValidPage(page),ParamsValidation.isValidSize(size)));
-
-    }
-
-    @GetMapping({"/sort/byName/{direction}", "/sort/byName/{direction}/{page}", "/sort/byName/{direction}/{page}/{size}"})
-    public ResponseEntity<?> getCertificatesSortedByName(@PathVariable("direction") String direction, @PathVariable(required = false) Optional<Integer> page, @PathVariable(required = false) Optional<Integer> size) {
-        return isNotFound(giftCertificateService.getCertificatesSortedByName(direction, ParamsValidation.isValidPage(page),ParamsValidation.isValidSize(size)));
+    @GetMapping("/sort/byDate/{direction}")
+    public ResponseEntity<?> getCertificatesSortedByDate(@PathVariable("direction") String direction, @RequestParam(required = false,defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false,defaultValue = DEFAULT_SIZE) Integer size) {
+        return isNotFound(giftCertificateService.getCertificatesSortedByDate(direction, page,size));
 
     }
 
-    @GetMapping({"/sort/byDateAndName/{directionDate}/{directionName}", "/sort/byDateAndName/{directionDate}/{directionName}/{page}", "/sort/byDateAndName/{directionDate}/{directionName}/{page}/{size}"})
-    public ResponseEntity<?> getCertificatesSortedByDateName(@PathVariable("directionDate") String directionDate, @PathVariable("directionName") String directionName, @PathVariable(required = false) Optional<Integer> page,@PathVariable(required = false) Optional<Integer> size) {
-        return isNotFound(giftCertificateService.getCertificatesSortedByDateName(directionDate, directionName, ParamsValidation.isValidPage(page),ParamsValidation.isValidSize(size)));
+    @GetMapping("/sort/byName/{direction}")
+    public ResponseEntity<?> getCertificatesSortedByName(@PathVariable("direction") String direction, @RequestParam(required = false,defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false,defaultValue = DEFAULT_SIZE) Integer size) {
+        return isNotFound(giftCertificateService.getCertificatesSortedByName(direction, page,size));
+
+    }
+
+    @GetMapping("/sort/byDateAndName/{directionDate}/{directionName}")
+    public ResponseEntity<?> getCertificatesSortedByDateName(@PathVariable("directionDate") String directionDate, @PathVariable("directionName") String directionName, @RequestParam(required = false,defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false,defaultValue = DEFAULT_SIZE) Integer size) {
+        return isNotFound(giftCertificateService.getCertificatesSortedByDateName(directionDate, directionName, page,size));
 
     }
 
     @GetMapping({"/search/byTags"})
-    public ResponseEntity<?> searchForCertificatesBySeveralTags(@RequestParam("tags") List<Long> tags, @PathVariable(required = false) Optional<Integer> page, @PathVariable(required = false) Optional<Integer> size) {
+    public ResponseEntity<?> searchForCertificatesBySeveralTags(@RequestParam("tags") List<Long> tags, @RequestParam(required = false,defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false,defaultValue = DEFAULT_SIZE) Integer size) {
 
-        return isNotFound(giftCertificateService.getCertificatesBySeveralTags(tags, ParamsValidation.isValidPage(page),ParamsValidation.isValidSize(size)));
+        return isNotFound(giftCertificateService.getCertificatesBySeveralTags(tags, page, size));
     }
 
     public ResponseEntity<?> isNotFound(List<GiftCertificate> gcs) {
