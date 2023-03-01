@@ -83,8 +83,9 @@ public class GiftCertificateController {
 
     }
 
-    @PostMapping({"/search/byTags", "/search/byTags/{page}","/search/byTags/{page}/{size}"})
-    public ResponseEntity<?> searchForCertificatesBySeveralTags(@RequestBody List<Tag> tags, @PathVariable(required = false) Optional<Integer> page, @PathVariable(required = false) Optional<Integer> size) {
+    @GetMapping({"/search/byTags"})
+    public ResponseEntity<?> searchForCertificatesBySeveralTags(@RequestParam("tags") List<Long> tags, @PathVariable(required = false) Optional<Integer> page, @PathVariable(required = false) Optional<Integer> size) {
+
         return isNotFound(giftCertificateService.getCertificatesBySeveralTags(tags, ParamsValidation.isValidPage(page),ParamsValidation.isValidSize(size)));
     }
 

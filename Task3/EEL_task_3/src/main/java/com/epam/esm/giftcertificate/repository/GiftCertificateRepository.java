@@ -43,7 +43,7 @@ public interface GiftCertificateRepository {
 
     List<GiftCertificate> getCertificatesSortedByDateName(DirectionEnum directionDate, DirectionEnum directionName,Integer page,Integer size);
 
-    List<GiftCertificate> getCertificatesBySeveralTags(List<Tag> tags,Integer page,Integer size);
+    List<GiftCertificate> getCertificatesBySeveralTags(List<Long> tags,Integer page,Integer size);
 
     Double getCertificatesPriceByID(long id);
 }

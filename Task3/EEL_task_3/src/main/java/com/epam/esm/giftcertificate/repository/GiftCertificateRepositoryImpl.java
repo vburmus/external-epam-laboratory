@@ -131,7 +131,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     }
 
     @Override
-    public List<GiftCertificate> getCertificatesBySeveralTags(List<Tag> tags,Integer page,Integer size) {
+    public List<GiftCertificate> getCertificatesBySeveralTags(List<Long> tags,Integer page,Integer size) {
         return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificateHasTag.getQueryForGettingSeveralTags(tags),page,size),new BeanPropertyRowMapper<>(GiftCertificate.class));
     }
 

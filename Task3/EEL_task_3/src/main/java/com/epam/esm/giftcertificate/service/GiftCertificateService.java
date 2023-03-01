@@ -182,7 +182,7 @@ public class GiftCertificateService {
 
     }
 
-    public List<GiftCertificate> getCertificatesBySeveralTags(List<Tag> tags,Integer page, Integer size) {
+    public List<GiftCertificate> getCertificatesBySeveralTags(List<Long> tags,Integer page, Integer size) {
         return giftCertificateRepository.getCertificatesBySeveralTags(tags,page,size);
     }
 }

@@ -45,7 +45,7 @@ public class AppQuery {
         public static final String GET_GIFT_CERTIFICATE_BY_TAGS_NAME = "SELECT  cert.id , cert.name , cert.description, cert.price, cert.duration ,cert.create_date , cert.last_update_date FROM gift_certificate_has_tag cert_tag JOIN tag t JOIN gift_certificate cert  WHERE t.id = cert_tag.tag_id AND cert.id = cert_tag.gift_certificate_id  AND t.name = ?";
         public static final String GET_GIFT_CERTIFICATE_BY_PART_OF_NAME = "SELECT  * FROM  gift_certificate  WHERE name LIKE ?";
         public static final String GET_GIFT_CERTIFICATE_BY_PART_OF_DESCRIPTION = "SELECT  * FROM  gift_certificate  WHERE description LIKE ?";
-        public static  String getQueryForGettingSeveralTags(List<com.epam.esm.tag.model.Tag> tags) {
+        public static  String getQueryForGettingSeveralTags(List<Long> tags) {
             StringBuilder sb = new StringBuilder("SELECT gc.id FROM gift_certificate gc");
             String part1 = " JOIN gift_certificate_has_tag gct";
             String part2 = " ON gc.id = gct";
@@ -54,7 +54,7 @@ public class AppQuery {
             String part5 = " GROUP BY gc.id";
 
             for(int i = 0; i < tags.size();i++){
-                sb.append(part1 + i + part2 + i + part3 + i + part4 + tags.get(i).getId());
+                sb.append(part1 + i + part2 + i + part3 + i + part4 + tags.get(i));
             }
             return sb.append(part5+ " ").toString();
 
