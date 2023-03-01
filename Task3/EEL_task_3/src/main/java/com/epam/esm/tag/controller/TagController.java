@@ -1,57 +1,52 @@
 package com.epam.esm.tag.controller;
 
-import com.epam.esm.order.model.Order;
+
 import com.epam.esm.tag.model.Tag;
 import com.epam.esm.tag.service.TagService;
-import com.epam.esm.utils.datavalidation.ParamsValidation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+
+import static com.epam.esm.utils.Constants.*;
 
 @RestController
 @RequestMapping(value = "/tag")
 public class TagController {
-    public static final String TAGS = "Tags";
+
     private final TagService tagService;
 
-    @Autowired
     public TagController(TagService tagService) {
         this.tagService = tagService;
     }
 
-    @GetMapping({"","/{page}","/{page}/{size}"})
-    public ResponseEntity<?> showAllTags(@PathVariable(required = false) Optional<Integer> page,@PathVariable(required = false) Optional<Integer> size) {
-       List<Tag> tags = tagService.getAllTags(ParamsValidation.isValidPage(page),ParamsValidation.isValidSize(size));
-            if (tags.isEmpty())
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            return ResponseEntity.ok(Map.of(TAGS, tags));
+    @GetMapping
+    public ResponseEntity<?> showAllTags(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
+        List<Tag> tags = tagService.getAllTags(page, size);
+        return new ResponseEntity<>(tags.isEmpty()? HttpStatus.NOT_FOUND:Map.of(TAGS, tags),HttpStatus.OK);
     }
 
     @GetMapping("/search/byId/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") long id) {
-        return new ResponseEntity<>(Map.of("tag", tagService.getTagById(id)), HttpStatus.OK);
+        return new ResponseEntity<>(Map.of(TAG, tagService.getTagById(id)), HttpStatus.OK);
+    }
+
+    @GetMapping("search/mostUsed")
+    public ResponseEntity<?> getMostUsed() {
+        return ResponseEntity.ok(Map.of(TAG, tagService.getMostUsedTag()));
     }
 
     @PostMapping
     public ResponseEntity<?> createTag(@RequestBody Tag tag) {
-        tagService.createTag(tag);
-        return new ResponseEntity<>(Map.of("status", HttpStatus.CREATED), HttpStatus.CREATED);
+        return new ResponseEntity<>(tagService.createTag(tag)?HttpStatus.CREATED:HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") long id) {
         tagService.deleteTag(id);
-        return new ResponseEntity<>(Map.of("status", HttpStatus.NO_CONTENT), HttpStatus.NO_CONTENT);
-    }
-    @GetMapping("search/mostUsed")
-    public ResponseEntity<?> getMostUsed(){
-        return ResponseEntity.ok(Map.of("TAG", tagService.getMostUsedTag()));
+        return new ResponseEntity<>(Map.of(STATUS, HttpStatus.NO_CONTENT), HttpStatus.NO_CONTENT);
     }
 
 }
