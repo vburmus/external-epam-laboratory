@@ -83,9 +83,16 @@ class TagRepositoryTest {
     @Test
     void getAllTagsByCertificateID() {
         Tag tag = new Tag();
-        tag.setName(TAG_1);
-        tag.setId(ID);
-        assertEquals(List.of(tag), tagRepository.getAllTagsByCertificateID(ID));
+        tag.setName(TAG_2);
+        tag.setId(ID1);
+        assertEquals(List.of(tag), tagRepository.getAllTagsByCertificateID(ID1));
+    }
+    @Test
+    void getMostUsedTag(){
+        Tag t = new Tag();
+        t.setId(ID1);
+        t.setName("Tag2");
+        assertEquals(t,tagRepository.getMostUsedTag());
     }
     @AfterEach
     public void drop(){

@@ -1,5 +1,6 @@
 package com.epam.esm.giftcertificate.repository;
 
+import com.epam.esm.giftcertificate.direction.DirectionEnum;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.tag.model.Tag;
 import org.junit.jupiter.api.AfterEach;
@@ -123,9 +124,10 @@ class GiftCertificateRepositoryTest {
         Tag tag2 = new Tag();
         tag2.setName(NAME2);
         tag2.setId(ID1);
-        assertEquals(List.of(tag1), giftCertificateRepository.getAllTagsIdByCertificateId(ID));
+        assertEquals(List.of(tag1,tag2), giftCertificateRepository.getAllTagsIdByCertificateId(ID));
         assertEquals(List.of(tag2), giftCertificateRepository.getAllTagsIdByCertificateId(ID1));
-        assertTrue(giftCertificateRepository.deleteTagDependenciesForGiftCertificate(List.of(tag1.getId()), ID));
+        assertTrue(giftCertificateRepository.deleteTagDependenciesForGiftCertificate(List.of(tag1.getId(),tag2.getId()), ID));
+
         assertTrue(giftCertificateRepository.deleteTagDependenciesForGiftCertificate(List.of(tag2.getId()), ID1));
         assertEquals(List.of(), giftCertificateRepository.getAllTagsIdByCertificateId(ID));
         assertEquals(List.of(), giftCertificateRepository.getAllTagsIdByCertificateId(ID1));
@@ -136,6 +138,61 @@ class GiftCertificateRepositoryTest {
     }
 
 
+    @Test
+    void allSortingAndGettingMethods() {
+        GiftCertificate gc1 = new GiftCertificate();
+        gc1.setId(ID);
+        gc1.setName(GIFT_CERTIFICATE_1);
+        gc1.setDescription(DESCRIPTION);
+        gc1.setDuration(DURATION);
+        gc1.setPrice(PRICE);
+        gc1.setCreateDate(CREATE_DATE);
+        gc1.setLastUpdateDate(LAST_UPDATE_DATE);
+
+        GiftCertificate gc2 = new GiftCertificate();
+        gc2.setId(ID1);
+        gc2.setName(GIFT_CERTIFICATE_2);
+        gc2.setDescription(DESCRIPTION);
+        gc2.setDuration(DURATION);
+        gc2.setPrice(PRICE);
+        gc2.setCreateDate(CREATE_DATE1);
+        gc2.setLastUpdateDate(LAST_UPDATE_DATE1);
+        assertEquals(List.of(gc1), giftCertificateRepository.getGiftCertificatesByTagName("Tag1",1,10));
+        assertEquals(List.of(gc1,gc2), giftCertificateRepository.getGiftCertificatesByPartOfName("Gift",1,10));
+        assertEquals(List.of(gc1,gc2), giftCertificateRepository.getCertificatesSortedByDate(DirectionEnum.ASC,1,10));
+        assertEquals(List.of(gc2,gc1), giftCertificateRepository.getCertificatesSortedByDate(DirectionEnum.DESC,1,10));
+        assertEquals(List.of(gc1,gc2), giftCertificateRepository.getGiftCertificatesByPartOfDescription("d",1,10));
+        assertEquals(List.of(gc1,gc2), giftCertificateRepository.getCertificatesSortedByName(DirectionEnum.ASC,1,10));
+        assertEquals(List.of(gc2,gc1), giftCertificateRepository.getCertificatesSortedByName(DirectionEnum.DESC,1,10));
+        assertEquals
+                (List.of(gc1,gc2), giftCertificateRepository.getCertificatesSortedByDateName(DirectionEnum.ASC,DirectionEnum.ASC,1,10));
+        assertEquals(List.of(gc2,gc1), giftCertificateRepository.getCertificatesSortedByDateName(DirectionEnum.DESC,DirectionEnum.ASC,1,10));
+        assertEquals(List.of(gc1,gc2), giftCertificateRepository.getCertificatesSortedByDateName(DirectionEnum.ASC,DirectionEnum.DESC,1,10));
+        assertEquals(List.of(gc2,gc1), giftCertificateRepository.getCertificatesSortedByDateName(DirectionEnum.DESC,DirectionEnum.DESC,1,10));
+    }
+
+    @Test
+    void getCertificatesBySeveralTags(){
+        Tag tag1 = new Tag();
+        tag1.setName(NAME1);
+        tag1.setId(ID);
+        Tag tag2 = new Tag();
+        tag2.setName(NAME2);
+        tag2.setId(ID1);
+        GiftCertificate gc1 = new GiftCertificate();
+        gc1.setId(ID);
+        gc1.setName(GIFT_CERTIFICATE_1);
+        gc1.setDescription(DESCRIPTION);
+        gc1.setDuration(DURATION);
+        gc1.setPrice(PRICE);
+        gc1.setCreateDate(CREATE_DATE);
+        gc1.setLastUpdateDate(LAST_UPDATE_DATE);
+        assertEquals(List.of(gc1), giftCertificateRepository.getCertificatesBySeveralTags(List.of(tag1.getId(),tag2.getId()),1,10));
+    }
+    @Test
+    void getCertificatesPriceByID(){
+        assertEquals(PRICE, giftCertificateRepository.getCertificatesPriceByID(ID));
+    }
     @AfterEach
     public void drop() {
         embeddedDatabase.shutdown();

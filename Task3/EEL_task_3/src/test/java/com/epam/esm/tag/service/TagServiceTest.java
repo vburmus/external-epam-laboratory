@@ -125,6 +125,24 @@ class TagServiceTest {
         when(tagRepositoryMocked.isTagExists(TEST_TAG)).thenReturn(true);
         assertTrue(tagServiceMocked.isTagWithNameExists(TEST_TAG));
     }
-
+    @Test
+    void getTagsByNames(){
+        Tag tag = new Tag();
+        tag.setName(TEST_TAG);
+        when(tagRepositoryMocked.getTagByName(TEST_TAG)).thenReturn(tag);
+        assertEquals(List.of(tag),tagServiceMocked.getTagsByNames(List.of(TEST_TAG)));
+    }
+    @Test
+    void getTagsByNamesException(){
+        NoSuchItemException thrown = assertThrows(NoSuchItemException.class,
+                () -> tagServiceMocked.getTagsByNames(List.of("Name")));
+    }
+    @Test
+    void getMostUsedTag(){
+        Tag tag = new Tag();
+        tag.setName(TEST_TAG);
+        when(tagRepositoryMocked.getMostUsedTag()).thenReturn(tag);
+        assertEquals(tag,tagServiceMocked.getMostUsedTag());
+    }
 
 }
