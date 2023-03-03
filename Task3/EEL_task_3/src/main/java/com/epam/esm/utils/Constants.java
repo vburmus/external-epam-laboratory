@@ -7,7 +7,7 @@ public class Constants {
     public static final String ORDER = "Order:";
     public static final String USER = "User:";
     public static final String RESULT = "Result:";
-
+    public static final String INFO = "Info:";
     public static final String OBJECTS = "Objects: ";
     public static final String GIFT_CERTIFICATE = "Gift certificate: ";
     public static final String DEFAULT_PAGE = "1";

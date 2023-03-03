@@ -1,5 +1,6 @@
 package com.epam.esm.order.service;
 
+import com.epam.esm.exceptionhandler.exceptions.NoSuchItemException;
 import com.epam.esm.exceptionhandler.exceptions.ObjectIsInvalidException;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.giftcertificate.repository.GiftCertificateRepository;
@@ -31,7 +32,10 @@ public class OrderService {
 
 
     public String getOrderInfoByID(long id) {
-        return orderRepository.getOrderByID(id).toString();
+       Order order = orderRepository.getOrderByID(id);
+       if(order==null)
+           throw new NoSuchItemException("No such order!");
+       return order.toString();
       }
     @Transactional
     public Order createOrder(Order order) {
