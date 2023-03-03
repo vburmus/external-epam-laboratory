@@ -1,5 +1,6 @@
 package com.epam.esm.user.service;
 
+import com.epam.esm.exceptionhandler.exceptions.NoSuchItemException;
 import com.epam.esm.user.model.User;
 import com.epam.esm.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,9 @@ public class UserService {
     }
 
     public User getUserById(long id) {
-        return userRepository.getUserByID(id);
+        User user = userRepository.getUserByID(id);
+        if(user==null)
+            throw new NoSuchItemException("No such user!");
+        return user;
     }
 }
