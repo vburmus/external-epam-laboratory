@@ -3,7 +3,6 @@ package com.epam.esm.tag.controller;
 
 import com.epam.esm.tag.model.Tag;
 import com.epam.esm.tag.service.TagService;
-import com.epam.esm.utils.datavalidation.ParamsValidation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +23,7 @@ public class TagController {
 
     @GetMapping
     public ResponseEntity<?> showAllTags(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
-        return ParamsValidation.isNotFound(tagService.getAllTags(page, size));
+        return new ResponseEntity<>(Map.of(OBJECTS, tagService.getAllTags(page, size)), HttpStatus.OK);
     }
 
     @GetMapping("/search/byId/{id}")
@@ -44,7 +43,7 @@ public class TagController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") long id) {
-        return new ResponseEntity<>(Map.of(RESULT,tagService.deleteTag(id)),HttpStatus.OK);
+        return new ResponseEntity<>(Map.of(RESULT, tagService.deleteTag(id)), HttpStatus.OK);
     }
 
 
