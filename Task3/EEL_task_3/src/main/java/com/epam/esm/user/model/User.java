@@ -4,10 +4,11 @@ package com.epam.esm.user.model;
 import com.epam.esm.order.model.Order;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
 
-public class User {
+public class User extends RepresentationModel<User> {
     private Long id;
     private String name;
     private String surname;
