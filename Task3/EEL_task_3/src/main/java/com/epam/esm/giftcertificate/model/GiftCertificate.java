@@ -1,13 +1,13 @@
 package com.epam.esm.giftcertificate.model;
 
 import com.epam.esm.tag.model.Tag;
-
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
 import java.util.Objects;
 
 
-public class GiftCertificate {
+public class GiftCertificate extends RepresentationModel<GiftCertificate> {
     private Long id;
     private String name;
     private List<Tag> tags;
@@ -115,7 +115,6 @@ public class GiftCertificate {
     public int hashCode() {
         return super.hashCode();
     }
-
 
 
     @Override
