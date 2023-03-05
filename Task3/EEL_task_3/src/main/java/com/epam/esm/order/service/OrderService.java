@@ -22,12 +22,12 @@ public class OrderService {
     }
 
     public List<Order> getAllOrders(Integer page,Integer size) {
-        return orderRepository.getAllOrders(page,size);
+        return ParamsValidation.isEmptyOrElseThrowPageException(orderRepository.getAllOrders(page,size));
     }
 
 
     public List<Order> getOrdersByUsersID(long usersId,Integer page,Integer size) {
-        return orderRepository.getOrdersByUsersID(usersId,page,size);
+        return ParamsValidation.isEmptyOrElseThrowPageException(orderRepository.getOrdersByUsersID(usersId,page,size));
     }
 
 

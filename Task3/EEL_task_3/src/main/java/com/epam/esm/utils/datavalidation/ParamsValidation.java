@@ -2,12 +2,12 @@ package com.epam.esm.utils.datavalidation;
 
 import com.epam.esm.exceptionhandler.exceptions.NoSuchItemException;
 import com.epam.esm.exceptionhandler.exceptions.ObjectIsInvalidException;
+import com.epam.esm.exceptionhandler.exceptions.PageException;
 import com.epam.esm.giftcertificate.direction.DirectionEnum;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.order.model.Order;
 import com.epam.esm.tag.model.Tag;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.lang.NonNull;
 
 import java.util.HashMap;
@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.epam.esm.utils.Constants.OBJECTS;
-import static com.epam.esm.utils.Constants.STATUS;
 
 public class ParamsValidation {
     private ParamsValidation() {}
@@ -73,8 +71,10 @@ public class ParamsValidation {
         return order.getUser().getId() != null && !order.getCertificates().isEmpty();
     }
 
-    public static ResponseEntity<?> isNotFound(List<?> list) {
-        return list.isEmpty() ? new ResponseEntity<>(Map.of(STATUS, HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND) : new ResponseEntity<>(Map.of(OBJECTS, list), HttpStatus.OK);
+    public static <T> List<T> isEmptyOrElseThrowPageException(List<T> list) {
+        if(list.isEmpty())
+            throw new PageException("Page must contain some data!");
+        return list;
     }
 
 }
