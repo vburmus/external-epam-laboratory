@@ -26,12 +26,12 @@ public class TagController {
         return new ResponseEntity<>(Map.of(OBJECTS, tagService.getAllTags(page, size)), HttpStatus.OK);
     }
 
-    @GetMapping("/search/byId/{id}")
+    @GetMapping("/search/by-id/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") long id) {
         return new ResponseEntity<>(Map.of(TAG, tagService.getTagById(id)), HttpStatus.OK);
     }
 
-    @GetMapping("search/mostUsed")
+    @GetMapping("/search/most-used")
     public ResponseEntity<?> getMostUsed() {
         return new ResponseEntity<>(Map.of(TAG, tagService.getMostUsedTag()), HttpStatus.OK);
     }
