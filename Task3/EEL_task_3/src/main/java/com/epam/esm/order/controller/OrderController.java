@@ -46,10 +46,6 @@ public class OrderController {
         return CollectionModel.of(orders, links);
     }
 
-    @GetMapping("/by-user-id/{id}")
-    public ResponseEntity<?> getOrdersByUsersID(@PathVariable("id") long id, @RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
-        return new ResponseEntity<>(Map.of(OBJECTS, orderService.getOrdersByUsersID(id, page, size)), HttpStatus.OK);
-    }
 
     @GetMapping("/info/{id}")
     public ResponseEntity<?> getOrdersInfoByID(@PathVariable("id") long id) {
