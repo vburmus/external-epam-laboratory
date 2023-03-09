@@ -10,6 +10,7 @@ import com.epam.esm.tag.model.Tag;
 
 import org.springframework.lang.NonNull;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class ParamsValidation {
     }
 
     public static boolean isValidCertificate(GiftCertificate giftCertificate) {
-        return giftCertificate.getName() != null && !giftCertificate.getName().isEmpty() && giftCertificate.getDuration() != null && giftCertificate.getDuration() >= 0 && giftCertificate.getDescription() != null && !giftCertificate.getDescription().isEmpty() && giftCertificate.getPrice() != null && giftCertificate.getPrice() >= 0 && isCertificateHaveValidTags(giftCertificate.getTags());
+        return giftCertificate.getName() != null && !giftCertificate.getName().isEmpty() && giftCertificate.getDuration() != null && giftCertificate.getDuration() >= 0 && giftCertificate.getDescription() != null && !giftCertificate.getDescription().isEmpty() && giftCertificate.getPrice() != null && giftCertificate.getPrice().compareTo(BigDecimal.ZERO) > 0 && isCertificateHaveValidTags(giftCertificate.getTags());
     }
 
     public static Optional<Map<String, String>> isPatchCertificateValid(@NonNull GiftCertificate giftCertificate) {
@@ -46,7 +47,7 @@ public class ParamsValidation {
 
         if (giftCertificate.getDescription() != null) map.put("description", giftCertificate.getDescription());
 
-        if (giftCertificate.getPrice() != null && giftCertificate.getPrice() >= 0)
+        if (giftCertificate.getPrice() != null && giftCertificate.getPrice().compareTo(BigDecimal.ZERO) > 0)
             map.put("price", String.valueOf(giftCertificate.getPrice()));
 
         if (giftCertificate.getDuration() != null && giftCertificate.getDuration() >= 0)

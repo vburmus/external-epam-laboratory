@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,7 +31,7 @@ class GiftCertificateServiceTest {
     public static final String TEST_TAG = "TestTag";
     public static final String TEST_CERT = "Test";
     public static final int DURATION = 1;
-    public static final double PRICE = 20.0;
+    public static final BigDecimal PRICE = new BigDecimal("20.0");
     public final static String NAME = "name";
     public static final long ID1 = 1L;
     public static final long ID2 = 2L;
@@ -253,9 +254,6 @@ class GiftCertificateServiceTest {
         assertEquals(List.of(gc, gc2), giftCertificateServiceMocked.getGiftCertificatesByTagName(NAME,1,10));
     }
 
-    @Test
-    void getGiftCertificatesByPart() {
-    }
 
     @Test
     void getCertificatesSortedByDateDirectionException() {

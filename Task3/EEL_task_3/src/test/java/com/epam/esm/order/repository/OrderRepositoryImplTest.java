@@ -13,6 +13,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,13 +22,13 @@ class OrderRepositoryImplTest {
 
     public static final long ID3 = 3L;
     public static final long ID = 1L;
-    public static final double COST = 12.0;
+    public static final BigDecimal COST = new BigDecimal("12");
     public static final String DESCRIPTION = "...";
     public static final boolean CLOSED = false;
     public static final String CREATE_DATE = "2023-01-15 00:36:20.0";
     public static final String LAST_UPDATE_DATE = "2023-01-16 01:20:09";
     public static final long ID2 = 2L;
-    public static final double COST2 = 1.0;
+    public static final BigDecimal COST2 = new BigDecimal("1");
     private OrderRepositoryImpl orderRepository;
     private EmbeddedDatabase embeddedDatabase;
     private GiftCertificateRepository giftCertificateRepository;
@@ -63,14 +64,14 @@ class OrderRepositoryImplTest {
     void getOrderByID() {
         Order order1 = new Order();
         order1.setId(ID).setUser(new User().setId(ID)).setCost(COST).setClosed(CLOSED).setDescription(DESCRIPTION).setCreateDate(CREATE_DATE).setLastUpdateDate(LAST_UPDATE_DATE);
-        assertTrue(order1.equals(orderRepository.getOrderByID(ID)));
+        assertEquals(order1, orderRepository.getOrderByID(ID));
     }
 
     @Test
     void getOrdersID() {
         Order order1 = new Order();
         order1.setId(1).setUser(new User().setId(ID)).setCost(COST).setClosed(CLOSED).setDescription(DESCRIPTION).setCreateDate(CREATE_DATE).setLastUpdateDate(LAST_UPDATE_DATE);
-        assertTrue(order1.equals(orderRepository.getOrderByID(ID)));
+        assertEquals(order1, orderRepository.getOrderByID(ID));
     }
 
 

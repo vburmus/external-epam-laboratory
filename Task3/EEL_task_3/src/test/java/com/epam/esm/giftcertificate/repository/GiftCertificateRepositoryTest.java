@@ -11,6 +11,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GiftCertificateRepositoryTest {
 
-    public static final double PRICE = 20.0;
+    public static final BigDecimal PRICE = new BigDecimal("20.0");
     public static final int DURATION = 20;
     public static final String DESCRIPTION = "description";
     public static final String GIFT_CERTIFICATE_1 = "GiftCertificate1";
@@ -113,7 +114,7 @@ class GiftCertificateRepositoryTest {
     void updateGiftCertificate() {
         assertTrue(giftCertificateRepository.updateGiftCertificate(ID, Map.of("name", "newUpdate", "price", "222")));
         assertEquals("newUpdate", giftCertificateRepository.getGiftCertificateByID(ID).getName());
-        assertEquals(222, giftCertificateRepository.getGiftCertificateByID(ID).getPrice());
+        assertEquals(new BigDecimal("222.0"), giftCertificateRepository.getGiftCertificateByID(ID).getPrice());
     }
 
     @Test

@@ -25,7 +25,7 @@ public class GiftCertificateController {
         this.giftCertificateService = giftCertificateService;
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<?> showAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
         return new ResponseEntity<>(Map.of(OBJECTS, giftCertificateService.getAllGiftCertificates(page, size)), HttpStatus.OK);
     }

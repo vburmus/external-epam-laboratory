@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
 
     @Override
     public GiftCertificate getGiftCertificateByID(long id) {
-        return jdbcTemplate.query(AppQuery.GiftCertificate.GET_CERTIFICATE_BY_ID, new Object[]{id}, new BeanPropertyRowMapper<>(GiftCertificate.class)).stream().findAny().orElse(null);
+        return jdbcTemplate.queryForObject(AppQuery.GiftCertificate.GET_CERTIFICATE_BY_ID, new BeanPropertyRowMapper<>(GiftCertificate.class), id);
     }
 
     @Override
@@ -49,13 +50,13 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
 
     @Override
     public boolean isGiftCertificateExist(GiftCertificate giftCertificate) {
-        return jdbcTemplate.queryForObject(AppQuery.GiftCertificate.IS_CERTIFICATE_EXISTS, Integer.class, giftCertificate.getName(), giftCertificate.getDescription(), giftCertificate.getPrice(), giftCertificate.getDuration()) >= 1;
-
+        return jdbcTemplate.queryForObject(AppQuery.GiftCertificate.IS_CERTIFICATE_EXISTS, Integer.class, giftCertificate.getName(), giftCertificate.getDescription(), giftCertificate.getPrice(), giftCertificate.getDuration()) != null;
     }
 
     @Override
     public long getGiftCertificatesID(GiftCertificate giftCertificate) {
-        return jdbcTemplate.queryForObject(AppQuery.GiftCertificate.GET_CERTIFICATES_ID, Long.class, giftCertificate.getName(), giftCertificate.getDescription(), giftCertificate.getPrice(), giftCertificate.getDuration());
+        Long id = jdbcTemplate.queryForObject(AppQuery.GiftCertificate.GET_CERTIFICATES_ID, Long.class, giftCertificate.getName(), giftCertificate.getDescription(), giftCertificate.getPrice(), giftCertificate.getDuration());
+        return id==null?0:id;
     }
 
     @Override
@@ -95,7 +96,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
 
     @Override
     public List<Tag> getAllTagsIdByCertificateId(long id) {
-        return jdbcTemplate.query(AppQuery.GiftCertificateHasTag.GET_ALL_TAGS_BY_CERTIFICATE_ID, new Long[]{id}, new BeanPropertyRowMapper<>(Tag.class));
+        return jdbcTemplate.query(AppQuery.GiftCertificateHasTag.GET_ALL_TAGS_BY_CERTIFICATE_ID, new BeanPropertyRowMapper<>(Tag.class), id);
     }
 
     @Override
@@ -136,8 +137,8 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     }
 
     @Override
-    public Double getCertificatesPriceByID(long id) {
-        return jdbcTemplate.queryForObject(AppQuery.GiftCertificate.GET_CERTIFICATES_PRICE, Double.class,id);
+    public BigDecimal getCertificatesPriceByID(long id) {
+        return jdbcTemplate.queryForObject(AppQuery.GiftCertificate.GET_CERTIFICATES_PRICE, BigDecimal.class,id);
     }
 
 

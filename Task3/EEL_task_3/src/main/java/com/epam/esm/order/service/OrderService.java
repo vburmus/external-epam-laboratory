@@ -10,6 +10,7 @@ import com.epam.esm.utils.datavalidation.ParamsValidation;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -46,9 +47,9 @@ public class OrderService {
         if(!ParamsValidation.isValidOrder(order)){
             throw new ObjectIsInvalidException("Order is invalid!");
         }
-        double cost = 0;
+        BigDecimal cost = BigDecimal.ZERO;
         for(GiftCertificate gc: order.getCertificates()){
-            cost+=giftCertificateRepository.getCertificatesPriceByID(gc.getId());
+            cost = cost.add(giftCertificateRepository.getCertificatesPriceByID(gc.getId()));
         }
         order.setCost(cost);
         orderRepository.createOrder(order);

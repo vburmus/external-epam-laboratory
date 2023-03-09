@@ -5,6 +5,7 @@ import com.epam.esm.tag.model.Tag;
 import com.epam.esm.giftcertificate.direction.DirectionEnum;
 
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -45,5 +46,5 @@ public interface GiftCertificateRepository {
 
     List<GiftCertificate> getCertificatesBySeveralTags(List<Long> tags,Integer page,Integer size);
 
-    Double getCertificatesPriceByID(long id);
+    BigDecimal getCertificatesPriceByID(long id);
 }

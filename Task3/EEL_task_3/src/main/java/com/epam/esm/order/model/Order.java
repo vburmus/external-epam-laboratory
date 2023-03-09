@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.hateoas.RepresentationModel;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class Order extends RepresentationModel<Order> {
@@ -16,7 +17,7 @@ public class Order extends RepresentationModel<Order> {
     private List<GiftCertificate> certificates;
     private String description;
     private boolean isClosed;
-    private Double cost;
+    private BigDecimal cost;
     private String createDate;
     private String lastUpdateDate;
     public Order() {
@@ -77,11 +78,11 @@ public class Order extends RepresentationModel<Order> {
         return this;
     }
 
-    public Double getCost() {
+    public BigDecimal getCost() {
         return cost;
     }
 
-    public Order setCost(Double cost) {
+    public Order setCost(BigDecimal cost) {
         this.cost = cost;
         return this;
     }
