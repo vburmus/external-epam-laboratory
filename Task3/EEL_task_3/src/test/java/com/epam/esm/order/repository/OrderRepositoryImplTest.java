@@ -57,7 +57,7 @@ class OrderRepositoryImplTest {
         order1.setId(ID).setUser(new User().setId(ID)).setCost(COST2).setClosed(CLOSED).setDescription(DESCRIPTION).setCreateDate("2023-01-15 00:36:20").setLastUpdateDate(LAST_UPDATE_DATE);
         Order order2 = new Order();
         order2.setId(ID2).setUser(new User().setId(ID2)).setCost(COST).setClosed(CLOSED).setDescription(DESCRIPTION).setCreateDate("2023-01-15 00:36:20").setLastUpdateDate(LAST_UPDATE_DATE);
-        assertEquals(List.of(order1),orderRepository.getOrdersByUsersID(ID,1,10));
+        assertEquals(List.of(order1),orderRepository.getOrdersByUserID(ID,1,10));
     }
 
     @Test
@@ -85,7 +85,7 @@ class OrderRepositoryImplTest {
         orderRepository.setCertificateIntoOrder(gc1,order1);
         assertTrue(orderRepository.isOrderExist(order1));
         assertTrue( orderRepository.isCertificateExistsInOrder(gc1,order1));
-        assertEquals(ID3,orderRepository.getOrdersID(order1));
+        assertEquals(ID3,orderRepository.getOrderID(order1));
     }
     @AfterEach
     public void drop(){

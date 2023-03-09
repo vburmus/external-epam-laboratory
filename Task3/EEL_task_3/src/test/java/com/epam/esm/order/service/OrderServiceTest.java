@@ -25,7 +25,7 @@ class OrderServiceTest {
         Order order = new Order().setId(ID);
         when(orderRepositoryMocked.getAllOrders(1,10)).thenReturn(List.of(order));
         assertEquals(List.of(order), orderServiceMocked.getAllOrders(1,10));
-        when(orderRepositoryMocked.getOrdersByUsersID(ID,1,10)).thenReturn(List.of(order));
+        when(orderRepositoryMocked.getOrdersByUserID(ID,1,10)).thenReturn(List.of(order));
         assertEquals(List.of(order),orderServiceMocked.getOrdersByUsersID(ID,1,10));
         when(orderRepositoryMocked.getOrderByID(ID)).thenReturn(order);
         assertEquals(order.toString(), orderServiceMocked.getOrderInfoByID(ID));

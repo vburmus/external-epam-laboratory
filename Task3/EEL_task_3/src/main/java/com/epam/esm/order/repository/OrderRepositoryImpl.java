@@ -23,7 +23,7 @@ public class OrderRepositoryImpl implements OrderRepository{
     }
 
     @Override
-    public List<Order> getOrdersByUsersID(long usersId,Integer page,Integer size) {
+    public List<Order> getOrdersByUserID(long usersId, Integer page, Integer size) {
         return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.Order.GET_ORDERS_BY_USER_ID,page,size),new BeanPropertyRowMapper<>(Order.class),usersId);
     }
 
@@ -33,7 +33,7 @@ public class OrderRepositoryImpl implements OrderRepository{
     }
 
     @Override
-    public long getOrdersID(Order order) {
+    public long getOrderID(Order order) {
         return jdbcTemplate.queryForObject(AppQuery.Order.GET_ORDERS_ID, Long.class, order.getUser().getId(), order.getDescription(),order.getCost());
     }
 

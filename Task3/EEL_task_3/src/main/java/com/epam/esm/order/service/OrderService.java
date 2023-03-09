@@ -28,7 +28,7 @@ public class OrderService {
 
 
     public List<Order> getOrdersByUsersID(long usersId,Integer page,Integer size) {
-        return ParamsValidation.isEmptyOrElseThrowPageException(orderRepository.getOrdersByUsersID(usersId,page,size));
+        return ParamsValidation.isEmptyOrElseThrowPageException(orderRepository.getOrdersByUserID(usersId,page,size));
     }
 
 
@@ -53,7 +53,7 @@ public class OrderService {
         }
         order.setCost(cost);
         orderRepository.createOrder(order);
-        order.setId(orderRepository.getOrdersID(order));
+        order.setId(orderRepository.getOrderID(order));
 
         for (GiftCertificate gc: order.getCertificates()) {
          if (orderRepository.isCertificateExistsInOrder(gc,order))
