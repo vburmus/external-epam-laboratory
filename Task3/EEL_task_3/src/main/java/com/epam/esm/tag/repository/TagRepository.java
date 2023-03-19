@@ -14,7 +14,7 @@ public interface TagRepository {
 
     List<Tag> getAllTagsByCertificateID(long id);
 
-    long getTagsID(Tag tag);
+    long getTagID(Tag tag);
 
     Tag getTagByName(String name);
 

@@ -1,5 +1,6 @@
 package com.epam.esm.order.repository;
 
+import com.epam.esm.exceptionhandler.exceptions.ObjectNotFoundException;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.order.model.Order;
 import com.epam.esm.utils.AppQuery;
@@ -34,12 +35,17 @@ public class OrderRepositoryImpl implements OrderRepository{
 
     @Override
     public long getOrderID(Order order) {
-        return jdbcTemplate.queryForObject(AppQuery.Order.GET_ORDERS_ID, Long.class, order.getUser().getId(), order.getDescription(),order.getCost());
+        Long id = jdbcTemplate.queryForObject(AppQuery.Order.GET_ORDERS_ID, Long.class, order.getUser().getId(), order.getDescription(),order.getCost());
+        if (id == null)
+            throw new ObjectNotFoundException(String.format("Element with created on %s doesn't exist", order.getCreateDate()));
+        else
+            return id;
     }
 
     @Override
     public boolean isOrderExist(Order order) {
-        return jdbcTemplate.queryForObject(AppQuery.Order.IS_ORDER_EXIST, Integer.class,order.getUser().getId(),order.getDescription(),order.getCost()) >=1;
+        Integer result = jdbcTemplate.queryForObject(AppQuery.Order.IS_ORDER_EXIST, Integer.class,order.getUser().getId(),order.getDescription(),order.getCost());
+        return result != null && result == 1;
     }
 
     @Override
@@ -55,7 +61,8 @@ public class OrderRepositoryImpl implements OrderRepository{
 
     @Override
     public boolean isCertificateExistsInOrder(GiftCertificate gc, Order order) {
-        return jdbcTemplate.queryForObject(AppQuery.Order.IS_GC_IN_ORDER_EXIST,Integer.class, order.getId(), gc.getId())==1;
+        Integer result = jdbcTemplate.queryForObject(AppQuery.Order.IS_GC_IN_ORDER_EXIST,Integer.class, order.getId(), gc.getId());
+        return result != null && result == 1;
     }
 
     @Override

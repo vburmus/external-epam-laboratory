@@ -97,7 +97,7 @@ class GiftCertificateRepositoryTest {
 
     @Test
     void isExistsGetIdAndDeleteGiftCertificate() {
-        GiftCertificate gc1 = new GiftCertificate();
+        GiftCertificate gc1 = giftCertificateRepository.getGiftCertificateByID(1L);
         gc1.setId(ID);
         gc1.setName(GIFT_CERTIFICATE_1);
         gc1.setDescription(DESCRIPTION);

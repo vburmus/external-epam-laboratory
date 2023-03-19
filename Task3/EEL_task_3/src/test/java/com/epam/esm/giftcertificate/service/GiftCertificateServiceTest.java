@@ -7,21 +7,17 @@ import com.epam.esm.giftcertificate.direction.DirectionEnum;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.giftcertificate.repository.GiftCertificateRepository;
 import com.epam.esm.tag.model.Tag;
-
 import com.epam.esm.tag.repository.TagRepository;
 import com.epam.esm.tag.service.TagService;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
-
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -36,8 +32,8 @@ class GiftCertificateServiceTest {
     public static final long ID1 = 1L;
     public static final long ID2 = 2L;
     public static final String FAULT_DIRECTION = "A";
-    public static final String ASC = "ASC";
-    public static final String DESC = "DESC";
+    public static final DirectionEnum ASC = DirectionEnum.ASC;
+    public static final DirectionEnum DESC = DirectionEnum.DESC;
     public static final String TEST_TAG_1 = "TestTag1";
     public static final String TEST_CERT_1 = "Test1";
     public static final String DESCRIPTION = "...";
@@ -77,8 +73,9 @@ class GiftCertificateServiceTest {
         when(giftCertificateServiceMocked.getAllTagsByCertificate(gc)).thenReturn(gc.getTags());
         when(giftCertificateRepositoryMocked.getGiftCertificatesID(gc)).thenReturn(gc.getId());
         when(giftCertificateRepositoryMocked.getGiftCertificateByID(ID1)).thenReturn(gc);
-        assertEquals(gc,giftCertificateServiceMocked.createCertificate(gc));
+        assertEquals(gc, giftCertificateServiceMocked.createCertificate(gc));
     }
+
     @Test
     void createCertificateIsInvalid() {
         GiftCertificate gc = new GiftCertificate();
@@ -88,8 +85,9 @@ class GiftCertificateServiceTest {
         when(giftCertificateRepositoryMocked.isGiftCertificateExist(gc)).thenReturn(false);
         ObjectIsInvalidException thrown = assertThrows(ObjectIsInvalidException.class,
                 () -> giftCertificateServiceMocked.createCertificate(gc));
-        assertEquals("Gift certificate with name = " +  TEST_CERT + ", duration = " + DURATION + "is invalid, please check your params", thrown.getMessage());
+        assertEquals("Gift certificate with name = " + TEST_CERT + ", duration = " + DURATION + "is invalid, please check your params", thrown.getMessage());
     }
+
     @Test
     void createCertificateAlreadyExists() {
         GiftCertificate gc = new GiftCertificate();
@@ -105,9 +103,10 @@ class GiftCertificateServiceTest {
         when(giftCertificateRepositoryMocked.isGiftCertificateExist(gc)).thenReturn(true);
         ObjectAlreadyExistsException thrown = assertThrows(ObjectAlreadyExistsException.class,
                 () -> giftCertificateServiceMocked.createCertificate(gc));
-        assertEquals("Gift certificate with name = " +  TEST_CERT + ", duration = " + DURATION + " already exists", thrown.getMessage());
+        assertEquals("Gift certificate with name = " + TEST_CERT + ", duration = " + DURATION + " already exists", thrown.getMessage());
 
     }
+
     @Test
     void deleteCertificateSuccess() {
         GiftCertificate gc = new GiftCertificate();
@@ -124,6 +123,7 @@ class GiftCertificateServiceTest {
         assertTrue(giftCertificateServiceMocked.deleteCertificate(ID1));
 
     }
+
     @Test
     void deleteCertificateFalse() {
         GiftCertificate gc = new GiftCertificate();
@@ -146,11 +146,12 @@ class GiftCertificateServiceTest {
     @Test
     void updateCertificateObjectIsInvalidCertificate() {
         GiftCertificate gc = new GiftCertificate();
-         ObjectIsInvalidException thrown = assertThrows(ObjectIsInvalidException.class,
-                () -> giftCertificateServiceMocked.updateCertificate(ID1,gc));
-        assertEquals("Please check params for certificate name = " +  null , thrown.getMessage());
+        ObjectIsInvalidException thrown = assertThrows(ObjectIsInvalidException.class,
+                () -> giftCertificateServiceMocked.updateCertificate(ID1, gc));
+        assertEquals("Please check params for certificate name = " + null, thrown.getMessage());
 
     }
+
     @Test
     void updateCertificateObjectIsInvalidTag() {
         GiftCertificate gc = new GiftCertificate();
@@ -163,10 +164,11 @@ class GiftCertificateServiceTest {
         Tag t = new Tag();
         gc.setTags(List.of(t));
         ObjectIsInvalidException thrown = assertThrows(ObjectIsInvalidException.class,
-                () -> giftCertificateServiceMocked.updateCertificate(ID1,gc));
-        assertEquals("Some tags are invalid" , thrown.getMessage());
+                () -> giftCertificateServiceMocked.updateCertificate(ID1, gc));
+        assertEquals("Some tags are invalid", thrown.getMessage());
 
     }
+
     @Test
     void updateCertificateWithNoTags() {
         GiftCertificate gc = new GiftCertificate();
@@ -175,8 +177,8 @@ class GiftCertificateServiceTest {
         gc.setDuration(DURATION);
         gc.setPrice(PRICE);
         gc.setDescription(TEST_CERT);
-        when(giftCertificateServiceMocked.updateCertificate(ID1,gc)).thenReturn(true);
-        assertTrue(giftCertificateServiceMocked.updateCertificate(ID1,gc));
+        when(giftCertificateServiceMocked.updateCertificate(ID1, gc)).thenReturn(true);
+        assertTrue(giftCertificateServiceMocked.updateCertificate(ID1, gc));
 
     }
 
@@ -193,9 +195,10 @@ class GiftCertificateServiceTest {
         gc.setDescription(TEST_CERT);
         gc.setTags(List.of(t));
         when(giftCertificateRepositoryMocked.getGiftCertificateByID(ID1)).thenReturn(gc);
-        assertEquals(gc,giftCertificateServiceMocked.getCertificateById(ID1));
+        assertEquals(gc, giftCertificateServiceMocked.getCertificateById(ID1));
 
     }
+
     @Test
     void getCertificateByIdNoSuchItem() {
         when(giftCertificateRepositoryMocked.getGiftCertificateByID(ID1)).thenReturn(null);
@@ -204,13 +207,14 @@ class GiftCertificateServiceTest {
         assertEquals("GiftCertificate with id = " + ID1 + " doesn't exist", thrown.getMessage());
 
     }
+
     @Test
     void getGiftCertificatesByTagNameObjectIsInvalid() {
         ObjectIsInvalidException thrown1 = assertThrows(ObjectIsInvalidException.class,
-                () -> giftCertificateServiceMocked.getGiftCertificatesByTagName(null,1,10));
+                () -> giftCertificateServiceMocked.getGiftCertificatesByTagName(null, 1, 10));
         assertEquals("Tag name " + null + " is invalid", thrown1.getMessage());
         ObjectIsInvalidException thrown2 = assertThrows(ObjectIsInvalidException.class,
-                () -> giftCertificateServiceMocked.getGiftCertificatesByTagName("",1,10));
+                () -> giftCertificateServiceMocked.getGiftCertificatesByTagName("", 1, 10));
         assertEquals("Tag name " + " is invalid", thrown2.getMessage());
 
     }
@@ -219,7 +223,7 @@ class GiftCertificateServiceTest {
     void getGiftCertificatesByTagNameNoSuchItem() {
         when(tagServiceMocked.isTagWithNameExists(NAME)).thenReturn(false);
         NoSuchItemException thrown = assertThrows(NoSuchItemException.class,
-                () -> giftCertificateServiceMocked.getGiftCertificatesByTagName(NAME,1,10));
+                () -> giftCertificateServiceMocked.getGiftCertificatesByTagName(NAME, 1, 10));
         assertEquals("Tag with name " + NAME + " doesn't exist", thrown.getMessage());
 
     }
@@ -248,20 +252,12 @@ class GiftCertificateServiceTest {
         gc2.setDescription(DESCRIPTION);
         gc2.setTags(List.of(t2));
         when(tagServiceMocked.isTagWithNameExists(NAME)).thenReturn(true);
-        when(giftCertificateRepositoryMocked.getGiftCertificatesByTagName(NAME,1,10)).thenReturn(List.of(gc, gc2));
+        when(giftCertificateRepositoryMocked.getGiftCertificatesByTagName(NAME, 1, 10)).thenReturn(List.of(gc, gc2));
         when(giftCertificateRepositoryMocked.getGiftCertificatesID(gc)).thenReturn(ID1);
         when(giftCertificateRepositoryMocked.getGiftCertificatesID(gc2)).thenReturn(ID2);
-        assertEquals(List.of(gc, gc2), giftCertificateServiceMocked.getGiftCertificatesByTagName(NAME,1,10));
+        assertEquals(List.of(gc, gc2), giftCertificateServiceMocked.getGiftCertificatesByTagName(NAME, 1, 10));
     }
 
-
-    @Test
-    void getCertificatesSortedByDateDirectionException() {
-        ObjectIsInvalidException thrown1 = assertThrows(ObjectIsInvalidException.class,
-                () -> giftCertificateServiceMocked.getCertificatesSortedByDate(FAULT_DIRECTION,1,10));
-        assertEquals("Direction " + FAULT_DIRECTION + " is invalid", thrown1.getMessage());
-
-    }
 
     @Test
     void getCertificatesSortedByDateASC() {
@@ -286,8 +282,8 @@ class GiftCertificateServiceTest {
         gc2.setPrice(PRICE);
         gc2.setDescription(DESCRIPTION);
         gc2.setTags(List.of(t2));
-        when(giftCertificateRepositoryMocked.getCertificatesSortedByDate(DirectionEnum.ASC,1,10)).thenReturn(List.of(gc, gc2));
-        assertEquals(List.of(gc, gc2), giftCertificateServiceMocked.getCertificatesSortedByDate(ASC,1,10));
+        when(giftCertificateRepositoryMocked.getCertificatesSortedByDate(DirectionEnum.ASC, 1, 10)).thenReturn(List.of(gc, gc2));
+        assertEquals(List.of(gc, gc2), giftCertificateServiceMocked.getCertificatesSortedByDate(ASC, 1, 10));
     }
 
     @Test
@@ -313,8 +309,8 @@ class GiftCertificateServiceTest {
         gc2.setPrice(PRICE);
         gc2.setDescription(DESCRIPTION);
         gc2.setTags(List.of(t2));
-        when(giftCertificateRepositoryMocked.getCertificatesSortedByDate(DirectionEnum.DESC,1,10)).thenReturn(List.of(gc2, gc));
-        assertEquals(List.of(gc2, gc), giftCertificateServiceMocked.getCertificatesSortedByDate(DESC,1,10));
+        when(giftCertificateRepositoryMocked.getCertificatesSortedByDate(DirectionEnum.DESC, 1, 10)).thenReturn(List.of(gc2, gc));
+        assertEquals(List.of(gc2, gc), giftCertificateServiceMocked.getCertificatesSortedByDate(DESC, 1, 10));
 
     }
 
@@ -342,8 +338,8 @@ class GiftCertificateServiceTest {
         gc2.setDescription(DESCRIPTION);
         gc2.setTags(List.of(t2));
 
-        when(giftCertificateRepositoryMocked.getCertificatesSortedByName(DirectionEnum.ASC,1,10)).thenReturn(List.of(gc, gc2));
-        assertEquals(List.of(gc, gc2), giftCertificateServiceMocked.getCertificatesSortedByName(ASC,1,10));
+        when(giftCertificateRepositoryMocked.getCertificatesSortedByName(DirectionEnum.ASC, 1, 10)).thenReturn(List.of(gc, gc2));
+        assertEquals(List.of(gc, gc2), giftCertificateServiceMocked.getCertificatesSortedByName(ASC, 1, 10));
     }
 
     @Test
@@ -369,26 +365,11 @@ class GiftCertificateServiceTest {
         gc2.setPrice(PRICE);
         gc2.setDescription(DESCRIPTION);
         gc2.setTags(List.of(t2));
-        when(giftCertificateRepositoryMocked.getCertificatesSortedByName(DirectionEnum.DESC,1,10)).thenReturn(List.of(gc2, gc));
-        assertEquals(List.of(gc2, gc), giftCertificateServiceMocked.getCertificatesSortedByName(DESC,1,10));
+        when(giftCertificateRepositoryMocked.getCertificatesSortedByName(DirectionEnum.DESC, 1, 10)).thenReturn(List.of(gc2, gc));
+        assertEquals(List.of(gc2, gc), giftCertificateServiceMocked.getCertificatesSortedByName(DESC, 1, 10));
 
     }
 
-    @Test
-    void getCertificatesSortedByNameDirectionException() {
-        ObjectIsInvalidException thrown1 = assertThrows(ObjectIsInvalidException.class,
-                () -> giftCertificateServiceMocked.getCertificatesSortedByName(FAULT_DIRECTION,1,10));
-        assertEquals("Direction " + FAULT_DIRECTION + " is invalid", thrown1.getMessage());
-
-    }
-
-    @Test
-    void getCertificatesSortedByDateNameDirectionInvalid() {
-        ObjectIsInvalidException thrown1 = assertThrows(ObjectIsInvalidException.class,
-                () -> giftCertificateServiceMocked.getCertificatesSortedByDateName(FAULT_DIRECTION, FAULT_DIRECTION,1,10));
-        assertEquals("Some of directions: " + FAULT_DIRECTION + " " + FAULT_DIRECTION+ " are invalid", thrown1.getMessage());
-
-    }
 
     @Test
     void getCertificatesSortedByDateNameSuccess() {
@@ -415,12 +396,13 @@ class GiftCertificateServiceTest {
         gc2.setTags(List.of(t2));
         when(giftCertificateRepositoryMocked.getGiftCertificatesID(gc)).thenReturn(ID1);
         when(giftCertificateRepositoryMocked.getGiftCertificatesID(gc2)).thenReturn(ID2);
-        when(giftCertificateRepositoryMocked.getCertificatesSortedByDateName(DirectionEnum.ASC, DirectionEnum.ASC,1,10)).thenReturn(List.of(gc, gc2));
-        assertEquals(List.of(gc, gc2), giftCertificateServiceMocked.getCertificatesSortedByDateName(ASC, ASC,1,10));
+        when(giftCertificateRepositoryMocked.getCertificatesSortedByDateName(DirectionEnum.ASC, DirectionEnum.ASC, 1, 10)).thenReturn(List.of(gc, gc2));
+        assertEquals(List.of(gc, gc2), giftCertificateServiceMocked.getCertificatesSortedByDateName(ASC, ASC, 1, 10));
 
     }
+
     @Test
-    void getGCBySeveralTags(){
+    void getGCBySeveralTags() {
         GiftCertificate gc = new GiftCertificate();
         Tag t1 = new Tag();
         t1.setName(TEST_TAG_1);
@@ -433,11 +415,11 @@ class GiftCertificateServiceTest {
         gc.setDuration(DURATION);
         gc.setPrice(PRICE);
         gc.setDescription(DESCRIPTION);
-        gc.setTags(List.of(t1,t2));
-        when(giftCertificateRepositoryMocked.getCertificatesBySeveralTags(List.of(ID1,ID2),1,10)).thenReturn(Collections.singletonList(gc));
+        gc.setTags(List.of(t1, t2));
+        when(giftCertificateRepositoryMocked.getCertificatesBySeveralTags(List.of(ID1, ID2), 1, 10)).thenReturn(Collections.singletonList(gc));
 
         when(giftCertificateRepositoryMocked.getGiftCertificatesID(gc)).thenReturn(ID1);
         when(giftCertificateServiceMocked.setTagsInCertificates(List.of(gc))).thenReturn(List.of(gc));
-        assertEquals(List.of(gc),giftCertificateServiceMocked.getCertificatesBySeveralTags(List.of(t1.getId(),t2.getId()),1,10));
+        assertEquals(List.of(gc), giftCertificateServiceMocked.getCertificatesBySeveralTags(List.of(t1.getId(), t2.getId()), 1, 10));
     }
 }

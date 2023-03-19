@@ -62,7 +62,7 @@ public class TagService {
     }
 
     public long getTagsID(Tag tag) {
-        return tagRepository.getTagsID(tag);
+        return tagRepository.getTagID(tag);
     }
 
     public List<Long> getTagsIds(List<Tag> tags) {

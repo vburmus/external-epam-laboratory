@@ -1,13 +1,10 @@
 package com.epam.esm.tag.repository;
 
-import com.epam.esm.giftcertificate.repository.GiftCertificateRepository;
 import com.epam.esm.tag.model.Tag;
-import com.epam.esm.utils.AppQuery;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
@@ -76,7 +73,7 @@ class TagRepositoryTest {
         Tag tag = new Tag();
         tag.setName(TAG_1);
         assertTrue(tagRepository.isTagExists(TAG_1));
-        assertTrue(tagRepository.deleteTagByID(tagRepository.getTagsID(tag)));
+        assertTrue(tagRepository.deleteTagByID(tagRepository.getTagID(tag)));
         assertFalse(tagRepository.isTagExists(TAG_1));
     }
 

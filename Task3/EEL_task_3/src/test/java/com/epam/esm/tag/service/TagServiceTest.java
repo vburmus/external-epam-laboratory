@@ -99,7 +99,7 @@ class TagServiceTest {
     void getTagsIDSuccess() {
         Tag tag = new Tag();
 
-        when(tagRepositoryMocked.getTagsID(tag)).thenReturn(ID1);
+        when(tagRepositoryMocked.getTagID(tag)).thenReturn(ID1);
         assertEquals(ID1, tagServiceMocked.getTagsID(tag));
     }
 
@@ -111,9 +111,9 @@ class TagServiceTest {
         tag2.setId(ID2);
         Tag tag3 = new Tag();
         tag3.setId(ID3);
-        when(tagRepositoryMocked.getTagsID(tag1)).thenReturn(ID1);
-        when(tagRepositoryMocked.getTagsID(tag2)).thenReturn(ID2);
-        when(tagRepositoryMocked.getTagsID(tag3)).thenReturn(ID3);
+        when(tagRepositoryMocked.getTagID(tag1)).thenReturn(ID1);
+        when(tagRepositoryMocked.getTagID(tag2)).thenReturn(ID2);
+        when(tagRepositoryMocked.getTagID(tag3)).thenReturn(ID3);
 
         assertEquals(List.of(ID1, ID2, ID3), tagServiceMocked.getTagsIds(List.of(tag1,tag2,tag3)));
     }

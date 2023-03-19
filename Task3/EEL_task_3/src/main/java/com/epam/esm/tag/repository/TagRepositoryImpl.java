@@ -1,8 +1,8 @@
 package com.epam.esm.tag.repository;
 
+import com.epam.esm.exceptionhandler.exceptions.ObjectNotFoundException;
 import com.epam.esm.tag.model.Tag;
 import com.epam.esm.utils.AppQuery;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -24,20 +24,18 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public List<Tag> getAllTags(Integer page,Integer size) {
-        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.Tag.GET_ALL_TAGS,page,size), new BeanPropertyRowMapper<>(Tag.class));
+    public List<Tag> getAllTags(Integer page, Integer size) {
+        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.Tag.GET_ALL_TAGS, page, size), new BeanPropertyRowMapper<>(Tag.class));
     }
 
     @Override
     public Tag getTagByID(long id) {
-        return jdbcTemplate.query(AppQuery.Tag.GET_TAG_BY_ID, new Object[]{id}, new BeanPropertyRowMapper<>(Tag.class))
-                .stream().findAny().orElse(null);
+        return jdbcTemplate.queryForObject(AppQuery.Tag.GET_TAG_BY_ID, new BeanPropertyRowMapper<>(Tag.class), id);
     }
 
     @Override
     public Tag getTagByName(String name) {
-        return jdbcTemplate.query(AppQuery.Tag.GET_TAG_BY_NAME, new Object[]{name}, new BeanPropertyRowMapper<>(Tag.class))
-                .stream().findAny().orElse(null);
+        return jdbcTemplate.queryForObject(AppQuery.Tag.GET_TAG_BY_NAME, new BeanPropertyRowMapper<>(Tag.class), name);
     }
 
     @Override
@@ -47,7 +45,8 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public boolean isTagExists(String tagName) {
-        return jdbcTemplate.queryForObject(AppQuery.Tag.IS_TAG_EXISTS, Integer.class, tagName) == 1;
+        Integer result = jdbcTemplate.queryForObject(AppQuery.Tag.IS_TAG_EXISTS, Integer.class, tagName);
+        return result != null && result == 1;
     }
 
     @Override
@@ -56,8 +55,12 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public long getTagsID(Tag tag) {
-        return jdbcTemplate.queryForObject(AppQuery.Tag.GET_TAGS_ID, Long.class, tag.getName());
+    public long getTagID(Tag tag) {
+        Long id = jdbcTemplate.queryForObject(AppQuery.Tag.GET_TAGS_ID, Long.class, tag.getName());
+        if (id == null)
+            throw new ObjectNotFoundException(String.format("Tag with name %s doesn't exist",tag.getName()));
+        else
+            return id;
     }
 
     @Override
