@@ -1,5 +1,7 @@
 package com.epam.esm.giftcertificate.controller;
 
+import com.epam.esm.exceptionhandler.exceptions.ObjectIsInvalidException;
+import com.epam.esm.giftcertificate.direction.DirectionEnum;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.giftcertificate.service.GiftCertificateService;
 import org.springframework.hateoas.EntityModel;
@@ -19,6 +21,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping(value = "/certificate")
 public class GiftCertificateController {
 
+    public static final String NAME_DESC = "-name";
+    public static final String NAME_ASC = "name";
+    public static final String DATE_ASC = "date";
+    public static final String DATE_DESC = "-date";
     private final GiftCertificateService giftCertificateService;
 
     public GiftCertificateController(GiftCertificateService giftCertificateService) {
@@ -30,7 +36,7 @@ public class GiftCertificateController {
         return new ResponseEntity<>(Map.of(OBJECTS, giftCertificateService.getAllGiftCertificates(page, size)), HttpStatus.OK);
     }
 
-    @GetMapping("/search/byId/{id}")
+    @GetMapping("/{id}")
     public EntityModel<GiftCertificate> getById(@PathVariable("id") long id) {
         GiftCertificate gc = giftCertificateService.getCertificateById(id);
         Link selfLink = linkTo(methodOn(GiftCertificateController.class).getById(id)).withSelfRel();
@@ -38,34 +44,50 @@ public class GiftCertificateController {
         return EntityModel.of(gc);
     }
 
-    @GetMapping("/search/byTag/{name}")
-    public ResponseEntity<?> getCertificatesByTagName(@PathVariable("name") String name, @RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
+    @GetMapping("/search/by-tag")
+    public ResponseEntity<?> getCertificatesByTagName(@RequestParam(NAME_ASC) String name, @RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
         return new ResponseEntity<>(Map.of(OBJECTS, giftCertificateService.getGiftCertificatesByTagName(name, page, size)), HttpStatus.OK);
     }
 
-    @GetMapping("/sort/byPart/{nameOrDescriptionPart}")
-    public ResponseEntity<?> getCertificatesByPartOfNameOrDescription(@PathVariable("nameOrDescriptionPart") String nameOrDescriptionPart, @RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
+    @GetMapping("/search/by-part-name-description")
+    public ResponseEntity<?> getCertificatesByPartOfNameOrDescription(@RequestParam("part") String nameOrDescriptionPart, @RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
         return new ResponseEntity<>(Map.of(OBJECTS, giftCertificateService.getGiftCertificatesByPart(nameOrDescriptionPart, page, size)), HttpStatus.OK);
     }
+    @GetMapping("/sort")
+    public ResponseEntity<?> getSortedCertificates(@RequestParam("sort") List<String> sort, @RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size){
 
-    @GetMapping("/sort/byDate/{direction}")
-    public ResponseEntity<?> getCertificatesSortedByDate(@PathVariable("direction") String direction, @RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
-        return new ResponseEntity<>(Map.of(OBJECTS, giftCertificateService.getCertificatesSortedByDate(direction, page, size)), HttpStatus.OK);
-    }
+        if(sort.size()==1) {
+            String param = sort.get(0);
+            if (param.equals(DATE_ASC))
+                return new ResponseEntity<>(Map.of(OBJECTS, giftCertificateService.getCertificatesSortedByDate(DirectionEnum.ASC, page, size)), HttpStatus.OK);
+            if (param.equals(DATE_DESC))
+                return new ResponseEntity<>(Map.of(OBJECTS, giftCertificateService.getCertificatesSortedByDate(DirectionEnum.DESC, page, size)), HttpStatus.OK);
+            if (param.equals(NAME_ASC))
+                return new ResponseEntity<>(Map.of(OBJECTS, giftCertificateService.getCertificatesSortedByName(DirectionEnum.ASC, page, size)), HttpStatus.OK);
+            if (param.equals(NAME_DESC))
+                return new ResponseEntity<>(Map.of(OBJECTS, giftCertificateService.getCertificatesSortedByName(DirectionEnum.DESC, page, size)), HttpStatus.OK);
+        }
+        if(sort.size()==2){
+            if (sort.contains(DATE_ASC)) {
+                if (sort.contains(NAME_ASC))
+                    return new ResponseEntity<>(Map.of(OBJECTS, giftCertificateService.getCertificatesSortedByDateName(DirectionEnum.ASC, DirectionEnum.ASC, page, size)), HttpStatus.OK);
+                if(sort.contains(NAME_DESC))
+                    return new ResponseEntity<>(Map.of(OBJECTS, giftCertificateService.getCertificatesSortedByDateName(DirectionEnum.ASC, DirectionEnum.DESC, page, size)), HttpStatus.OK);
+            }
 
-    @GetMapping("/sort/byName/{direction}")
-    public ResponseEntity<?> getCertificatesSortedByName(@PathVariable("direction") String direction, @RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
-        return new ResponseEntity<>(Map.of(OBJECTS, giftCertificateService.getCertificatesSortedByName(direction, page, size)), HttpStatus.OK);
-    }
+            if(sort.contains(DATE_DESC)){
+                if (sort.contains(NAME_ASC))
+                    return new ResponseEntity<>(Map.of(OBJECTS, giftCertificateService.getCertificatesSortedByDateName(DirectionEnum.DESC, DirectionEnum.ASC, page, size)), HttpStatus.OK);
+                if(sort.contains(NAME_DESC))
+                    return new ResponseEntity<>(Map.of(OBJECTS, giftCertificateService.getCertificatesSortedByDateName(DirectionEnum.DESC, DirectionEnum.DESC, page, size)), HttpStatus.OK);
+            }
+        }
+        throw new ObjectIsInvalidException("Please, provide correct sort parameter");
+        }
 
-    @GetMapping("/sort/byDateAndName/{directionDate}/{directionName}")
-    public ResponseEntity<?> getCertificatesSortedByDateName(@PathVariable("directionDate") String directionDate, @PathVariable("directionName") String directionName, @RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
-        return new ResponseEntity<>(Map.of(OBJECTS, giftCertificateService.getCertificatesSortedByDateName(directionDate, directionName, page, size)), HttpStatus.OK);
-    }
-
-    @GetMapping({"/search/byTags"})
-    public ResponseEntity<?> searchForCertificatesBySeveralTags(@RequestParam("tags") List<Long> tags, @RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
-        return new ResponseEntity<>(Map.of(OBJECTS, giftCertificateService.getCertificatesBySeveralTags(tags, page, size)), HttpStatus.OK);
+    @GetMapping({"/search/by-tags"})
+    public ResponseEntity<?> searchForCertificatesBySeveralTags(@RequestParam("tagsIDs") List<Long> tagsIDs, @RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
+        return new ResponseEntity<>(Map.of(OBJECTS, giftCertificateService.getCertificatesBySeveralTags(tagsIDs, page, size)), HttpStatus.OK);
     }
 
     @PostMapping

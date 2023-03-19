@@ -12,7 +12,10 @@ import com.epam.esm.utils.datavalidation.ParamsValidation;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -61,7 +64,7 @@ public class GiftCertificateService {
         Optional<Map<String, String>> updatingMap = ParamsValidation.isPatchCertificateValid(giftCertificate);
 
         List<Tag> tagsToUpdate = giftCertificate.getTags();
-        if(updatingMap.isEmpty()){
+        if (updatingMap.isEmpty()) {
             throw new ObjectIsInvalidException("Update params are empty!");
         }
         if (tagsToUpdate == null) return giftCertificateRepository.updateGiftCertificate(id, updatingMap.get());
@@ -141,43 +144,21 @@ public class GiftCertificateService {
     }
 
 
-    public List<GiftCertificate> getCertificatesSortedByDate(String direction, Integer page, Integer size) {
-
-        if (ParamsValidation.isDirectionValid(direction)) {
-            if (direction.toUpperCase(Locale.ROOT).equals(DirectionEnum.ASC.name())) {
-                List<GiftCertificate> gc = ParamsValidation.isCertificatesArentEmptyOrElseThrowNoSuchItem(giftCertificateRepository.getCertificatesSortedByDate(DirectionEnum.ASC, page, size), EMPTY_MESSAGE);
-                return setTagsInCertificates(gc);
-            }
-            List<GiftCertificate> gc = ParamsValidation.isCertificatesArentEmptyOrElseThrowNoSuchItem(giftCertificateRepository.getCertificatesSortedByDate(DirectionEnum.DESC, page, size), EMPTY_MESSAGE);
-            return setTagsInCertificates(gc);
-        }
-        throw new ObjectIsInvalidException("Direction " + direction + IS_INVALID);
+    public List<GiftCertificate> getCertificatesSortedByDate(DirectionEnum direction, Integer page, Integer size) {
+        List<GiftCertificate> gc = ParamsValidation.isCertificatesArentEmptyOrElseThrowNoSuchItem(giftCertificateRepository.getCertificatesSortedByDate(direction, page, size), EMPTY_MESSAGE);
+        return setTagsInCertificates(gc);
     }
 
 
-    public List<GiftCertificate> getCertificatesSortedByName(String direction, Integer page, Integer size) {
-
-        if (ParamsValidation.isDirectionValid(direction)) {
-            if (direction.toUpperCase(Locale.ROOT).equals(DirectionEnum.ASC.name())) {
-                List<GiftCertificate> gc = ParamsValidation.isCertificatesArentEmptyOrElseThrowNoSuchItem(giftCertificateRepository.getCertificatesSortedByName(DirectionEnum.ASC, page, size), EMPTY_MESSAGE);
-                return setTagsInCertificates(gc);
-            }
-            List<GiftCertificate> gc = ParamsValidation.isCertificatesArentEmptyOrElseThrowNoSuchItem(giftCertificateRepository.getCertificatesSortedByName(DirectionEnum.DESC, page, size), EMPTY_MESSAGE);
-            return setTagsInCertificates(gc);
-        }
-        throw new ObjectIsInvalidException("Direction " + direction + IS_INVALID);
+    public List<GiftCertificate> getCertificatesSortedByName(DirectionEnum direction, Integer page, Integer size) {
+        List<GiftCertificate> gc = ParamsValidation.isCertificatesArentEmptyOrElseThrowNoSuchItem(giftCertificateRepository.getCertificatesSortedByName(direction, page, size), EMPTY_MESSAGE);
+        return setTagsInCertificates(gc);
     }
 
 
-    public List<GiftCertificate> getCertificatesSortedByDateName(String directionDate, String directionName, Integer page, Integer size) {
-        if (ParamsValidation.isDirectionValid(directionDate) && ParamsValidation.isDirectionValid(directionName)) {
-            DirectionEnum direction1 = directionDate.equals(DirectionEnum.ASC.name()) ? DirectionEnum.ASC : DirectionEnum.DESC;
-            DirectionEnum direction2 = directionName.equals(DirectionEnum.ASC.name()) ? DirectionEnum.ASC : DirectionEnum.DESC;
-            List<GiftCertificate> gc = ParamsValidation.isCertificatesArentEmptyOrElseThrowNoSuchItem(giftCertificateRepository.getCertificatesSortedByDateName(direction1, direction2, page, size), EMPTY_MESSAGE);
-            return setTagsInCertificates(gc);
-        }
-        throw new ObjectIsInvalidException("Some of directions: " + directionDate + " " + directionName + " are invalid");
-
+    public List<GiftCertificate> getCertificatesSortedByDateName(DirectionEnum directionDate, DirectionEnum directionName, Integer page, Integer size) {
+        List<GiftCertificate> gc = ParamsValidation.isCertificatesArentEmptyOrElseThrowNoSuchItem(giftCertificateRepository.getCertificatesSortedByDateName(directionDate, directionName, page, size), EMPTY_MESSAGE);
+        return setTagsInCertificates(gc);
     }
 
     public List<GiftCertificate> getCertificatesBySeveralTags(List<Long> tags, Integer page, Integer size) {
