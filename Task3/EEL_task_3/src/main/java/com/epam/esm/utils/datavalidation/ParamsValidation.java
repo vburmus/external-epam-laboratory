@@ -3,11 +3,9 @@ package com.epam.esm.utils.datavalidation;
 import com.epam.esm.exceptionhandler.exceptions.NoSuchItemException;
 import com.epam.esm.exceptionhandler.exceptions.ObjectIsInvalidException;
 import com.epam.esm.exceptionhandler.exceptions.PageException;
-import com.epam.esm.giftcertificate.direction.DirectionEnum;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.order.model.Order;
 import com.epam.esm.tag.model.Tag;
-
 import org.springframework.lang.NonNull;
 
 import java.math.BigDecimal;
@@ -18,7 +16,8 @@ import java.util.Optional;
 
 
 public class ParamsValidation {
-    private ParamsValidation() {}
+    private ParamsValidation() {
+    }
 
     public static boolean isTagValid(Tag tag) {
         return tag != null && tag.getName() != null && !tag.getName().isEmpty();
@@ -64,16 +63,12 @@ public class ParamsValidation {
         throw new NoSuchItemException(message);
     }
 
-    public static boolean isDirectionValid(String direction) {
-        return direction.equals(DirectionEnum.ASC.name()) || direction.equals(DirectionEnum.DESC.name());
-    }
-
     public static boolean isValidOrder(Order order) {
         return order.getUser().getId() != null && !order.getCertificates().isEmpty();
     }
 
     public static <T> List<T> isEmptyOrElseThrowPageException(List<T> list) {
-        if(list.isEmpty())
+        if (list.isEmpty())
             throw new PageException("Page must contain some data!");
         return list;
     }
