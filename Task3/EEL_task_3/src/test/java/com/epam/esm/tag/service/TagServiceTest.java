@@ -60,8 +60,8 @@ class TagServiceTest {
     @Test
     void getAllTagsSuccess() {
         List<Tag> tags = List.of(new Tag(),new Tag(),new Tag());
-        when(tagRepositoryMocked.getAllTags()).thenReturn(tags);
-        assertEquals(tagServiceMocked.getAllTags(),tags);
+        when(tagRepositoryMocked.getAllTags(1,10)).thenReturn(tags);
+        assertEquals(tagServiceMocked.getAllTags(1,10),tags);
     }
 
     @Test
@@ -99,7 +99,7 @@ class TagServiceTest {
     void getTagsIDSuccess() {
         Tag tag = new Tag();
 
-        when(tagRepositoryMocked.getTagsID(tag)).thenReturn(ID1);
+        when(tagRepositoryMocked.getTagID(tag)).thenReturn(ID1);
         assertEquals(ID1, tagServiceMocked.getTagsID(tag));
     }
 
@@ -111,9 +111,9 @@ class TagServiceTest {
         tag2.setId(ID2);
         Tag tag3 = new Tag();
         tag3.setId(ID3);
-        when(tagRepositoryMocked.getTagsID(tag1)).thenReturn(ID1);
-        when(tagRepositoryMocked.getTagsID(tag2)).thenReturn(ID2);
-        when(tagRepositoryMocked.getTagsID(tag3)).thenReturn(ID3);
+        when(tagRepositoryMocked.getTagID(tag1)).thenReturn(ID1);
+        when(tagRepositoryMocked.getTagID(tag2)).thenReturn(ID2);
+        when(tagRepositoryMocked.getTagID(tag3)).thenReturn(ID3);
 
         assertEquals(List.of(ID1, ID2, ID3), tagServiceMocked.getTagsIds(List.of(tag1,tag2,tag3)));
     }
@@ -125,6 +125,24 @@ class TagServiceTest {
         when(tagRepositoryMocked.isTagExists(TEST_TAG)).thenReturn(true);
         assertTrue(tagServiceMocked.isTagWithNameExists(TEST_TAG));
     }
-
+    @Test
+    void getTagsByNames(){
+        Tag tag = new Tag();
+        tag.setName(TEST_TAG);
+        when(tagRepositoryMocked.getTagByName(TEST_TAG)).thenReturn(tag);
+        assertEquals(List.of(tag),tagServiceMocked.getTagsByNames(List.of(TEST_TAG)));
+    }
+    @Test
+    void getTagsByNamesException(){
+        NoSuchItemException thrown = assertThrows(NoSuchItemException.class,
+                () -> tagServiceMocked.getTagsByNames(List.of("Name")));
+    }
+    @Test
+    void getMostUsedTag(){
+        Tag tag = new Tag();
+        tag.setName(TEST_TAG);
+        when(tagRepositoryMocked.getMostUsedTag()).thenReturn(tag);
+        assertEquals(tag,tagServiceMocked.getMostUsedTag());
+    }
 
 }

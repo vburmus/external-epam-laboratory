@@ -1,13 +1,15 @@
 package com.epam.esm.giftcertificate.repository;
 
+import com.epam.esm.exceptionhandler.exceptions.ObjectNotFoundException;
+import com.epam.esm.giftcertificate.direction.DirectionEnum;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.tag.model.Tag;
 import com.epam.esm.utils.AppQuery;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,9 @@ import java.util.Map;
 
 @Repository
 public class GiftCertificateRepositoryImpl implements GiftCertificateRepository {
+    private static final String CREATE_DATE = "create_date";
+    private static final String NAME = "name";
+
     private final JdbcTemplate jdbcTemplate;
 
 
@@ -30,13 +35,13 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     }
 
     @Override
-    public List<GiftCertificate> getAllGiftCertificates() {
-        return jdbcTemplate.query(AppQuery.GiftCertificate.GET_ALL_CERTIFICATES, new BeanPropertyRowMapper<>(GiftCertificate.class));
+    public List<GiftCertificate> getAllGiftCertificates(Integer page, Integer size) {
+        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificate.GET_ALL_CERTIFICATES, page, size), new BeanPropertyRowMapper<>(GiftCertificate.class));
     }
 
     @Override
     public GiftCertificate getGiftCertificateByID(long id) {
-        return jdbcTemplate.query(AppQuery.GiftCertificate.GET_CERTIFICATE_BY_ID, new Object[]{id}, new BeanPropertyRowMapper<>(GiftCertificate.class)).stream().findAny().orElse(null);
+        return jdbcTemplate.queryForObject(AppQuery.GiftCertificate.GET_CERTIFICATE_BY_ID, new BeanPropertyRowMapper<>(GiftCertificate.class), id);
     }
 
     @Override
@@ -46,13 +51,17 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
 
     @Override
     public boolean isGiftCertificateExist(GiftCertificate giftCertificate) {
-        return jdbcTemplate.queryForObject(AppQuery.GiftCertificate.IS_CERTIFICATE_EXISTS, Integer.class, giftCertificate.getName(), giftCertificate.getDescription(), giftCertificate.getPrice(), giftCertificate.getDuration()) == 1;
-
-    }
+        Integer result = jdbcTemplate.queryForObject(AppQuery.GiftCertificate.IS_CERTIFICATE_EXISTS, Integer.class, giftCertificate.getName(), giftCertificate.getDescription(), giftCertificate.getPrice(), giftCertificate.getDuration());
+        return result != null && result == 1;
+        }
 
     @Override
     public long getGiftCertificatesID(GiftCertificate giftCertificate) {
-        return jdbcTemplate.queryForObject(AppQuery.GiftCertificate.GET_CERTIFICATES_ID, Long.class, giftCertificate.getName(), giftCertificate.getDescription(), giftCertificate.getPrice(), giftCertificate.getDuration());
+        Long id = jdbcTemplate.queryForObject(AppQuery.GiftCertificate.GET_CERTIFICATES_ID, Long.class, giftCertificate.getName(), giftCertificate.getDescription(), giftCertificate.getPrice(), giftCertificate.getDuration());
+        if (id == null)
+            throw new ObjectNotFoundException(String.format("Element with name = %s doesn't exist", giftCertificate.getName()));
+        else
+            return id;
     }
 
     @Override
@@ -70,12 +79,12 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     }
 
 
-    public void addTagDependency(long giftcertificateID, long tagID) {
-        jdbcTemplate.update(AppQuery.GiftCertificateHasTag.ADD_CERTIFICATE_TO_TAG, giftcertificateID, tagID);
+    public void addTagDependency(long giftCertificateID, long tagID) {
+        jdbcTemplate.update(AppQuery.GiftCertificateHasTag.ADD_CERTIFICATE_TO_TAG, giftCertificateID, tagID);
     }
 
-    public void deleteTagDependency(long giftcertificateID, long tagID) {
-        jdbcTemplate.update(AppQuery.GiftCertificateHasTag.DELETE_CERTIFICATE_FROM_TAG, giftcertificateID, tagID);
+    public void deleteTagDependency(long giftCertificateID, long tagID) {
+        jdbcTemplate.update(AppQuery.GiftCertificateHasTag.DELETE_CERTIFICATE_FROM_TAG, giftCertificateID, tagID);
     }
 
     @Override
@@ -92,6 +101,50 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
 
     @Override
     public List<Tag> getAllTagsIdByCertificateId(long id) {
-        return jdbcTemplate.query(AppQuery.GiftCertificateHasTag.GET_ALL_TAGS_BY_CERTIFICATE_ID, new Long[]{id}, new BeanPropertyRowMapper<>(Tag.class));
+        return jdbcTemplate.query(AppQuery.GiftCertificateHasTag.GET_ALL_TAGS_BY_CERTIFICATE_ID, new BeanPropertyRowMapper<>(Tag.class), id);
     }
+
+    @Override
+    public List<GiftCertificate> getGiftCertificatesByTagName(String tagName, Integer page, Integer size) {
+        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificateHasTag.GET_GIFT_CERTIFICATE_BY_TAGS_NAME, page, size), new BeanPropertyRowMapper<>(GiftCertificate.class), tagName);
+    }
+
+    @Override
+    public List<GiftCertificate> getGiftCertificatesByPartOfName(String part, Integer page, Integer size) {
+        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificateHasTag.GET_GIFT_CERTIFICATE_BY_PART_OF_NAME, page, size), new BeanPropertyRowMapper<>(GiftCertificate.class), part + "%");
+    }
+
+    @Override
+    public List<GiftCertificate> getGiftCertificatesByPartOfDescription(String part, Integer page, Integer size) {
+        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificateHasTag.GET_GIFT_CERTIFICATE_BY_PART_OF_DESCRIPTION, page, size), new BeanPropertyRowMapper<>(GiftCertificate.class), part + "%");
+    }
+
+    @Override
+    public List<GiftCertificate> getCertificatesSortedByDate(DirectionEnum direction, Integer page, Integer size) {
+        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificateHasTag.getSortingQueryForOneParam(direction, CREATE_DATE), page, size), new BeanPropertyRowMapper<>(GiftCertificate.class));
+    }
+
+    @Override
+    public List<GiftCertificate> getCertificatesSortedByName(DirectionEnum direction, Integer page, Integer size) {
+        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificateHasTag.getSortingQueryForOneParam(direction, NAME), page, size), new BeanPropertyRowMapper<>(GiftCertificate.class));
+
+    }
+
+    @Override
+    public List<GiftCertificate> getCertificatesSortedByDateName(DirectionEnum directionDate, DirectionEnum directionName, Integer page, Integer size) {
+        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificateHasTag.getSortingQueryForTwoParams(directionDate, CREATE_DATE, directionName, NAME), page, size), new BeanPropertyRowMapper<>(GiftCertificate.class));
+
+    }
+
+    @Override
+    public List<GiftCertificate> getCertificatesBySeveralTags(List<Long> tags, Integer page, Integer size) {
+        return jdbcTemplate.query(AppQuery.getQueryWithPagination(AppQuery.GiftCertificateHasTag.getQueryForGettingSeveralTags(tags), page, size), new BeanPropertyRowMapper<>(GiftCertificate.class));
+    }
+
+    @Override
+    public BigDecimal getCertificatesPriceByID(long id) {
+        return jdbcTemplate.queryForObject(AppQuery.GiftCertificate.GET_CERTIFICATES_PRICE, BigDecimal.class, id);
+    }
+
+
 }

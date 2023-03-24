@@ -6,11 +6,11 @@ import com.epam.esm.exceptionhandler.exceptions.ObjectIsInvalidException;
 import com.epam.esm.tag.model.Tag;
 import com.epam.esm.tag.repository.TagRepository;
 import com.epam.esm.utils.datavalidation.ParamsValidation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,8 +33,8 @@ public class TagService {
 
     }
 
-    public List<Tag> getAllTags() {
-        return tagRepository.getAllTags();
+    public List<Tag> getAllTags(Integer page, Integer size) {
+        return ParamsValidation.isEmptyOrElseThrowPageException(tagRepository.getAllTags(page, size));
     }
 
     public Tag getTagById(long id) {
@@ -50,7 +50,8 @@ public class TagService {
             if (tag != null) tags.add(tag);
         }
         if (!tags.isEmpty()) return tags;
-        else throw new NoSuchItemException("There are no tags with any of this names " + names.toArray());
+        else
+            throw new NoSuchItemException("There are no tags with any of this names " + Arrays.toString(names.toArray()));
     }
 
     public boolean deleteTag(long id) {
@@ -61,7 +62,7 @@ public class TagService {
     }
 
     public long getTagsID(Tag tag) {
-        return tagRepository.getTagsID(tag);
+        return tagRepository.getTagID(tag);
     }
 
     public List<Long> getTagsIds(List<Tag> tags) {
@@ -69,6 +70,7 @@ public class TagService {
 
 
     }
+
     @Transactional
     public boolean isTagsExistOrElseCreate(List<Tag> tags) {
         for (Tag tag : tags) {
@@ -83,5 +85,11 @@ public class TagService {
         return tagRepository.isTagExists(name);
     }
 
+    public List<Tag> getAllTagsByCertificateID(long id) {
+        return tagRepository.getAllTagsByCertificateID(id);
+    }
 
+    public Tag getMostUsedTag() {
+        return tagRepository.getMostUsedTag();
+    }
 }

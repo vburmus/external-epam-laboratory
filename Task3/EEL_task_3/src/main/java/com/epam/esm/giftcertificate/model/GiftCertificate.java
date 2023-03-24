@@ -1,18 +1,19 @@
 package com.epam.esm.giftcertificate.model;
 
 import com.epam.esm.tag.model.Tag;
+import org.springframework.hateoas.RepresentationModel;
 
-
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
 
-public class GiftCertificate {
+public class GiftCertificate extends RepresentationModel<GiftCertificate> {
     private Long id;
     private String name;
     private List<Tag> tags;
     private String description;
-    private Integer price;
+    private BigDecimal price;
     private Integer duration;
     private String createDate;
     private String lastUpdateDate;
@@ -20,7 +21,7 @@ public class GiftCertificate {
     public GiftCertificate() {
     }
 
-    public GiftCertificate(Long id, String name, List<Tag> tags, String description, Integer price, Integer duration) {
+    public GiftCertificate(Long id, String name, List<Tag> tags, String description, BigDecimal price, Integer duration) {
         this.id = id;
         this.name = name;
         this.tags = tags;
@@ -66,11 +67,11 @@ public class GiftCertificate {
         return this;
     }
 
-    public Integer getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public GiftCertificate setPrice(Integer price) {
+    public GiftCertificate setPrice(BigDecimal price) {
         this.price = price;
         return this;
     }
@@ -115,7 +116,6 @@ public class GiftCertificate {
     public int hashCode() {
         return super.hashCode();
     }
-
 
 
     @Override

@@ -8,18 +8,19 @@ public interface TagRepository {
 
     boolean createTag(Tag tag);
 
-    List<Tag> getAllTags();
+    List<Tag> getAllTags(Integer page,Integer size);
 
     Tag getTagByID(long id);
 
     List<Tag> getAllTagsByCertificateID(long id);
 
-    long getTagsID(Tag tag);
+    long getTagID(Tag tag);
 
     Tag getTagByName(String name);
 
     boolean deleteTagByID(long id);
 
     boolean isTagExists(String tagName);
+    Tag getMostUsedTag();
 
 }
