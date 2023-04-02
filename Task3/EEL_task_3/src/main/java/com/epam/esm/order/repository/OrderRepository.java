@@ -1,20 +1,18 @@
 package com.epam.esm.order.repository;
 
-import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.order.model.Order;
+import com.epam.esm.utils.AppQuery;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
+@Repository
+public interface OrderRepository extends JpaRepository<Order, Long> {
+    @Query(value = AppQuery.Order.IS_GC_IN_ORDER_EXIST, nativeQuery = true)
+    boolean existsByIdAndGiftCertificateId(Long orderId, Long giftCertificateId);
 
-public interface OrderRepository {
-    List<Order> getAllOrders(Integer page,Integer size);
-    List<Order> getOrdersByUserID(long id, Integer page, Integer size);
-    Order getOrderByID(long id);
-    long getOrderID(Order order);
-    boolean isOrderExist(Order order);
-
-    boolean createOrder(Order order);
-    boolean setCertificateIntoOrder(GiftCertificate gc, Order order);
-    boolean isCertificateExistsInOrder(GiftCertificate gc, Order order);
-
-    boolean incrementQuantity(GiftCertificate gc, Order order);
+    @Modifying
+    @Query(value = AppQuery.Order.INCREMENT_QUANTITY, nativeQuery = true)
+    int incrementQuantityByGiftCertificateIdAndOrderId(Long giftCertificateId, Long orderId);
 }
