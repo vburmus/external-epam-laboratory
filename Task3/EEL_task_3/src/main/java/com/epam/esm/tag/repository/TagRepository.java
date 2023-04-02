@@ -1,26 +1,15 @@
 package com.epam.esm.tag.repository;
 
 import com.epam.esm.tag.model.Tag;
+import com.epam.esm.utils.AppQuery;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
+@Repository
+public interface TagRepository extends JpaRepository<Tag, Long> {
+    boolean existsByName(String tagName);
 
-public interface TagRepository {
-
-    boolean createTag(Tag tag);
-
-    List<Tag> getAllTags(Integer page,Integer size);
-
-    Tag getTagByID(long id);
-
-    List<Tag> getAllTagsByCertificateID(long id);
-
-    long getTagID(Tag tag);
-
-    Tag getTagByName(String name);
-
-    boolean deleteTagByID(long id);
-
-    boolean isTagExists(String tagName);
+    @Query(nativeQuery = true, value = AppQuery.Tag.GET_MOST_USED_TAG)
     Tag getMostUsedTag();
-
 }

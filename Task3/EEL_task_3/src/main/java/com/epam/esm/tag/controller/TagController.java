@@ -20,10 +20,15 @@ public class TagController {
     public TagController(TagService tagService) {
         this.tagService = tagService;
     }
+    
+    @PostMapping
+    public ResponseEntity<?> createTag(@RequestBody Tag tag) {
+        return new ResponseEntity<>(Map.of(TAG, tagService.createTag(tag)), HttpStatus.CREATED);
+    }
 
     @GetMapping
     public ResponseEntity<?> showAllTags(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
-        return new ResponseEntity<>(Map.of(OBJECTS, tagService.getAllTags(page, size)), HttpStatus.OK);
+        return new ResponseEntity<>(Map.of(OBJECTS, tagService.getAllTags(--page, size)), HttpStatus.OK);
     }
 
     @GetMapping("/search/by-id/{id}")
@@ -34,11 +39,6 @@ public class TagController {
     @GetMapping("/search/most-used")
     public ResponseEntity<?> getMostUsed() {
         return new ResponseEntity<>(Map.of(TAG, tagService.getMostUsedTag()), HttpStatus.OK);
-    }
-
-    @PostMapping
-    public ResponseEntity<?> createTag(@RequestBody Tag tag) {
-        return new ResponseEntity<>(Map.of(TAG, tagService.createTag(tag)), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
