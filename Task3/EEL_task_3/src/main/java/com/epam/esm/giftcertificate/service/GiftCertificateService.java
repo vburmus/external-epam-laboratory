@@ -71,7 +71,7 @@ public class GiftCertificateService {
     public Page<GiftCertificate> getAllGiftCertificates(Integer page, Integer size) {
 
         PageRequest pageRequest = PageRequest.of(page, size);
-        return ParamsValidation.isListArentEmptyOrElseThrowNoSuchItem(giftCertificateRepository.findAll(pageRequest));
+        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(giftCertificateRepository.findAll(pageRequest));
     }
 
     public GiftCertificate getCertificateById(long id) {
@@ -120,7 +120,7 @@ public class GiftCertificateService {
         if (tagName != null && !tagName.isEmpty()) {
             if (tagService.existsByName(tagName)) {
                 PageRequest pageRequest = PageRequest.of(page, size);
-                return ParamsValidation.isListArentEmptyOrElseThrowNoSuchItem(giftCertificateRepository.findByTagsName(tagName, pageRequest));
+                return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(giftCertificateRepository.findByTagsName(tagName, pageRequest));
             }
             throw new NoSuchItemException("Tag with name " + tagName + " doesn't exist");
         }
@@ -133,8 +133,8 @@ public class GiftCertificateService {
             PageRequest pageRequest = PageRequest.of(page, size);
             Page<GiftCertificate> certificates = giftCertificateRepository.findByNameContaining(part, pageRequest);
             if (!certificates.isEmpty())
-                return ParamsValidation.isListArentEmptyOrElseThrowNoSuchItem(certificates);
-            return ParamsValidation.isListArentEmptyOrElseThrowNoSuchItem(giftCertificateRepository.findByDescriptionContaining(part, pageRequest));
+                return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(certificates);
+            return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(giftCertificateRepository.findByDescriptionContaining(part, pageRequest));
         }
         throw new ObjectIsInvalidException("Part of description -> " + part + IS_INVALID);
     }
@@ -158,7 +158,7 @@ public class GiftCertificateService {
         if (sort.length == 1) {
             Sort sortBy = Sort.by(firstDirection, firstParam);
             PageRequest pageRequest = PageRequest.of(page, size, sortBy);
-            return ParamsValidation.isListArentEmptyOrElseThrowNoSuchItem(giftCertificateRepository.findAll(pageRequest));
+            return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(giftCertificateRepository.findAll(pageRequest));
         } else {
             String secondParam = sort[1];
             Sort.Direction secondDirection = ParamsValidation.getSortDirection(firstParam);
@@ -167,7 +167,7 @@ public class GiftCertificateService {
                     new Sort.Order(firstDirection, firstParam),
                     new Sort.Order(secondDirection, secondParam));
             PageRequest pageRequest = PageRequest.of(page, size, sortBy);
-            return ParamsValidation.isListArentEmptyOrElseThrowNoSuchItem(giftCertificateRepository.findAll(pageRequest));
+            return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(giftCertificateRepository.findAll(pageRequest));
 
         }
 
@@ -176,6 +176,6 @@ public class GiftCertificateService {
     public Page<GiftCertificate> getCertificatesBySeveralTags(List<Long> tagsId, Integer page, Integer size) {
         page--;
         PageRequest pageRequest = PageRequest.of(page, size);
-        return ParamsValidation.isListArentEmptyOrElseThrowNoSuchItem(giftCertificateRepository.findByTagsIdIn(tagsId, pageRequest));
+        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(giftCertificateRepository.findByTagsIdIn(tagsId, pageRequest));
     }
 }

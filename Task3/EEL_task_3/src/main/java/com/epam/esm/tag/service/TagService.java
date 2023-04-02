@@ -70,7 +70,7 @@ public class TagService {
 
     public Page<Tag> getAllTags(Integer page, Integer size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        return ParamsValidation.isListArentEmptyOrElseThrowNoSuchItem(tagRepository.findAll(pageRequest));
+        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(tagRepository.findAll(pageRequest));
     }
 
     public Tag getTagById(long id) {

@@ -20,7 +20,7 @@ public class TagController {
     public TagController(TagService tagService) {
         this.tagService = tagService;
     }
-    
+
     @PostMapping
     public ResponseEntity<?> createTag(@RequestBody Tag tag) {
         return new ResponseEntity<>(Map.of(TAG, tagService.createTag(tag)), HttpStatus.CREATED);
