@@ -1,134 +1,57 @@
 package com.epam.esm.giftcertificate.model;
 
 import com.epam.esm.tag.model.Tag;
+import lombok.*;
+import org.hibernate.Hibernate;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.hateoas.RepresentationModel;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-
+@Entity
+@Table(name = "gift_certificate")
+@Builder
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class GiftCertificate extends RepresentationModel<GiftCertificate> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private List<Tag> tags;
     private String description;
     private BigDecimal price;
     private Integer duration;
-    private String createDate;
-    private String lastUpdateDate;
-
-    public GiftCertificate() {
-    }
-
-    public GiftCertificate(Long id, String name, List<Tag> tags, String description, BigDecimal price, Integer duration) {
-        this.id = id;
-        this.name = name;
-        this.tags = tags;
-        this.description = description;
-        this.price = price;
-        this.duration = duration;
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public GiftCertificate setId(Long id) {
-        this.id = id;
-        return this;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public GiftCertificate setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public List<Tag> getTags() {
-        return tags;
-    }
-
-    public GiftCertificate setTags(List<Tag> tags) {
-        this.tags = tags;
-        return this;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public GiftCertificate setDescription(String description) {
-        this.description = description;
-        return this;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public GiftCertificate setPrice(BigDecimal price) {
-        this.price = price;
-        return this;
-    }
-
-    public Integer getDuration() {
-        return duration;
-    }
-
-    public GiftCertificate setDuration(Integer duration) {
-        this.duration = duration;
-        return this;
-    }
-
-    public String getCreateDate() {
-        return createDate;
-    }
-
-    public GiftCertificate setCreateDate(String createDate) {
-        this.createDate = createDate;
-        return this;
-    }
-
-    public String getLastUpdateDate() {
-        return lastUpdateDate;
-    }
-
-    public GiftCertificate setLastUpdateDate(String lastUpdateDate) {
-        this.lastUpdateDate = lastUpdateDate;
-        return this;
-    }
-
+    @ManyToMany
+    @ToString.Exclude
+    @JoinTable(name = "gift_certificate_has_tag",
+            joinColumns = @JoinColumn(name = "gift_certificate_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private List<Tag> tags;
+    @CreatedDate
+    @Column(name = "create_date")
+    private LocalDateTime createDate;
+    @LastModifiedDate
+    @Column(name = "last_update_date")
+    private LocalDateTime lastUpdateDate;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         GiftCertificate that = (GiftCertificate) o;
-        return id.equals(that.id) && Objects.equals(name, that.name) && Objects.equals(tags, that.tags) && Objects.equals(description, that.description) && Objects.equals(price, that.price) && Objects.equals(duration, that.duration) && Objects.equals(createDate, that.createDate) && Objects.equals(lastUpdateDate, that.lastUpdateDate);
+        return id != null && Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode();
-    }
-
-
-    @Override
-    public String toString() {
-        return "GiftCertificate{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", tags=" + tags +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", duration=" + duration +
-                ", createDate='" + createDate + '\'' +
-                ", lastUpdateDate='" + lastUpdateDate + '\'' +
-                '}';
+        return getClass().hashCode();
     }
 }
