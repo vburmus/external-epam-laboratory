@@ -1,13 +1,16 @@
 package com.epam.esm.order.service;
 
 import com.epam.esm.exceptionhandler.exceptions.NoSuchItemException;
-import com.epam.esm.exceptionhandler.exceptions.ObjectIsInvalidException;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.giftcertificate.repository.GiftCertificateRepository;
+import com.epam.esm.giftcertificatehasorder.model.GiftCertificateHasOrder;
+import com.epam.esm.giftcertificatehasorder.model.GiftCertificateOrderID;
+import com.epam.esm.giftcertificatehasorder.repository.GiftCertificateHasOrderRepository;
 import com.epam.esm.order.model.Order;
 import com.epam.esm.order.repository.OrderRepository;
+import com.epam.esm.user.model.User;
+import com.epam.esm.user.repository.UserRepository;
 import com.epam.esm.utils.datavalidation.ParamsValidation;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -22,10 +25,14 @@ import java.util.Optional;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final GiftCertificateRepository giftCertificateRepository;
+    private final UserRepository userRepository;
+    private final GiftCertificateHasOrderRepository giftCertificateHasOrderRepository;
 
-    public OrderService(OrderRepository orderRepository, GiftCertificateRepository giftCertificateRepository) {
+    public OrderService(OrderRepository orderRepository, GiftCertificateRepository giftCertificateRepository, UserRepository userRepository, GiftCertificateHasOrderRepository giftCertificateHasOrderRepository) {
         this.orderRepository = orderRepository;
         this.giftCertificateRepository = giftCertificateRepository;
+        this.userRepository = userRepository;
+        this.giftCertificateHasOrderRepository = giftCertificateHasOrderRepository;
     }
 
     public Page<Order> getAllOrders(Integer page, Integer size) {
@@ -40,28 +47,54 @@ public class OrderService {
         return order.get().toString();
     }
 
+
     @Transactional
     public Order createOrder(Order order) {
 
-        if (orderRepository.exists(Example.of(order))) throw new ObjectIsInvalidException("Order already exists!");
+        Long userId = order.getUser().getId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchItemException("User not found with id " + userId));
 
-        if (!ParamsValidation.isValidOrder(order)) {
-            throw new ObjectIsInvalidException("Order is invalid!");
+        order.setUser(user);
+
+        Order savedOrder = orderRepository.save(order);
+
+        List<GiftCertificateHasOrder> giftCertificateHasOrders = new ArrayList<>();
+        for (GiftCertificateHasOrder giftCertificateHasOrder : order.getGiftCertificateHasOrders()) {
+            Long giftCertificateId = giftCertificateHasOrder.getGiftCertificate().getId();
+            GiftCertificate giftCertificate = giftCertificateRepository.findById(giftCertificateId)
+                    .orElseThrow(() -> new NoSuchItemException("Gift certificate not found with id " + giftCertificateId));
+
+            GiftCertificateOrderID id = new GiftCertificateOrderID();
+            id.setGiftCertificateId(giftCertificate.getId());
+            id.setOrderId(savedOrder.getId());
+
+            GiftCertificateHasOrder newGiftCertificateHasOrder = new GiftCertificateHasOrder();
+            newGiftCertificateHasOrder.setId(id);
+            newGiftCertificateHasOrder.setGiftCertificate(giftCertificate);
+            newGiftCertificateHasOrder.setOrder(savedOrder);
+            newGiftCertificateHasOrder.setQuantity(giftCertificateHasOrder.getQuantity());
+
+            GiftCertificateHasOrder gcho = giftCertificateHasOrderRepository.save(newGiftCertificateHasOrder);
+            giftCertificateHasOrders.add(gcho);
         }
-        BigDecimal cost = BigDecimal.ZERO;
-        for (GiftCertificate gc : order.getGiftCertificates()) {
-            cost = cost.add(giftCertificateRepository.getPriceById(gc.getId()));
-        }
-        order.setCost(cost);
-        orderRepository.save(order);
-        List<GiftCertificate> unknownGCs = new ArrayList<>();
-        for (GiftCertificate gc : order.getGiftCertificates()) {
-            if (orderRepository.existsByIdAndGiftCertificateId(gc.getId(), order.getId()))
-                orderRepository.incrementQuantityByGiftCertificateIdAndOrderId(gc.getId(), order.getId());
-            else unknownGCs.add(gc);
-        }
-        order.getGiftCertificates().addAll(unknownGCs);
-        orderRepository.save(order);
-        return order;
+
+        savedOrder.setGiftCertificateHasOrders(giftCertificateHasOrders);
+
+        BigDecimal orderCost = giftCertificateHasOrders.stream()
+                .map(gcho -> gcho.getGiftCertificate().getPrice().multiply(new BigDecimal(gcho.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        savedOrder.setCost(orderCost);
+
+        return savedOrder;
+    }
+
+    public Page<Order> getOrdersByUsersID(long id, Integer page, Integer size) {
+        PageRequest pageRequest = PageRequest.of(--page, size);
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty())
+            throw new NoSuchItemException(String.format("No user with id = %d found", id));
+        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(orderRepository.findAllByUser(user.get(), pageRequest));
     }
 }
+
