@@ -31,4 +31,8 @@ public class OrderController {
         return new ResponseEntity<>(Map.of(INFO, orderService.getOrderInfoByID(id)), HttpStatus.OK);
     }
 
+    @GetMapping("/by-user-id/{id}")
+    public ResponseEntity<?> getOrdersByUsersID(@PathVariable("id") long id, @RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
+        return new ResponseEntity<>(Map.of(OBJECTS, orderService.getOrdersByUsersID(id, page, size)), HttpStatus.OK);
+    }
 }

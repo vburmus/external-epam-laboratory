@@ -13,7 +13,6 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 public class GiftCertificateHasOrder {
@@ -22,7 +21,7 @@ public class GiftCertificateHasOrder {
 
     @ManyToOne
     @MapsId("giftCertificateId")
-    @JoinColumn(name = "gift_certificate_id",referencedColumnName = "id")
+    @JoinColumn(name = "gift_certificate_id", referencedColumnName = "id")
     private GiftCertificate giftCertificate;
 
     @ManyToOne

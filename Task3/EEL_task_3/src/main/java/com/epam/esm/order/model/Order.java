@@ -3,6 +3,7 @@ package com.epam.esm.order.model;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.giftcertificatehasorder.model.GiftCertificateHasOrder;
 import com.epam.esm.user.model.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.data.annotation.CreatedDate;
@@ -48,6 +49,7 @@ public class Order extends RepresentationModel<Order> {
 
     @ToString.Exclude
     @OneToMany(mappedBy = "order")
+    @JsonIgnore
     private List<GiftCertificateHasOrder> giftCertificateHasOrders;
 
 
