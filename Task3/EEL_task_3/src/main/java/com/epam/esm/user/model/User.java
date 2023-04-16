@@ -2,88 +2,50 @@ package com.epam.esm.user.model;
 
 
 import com.epam.esm.order.model.Order;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import lombok.*;
+import org.hibernate.Hibernate;
 import org.springframework.hateoas.RepresentationModel;
 
+import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
+
+@Entity
+@Table(name = "user")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 
 public class User extends RepresentationModel<User> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String surname;
     private String number;
 
+    @OneToMany
+    @ToString.Exclude
+    @JoinTable(
+            name = "user_orders",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "order_id")
+    )
     private List<Order> orders;
-
-    public User(){}
-
-    public User(Long id, String name, String surname, String number) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.number = number;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public User setId(Long id) {
-        this.id = id;
-        return this;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public User setOrders(List<Order> orders) {
-        this.orders = orders;
-        return this;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public User setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public User setSurname(String surname) {
-        this.surname = surname;
-        return this;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public User setNumber(String number) {
-        this.number = number;
-        return this;
-    }
-
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         User user = (User) o;
-
-        return new EqualsBuilder().append(id, user.id).append(name, user.name).append(surname, user.surname).append(number, user.number).isEquals();
+        return id != null && Objects.equals(id, user.id);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(id).append(name).append(surname).append(number).toHashCode();
+        return getClass().hashCode();
     }
 }
