@@ -16,6 +16,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -98,16 +99,15 @@ public class GiftCertificateService {
             if (updatingMap.containsKey("name"))
                 giftCertificateFromDB.setName(updatingMap.get("name"));
             if (updatingMap.containsKey("description"))
-                giftCertificateFromDB.setName(updatingMap.get("description"));
+                giftCertificateFromDB.setDescription(updatingMap.get("description"));
             if (updatingMap.containsKey("price"))
-                giftCertificateFromDB.setName(updatingMap.get("price"));
+                giftCertificateFromDB.setPrice(new BigDecimal(updatingMap.get("price")));
             if (updatingMap.containsKey("duration"))
-                giftCertificateFromDB.setName(updatingMap.get("duration"));
+                giftCertificateFromDB.setDuration(Integer.valueOf(updatingMap.get("duration")));
             giftCertificateFromDB.setLastUpdateDate(LocalDateTime.now());
 
             List<Tag> tags = tagService.checkTagsAndSaveIfDontExist(updatedGiftCertificate);
             giftCertificateFromDB.setTags(tags);
-
 
             return giftCertificateRepository.save(giftCertificateFromDB);
         }
