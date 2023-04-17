@@ -5,8 +5,10 @@ import com.epam.esm.exceptionhandler.exceptions.ObjectAlreadyExistsException;
 import com.epam.esm.exceptionhandler.exceptions.ObjectIsInvalidException;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.tag.model.Tag;
+import com.epam.esm.tag.model.TagDTO;
 import com.epam.esm.tag.repository.TagRepository;
 import com.epam.esm.utils.datavalidation.ParamsValidation;
+import com.epam.esm.utils.mappers.EntityToDtoMapper;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,10 +23,11 @@ import java.util.Optional;
 @Service
 public class TagService {
     private final TagRepository tagRepository;
+    private final EntityToDtoMapper entityToDtoMapper;
 
-
-    public TagService(TagRepository tagRepository) {
+    public TagService(TagRepository tagRepository, EntityToDtoMapper entityToDtoMapper) {
         this.tagRepository = tagRepository;
+        this.entityToDtoMapper = entityToDtoMapper;
     }
 
     public boolean existsByName(String tagName) {
@@ -32,16 +35,16 @@ public class TagService {
     }
 
     @Transactional
-    public Tag createTag(Tag tag) {
-        if (!tagRepository.exists(Example.of(tag))) {
-            if (ParamsValidation.isTagValid(tag)) {
-                tagRepository.save(tag);
-                return tag;
-            }
-            throw new ObjectIsInvalidException("Tag with name = " + tag.getName() + " is invalid");
-        }
-        throw new ObjectAlreadyExistsException("Tag with name = " + tag.getName() + " already exists");
+    public TagDTO createTag(TagDTO tagDTO) {
+        Tag tag = entityToDtoMapper.toTag(tagDTO);
 
+        if (!tagRepository.exists(Example.of(tag)))
+            throw new ObjectAlreadyExistsException("Tag with name = " + tag.getName() + " already exists");
+        if (!ParamsValidation.isTagValid(tag))
+            throw new ObjectIsInvalidException("Tag with name = " + tag.getName() + " is invalid");
+
+        Tag tagResult = tagRepository.save(tag);
+        return entityToDtoMapper.toTagDTO(tagResult);
     }
 
     @Transactional
@@ -62,31 +65,29 @@ public class TagService {
         if (tagRepository.exists(Example.of(tag))) {
             Optional<Tag> existingTag = tagRepository.findOne(Example.of(tag));
             existingTag.ifPresent(value -> tag.setId(value.getId()));
-        } else
-            tagRepository.save(tag);
+        } else tagRepository.save(tag);
         return tag;
 
     }
 
-    public Page<Tag> getAllTags(Integer page, Integer size) {
+    public Page<TagDTO> getAllTags(Integer page, Integer size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(tagRepository.findAll(pageRequest));
+        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(tagRepository.findAll(pageRequest)).map(entityToDtoMapper::toTagDTO);
     }
 
-    public Tag getTagById(long id) {
+    public TagDTO getTagById(long id) {
         Optional<Tag> tag = tagRepository.findById(id);
-        if (tag.isPresent()) return tag.get();
-        throw new NoSuchItemException("Tag with id = " + id + "doesn't exist");
+        if (tag.isEmpty()) throw new NoSuchItemException("Tag with id = " + id + "doesn't exist");
+        return entityToDtoMapper.toTagDTO(tag.get());
     }
 
     public boolean deleteTag(long id) {
-        if (!tagRepository.existsById(id))
-            throw new NoSuchItemException("There is no tag with id= " + id);
+        if (!tagRepository.existsById(id)) throw new NoSuchItemException("There is no tag with id= " + id);
         tagRepository.deleteById(id);
         return true;
     }
 
-    public Tag getMostUsedTag() {
-        return tagRepository.getMostUsedTag();
+    public TagDTO getMostUsedTag() {
+        return entityToDtoMapper.toTagDTO(tagRepository.getMostUsedTag());
     }
 }

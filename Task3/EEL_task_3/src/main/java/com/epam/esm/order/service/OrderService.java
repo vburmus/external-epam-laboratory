@@ -7,10 +7,12 @@ import com.epam.esm.giftcertificatehasorder.model.GiftCertificateHasOrder;
 import com.epam.esm.giftcertificatehasorder.model.GiftCertificateOrderID;
 import com.epam.esm.giftcertificatehasorder.repository.GiftCertificateHasOrderRepository;
 import com.epam.esm.order.model.Order;
+import com.epam.esm.order.model.OrderDTO;
 import com.epam.esm.order.repository.OrderRepository;
 import com.epam.esm.user.model.User;
 import com.epam.esm.user.repository.UserRepository;
 import com.epam.esm.utils.datavalidation.ParamsValidation;
+import com.epam.esm.utils.mappers.EntityToDtoMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -27,17 +29,19 @@ public class OrderService {
     private final GiftCertificateRepository giftCertificateRepository;
     private final UserRepository userRepository;
     private final GiftCertificateHasOrderRepository giftCertificateHasOrderRepository;
+    private final EntityToDtoMapper entityToDtoMapper;
 
-    public OrderService(OrderRepository orderRepository, GiftCertificateRepository giftCertificateRepository, UserRepository userRepository, GiftCertificateHasOrderRepository giftCertificateHasOrderRepository) {
+    public OrderService(OrderRepository orderRepository, GiftCertificateRepository giftCertificateRepository, UserRepository userRepository, GiftCertificateHasOrderRepository giftCertificateHasOrderRepository, EntityToDtoMapper entityToDtoMapper) {
         this.orderRepository = orderRepository;
         this.giftCertificateRepository = giftCertificateRepository;
         this.userRepository = userRepository;
         this.giftCertificateHasOrderRepository = giftCertificateHasOrderRepository;
+        this.entityToDtoMapper = entityToDtoMapper;
     }
 
-    public Page<Order> getAllOrders(Integer page, Integer size) {
+    public Page<OrderDTO> getAllOrders(Integer page, Integer size) {
         PageRequest pageRequest = PageRequest.of(--page, size);
-        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(orderRepository.findAll(pageRequest));
+        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(orderRepository.findAll(pageRequest)).map(entityToDtoMapper::toOrderDTO);
     }
 
 
@@ -49,11 +53,10 @@ public class OrderService {
 
 
     @Transactional
-    public Order createOrder(Order order) {
-
+    public OrderDTO createOrder(OrderDTO orderDTO) {
+        Order order = entityToDtoMapper.toOrder(orderDTO);
         Long userId = order.getUser().getId();
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchItemException("User not found with id " + userId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchItemException("User not found with id " + userId));
 
         order.setUser(user);
 
@@ -62,8 +65,7 @@ public class OrderService {
         List<GiftCertificateHasOrder> giftCertificateHasOrders = new ArrayList<>();
         for (GiftCertificateHasOrder giftCertificateHasOrder : order.getGiftCertificateHasOrders()) {
             Long giftCertificateId = giftCertificateHasOrder.getGiftCertificate().getId();
-            GiftCertificate giftCertificate = giftCertificateRepository.findById(giftCertificateId)
-                    .orElseThrow(() -> new NoSuchItemException("Gift certificate not found with id " + giftCertificateId));
+            GiftCertificate giftCertificate = giftCertificateRepository.findById(giftCertificateId).orElseThrow(() -> new NoSuchItemException("Gift certificate not found with id " + giftCertificateId));
 
             GiftCertificateOrderID id = new GiftCertificateOrderID();
             id.setGiftCertificateId(giftCertificate.getId());
@@ -81,20 +83,17 @@ public class OrderService {
 
         savedOrder.setGiftCertificateHasOrders(giftCertificateHasOrders);
 
-        BigDecimal orderCost = giftCertificateHasOrders.stream()
-                .map(gcho -> gcho.getGiftCertificate().getPrice().multiply(new BigDecimal(gcho.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal orderCost = giftCertificateHasOrders.stream().map(gcho -> gcho.getGiftCertificate().getPrice().multiply(new BigDecimal(gcho.getQuantity()))).reduce(BigDecimal.ZERO, BigDecimal::add);
         savedOrder.setCost(orderCost);
 
-        return savedOrder;
+        return entityToDtoMapper.toOrderDTO(savedOrder);
     }
 
-    public Page<Order> getOrdersByUsersID(long id, Integer page, Integer size) {
+    public Page<OrderDTO> getOrdersByUsersID(long id, Integer page, Integer size) {
         PageRequest pageRequest = PageRequest.of(--page, size);
         Optional<User> user = userRepository.findById(id);
-        if (user.isEmpty())
-            throw new NoSuchItemException(String.format("No user with id = %d found", id));
-        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(orderRepository.findAllByUser(user.get(), pageRequest));
+        if (user.isEmpty()) throw new NoSuchItemException(String.format("No user with id = %d found", id));
+        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(orderRepository.findAllByUser(user.get(), pageRequest)).map(entityToDtoMapper::toOrderDTO);
     }
 }
 

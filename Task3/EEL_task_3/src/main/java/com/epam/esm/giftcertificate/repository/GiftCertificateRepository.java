@@ -11,6 +11,7 @@ import java.util.List;
 
 @Repository
 public interface GiftCertificateRepository extends JpaRepository<GiftCertificate, Long> {
+
     Page<GiftCertificate> findByNameContaining(String partialName, Pageable pageable);
 
     Page<GiftCertificate> findByDescriptionContaining(String partialDescription, Pageable pageable);

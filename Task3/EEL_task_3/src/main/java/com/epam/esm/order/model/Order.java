@@ -66,7 +66,4 @@ public class Order extends RepresentationModel<Order> {
         return getClass().hashCode();
     }
 
-    public List<GiftCertificate> getGiftCertificates() {
-        return giftCertificateHasOrders.stream().map(GiftCertificateHasOrder::getGiftCertificate).collect(Collectors.toList());
-    }
 }

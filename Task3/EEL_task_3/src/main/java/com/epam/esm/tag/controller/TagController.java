@@ -1,7 +1,7 @@
 package com.epam.esm.tag.controller;
 
 
-import com.epam.esm.tag.model.Tag;
+import com.epam.esm.tag.model.TagDTO;
 import com.epam.esm.tag.service.TagService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +22,8 @@ public class TagController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createTag(@RequestBody Tag tag) {
-        return new ResponseEntity<>(Map.of(TAG, tagService.createTag(tag)), HttpStatus.CREATED);
+    public ResponseEntity<?> createTag(@RequestBody TagDTO tagDTO) {
+        return new ResponseEntity<>(Map.of(TAG, tagService.createTag(tagDTO)), HttpStatus.CREATED);
     }
 
     @GetMapping

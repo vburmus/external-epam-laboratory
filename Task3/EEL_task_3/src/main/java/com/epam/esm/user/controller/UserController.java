@@ -1,6 +1,6 @@
 package com.epam.esm.user.controller;
 
-import com.epam.esm.order.model.Order;
+import com.epam.esm.order.model.OrderDTO;
 import com.epam.esm.order.service.OrderService;
 import com.epam.esm.user.service.UserService;
 import org.springframework.context.annotation.Profile;
@@ -37,8 +37,8 @@ public class UserController {
     }
 
     @PostMapping("/create-order")
-    public ResponseEntity<?> createNewOrder(@RequestBody Order order) {
-        return new ResponseEntity<>(Map.of(ORDER, orderService.createOrder(order)), HttpStatus.CREATED);
+    public ResponseEntity<?> createNewOrder(@RequestBody OrderDTO orderDTO) {
+        return new ResponseEntity<>(Map.of(ORDER, orderService.createOrder(orderDTO)), HttpStatus.CREATED);
     }
 
 

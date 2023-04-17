@@ -1,6 +1,6 @@
 package com.epam.esm.giftcertificate.controller;
 
-import com.epam.esm.giftcertificate.model.GiftCertificate;
+import com.epam.esm.giftcertificate.model.GiftCertificateDTO;
 import com.epam.esm.giftcertificate.service.GiftCertificateService;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.context.annotation.Profile;
@@ -22,6 +22,11 @@ public class GiftCertificateController {
 
     public GiftCertificateController(GiftCertificateService giftCertificateService) {
         this.giftCertificateService = giftCertificateService;
+    }
+
+    @PostMapping
+    public ResponseEntity<?> createCertificate(@RequestBody GiftCertificateDTO giftCertificateDTO) {
+        return new ResponseEntity<>(Map.of(GIFT_CERTIFICATE, giftCertificateService.createCertificate(giftCertificateDTO)), HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -47,22 +52,14 @@ public class GiftCertificateController {
 
 
     @GetMapping("/sort")
-    public ResponseEntity<?> getSortedCertificates(
-            @Parameter(description = "Sorting criteria, e.g. -name,date. The '-' prefix indicates descending order. " +
-                    "The default order is ascending. The first sorting criterion is name. Example: sort=-name,date")
-            @RequestParam("sort") String sortString, @RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
+    public ResponseEntity<?> getSortedCertificates(@Parameter(description = "Sorting criteria, e.g. -name,date. The '-' prefix indicates descending order. " + "The default order is ascending. The first sorting criterion is name. Example: sort=-name,date") @RequestParam("sort") String sortString, @RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
         return new ResponseEntity<>(Map.of(OBJECTS, giftCertificateService.getCertificatesSortedByParam(sortString, page, size)), HttpStatus.OK);
     }
 
 
-    @PostMapping
-    public ResponseEntity<?> createCertificate(@RequestBody GiftCertificate giftCertificate) {
-        return new ResponseEntity<>(Map.of(GIFT_CERTIFICATE, giftCertificateService.createCertificate(giftCertificate)), HttpStatus.CREATED);
-    }
-
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateCertificate(@PathVariable("id") long id, @RequestBody GiftCertificate giftCertificate) {
-        return new ResponseEntity<>(Map.of(RESULT, giftCertificateService.updateCertificate(id, giftCertificate)), HttpStatus.OK);
+    public ResponseEntity<?> updateCertificate(@PathVariable("id") long id, @RequestBody GiftCertificateDTO giftCertificateDTO) {
+        return new ResponseEntity<>(Map.of(RESULT, giftCertificateService.updateCertificate(id, giftCertificateDTO)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

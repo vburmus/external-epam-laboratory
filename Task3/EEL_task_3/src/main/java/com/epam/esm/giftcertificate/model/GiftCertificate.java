@@ -54,4 +54,5 @@ public class GiftCertificate extends RepresentationModel<GiftCertificate> {
     public int hashCode() {
         return getClass().hashCode();
     }
+
 }
