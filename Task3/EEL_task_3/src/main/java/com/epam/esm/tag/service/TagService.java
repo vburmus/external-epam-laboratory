@@ -38,7 +38,7 @@ public class TagService {
     public TagDTO createTag(TagDTO tagDTO) {
         Tag tag = entityToDtoMapper.toTag(tagDTO);
 
-        if (!tagRepository.exists(Example.of(tag)))
+        if (tagRepository.exists(Example.of(tag)))
             throw new ObjectAlreadyExistsException("Tag with name = " + tag.getName() + " already exists");
         if (!ParamsValidation.isTagValid(tag))
             throw new ObjectIsInvalidException("Tag with name = " + tag.getName() + " is invalid");

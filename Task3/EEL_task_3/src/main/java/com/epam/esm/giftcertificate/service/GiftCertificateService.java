@@ -47,7 +47,7 @@ public class GiftCertificateService {
     public GiftCertificateDTO createCertificate(GiftCertificateDTO giftCertificateDTO) {
         GiftCertificate giftCertificate = entityToDtoMapper.toGiftCertificate(giftCertificateDTO);
         ExampleMatcher gcMatcher = ExampleMatcher.matching()
-                .withIgnorePaths(CREATE_DATE, LAST_UPDATE_DATE, ID, TAGS_RESULT, PRICE)
+                .withIgnorePaths(CREATE_DATE, LAST_UPDATE_DATE, ID, TAGS, PRICE)
                 .withMatcher(NAME, exact())
                 .withMatcher(DESCRIPTION, exact())
                 .withMatcher(DURATION, exact());
@@ -70,12 +70,11 @@ public class GiftCertificateService {
     }
 
     @Modifying
-    public boolean deleteCertificate(long id) {
-        if (giftCertificateRepository.existsById(id)) throw new NoSuchItemException("There is no gc with id= " + id);
+    public boolean deleteCertificate(Long id) {
+        if (!giftCertificateRepository.existsById(id)) throw new NoSuchItemException("There is no gc with id= " + id);
 
         giftCertificateRepository.deleteById(id);
         return true;
-
     }
 
     public Page<GiftCertificateDTO> getAllGiftCertificates(Integer page, Integer size) {
