@@ -1,8 +1,9 @@
 package com.epam.esm.user.controller;
 
-import com.epam.esm.user.model.User;
+import com.epam.esm.user.model.UserDTO;
 import com.epam.esm.user.service.UserService;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Page;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
@@ -30,9 +31,9 @@ public class UserHateoasController {
     }
 
     @GetMapping
-    public CollectionModel<User> showAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
-        List<User> users = userService.getAllUsers(page, size);
-        for (final User user : users) {
+    public CollectionModel<UserDTO> showAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
+        Page<UserDTO> users = userService.getAllUsers(page, size);
+        for (final UserDTO user : users) {
             Link selfLink = linkTo(methodOn(UserHateoasController.class).getUserById(user.getId())).withSelfRel();
             user.add(selfLink);
         }
@@ -48,7 +49,7 @@ public class UserHateoasController {
 
     @GetMapping("/search/{id}")
     public RepresentationModel<?> getUserById(@PathVariable("id") long id) {
-        User user = userService.getUserById(id);
+        UserDTO user = userService.getUserById(id);
         Link selfLink = linkTo(methodOn(UserHateoasController.class).getUserById(id)).withSelfRel();
         return RepresentationModel.of(user, Collections.singleton(selfLink));
     }

@@ -4,7 +4,6 @@ package com.epam.esm.user.model;
 import com.epam.esm.order.model.Order;
 import lombok.*;
 import org.hibernate.Hibernate;
-import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,7 +18,7 @@ import java.util.Objects;
 @Setter
 @ToString
 
-public class User extends RepresentationModel<User> {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

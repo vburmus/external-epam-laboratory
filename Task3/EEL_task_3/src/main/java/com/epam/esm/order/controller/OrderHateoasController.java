@@ -1,6 +1,6 @@
 package com.epam.esm.order.controller;
 
-import com.epam.esm.order.model.Order;
+import com.epam.esm.order.model.OrderDTO;
 import com.epam.esm.order.service.OrderService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
@@ -30,11 +30,11 @@ public class OrderHateoasController {
     }
 
     @GetMapping
-    public CollectionModel<Order> showAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
+    public CollectionModel<OrderDTO> showAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
 
-        Page<Order> orders = orderService.getAllOrders(page, size);
+        Page<OrderDTO> orders = orderService.getAllOrders(page, size);
 
-        for (final Order order : orders) {
+        for (final OrderDTO order : orders) {
             Link selfLink = linkTo(methodOn(OrderHateoasController.class).getOrdersInfoByID(order.getId())).withSelfRel();
             order.add(selfLink);
         }
