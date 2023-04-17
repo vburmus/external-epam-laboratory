@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.epam.esm.utils.Constants.*;
@@ -56,6 +57,10 @@ public class GiftCertificateController {
         return new ResponseEntity<>(Map.of(OBJECTS, giftCertificateService.getCertificatesSortedByParam(sortString, page, size)), HttpStatus.OK);
     }
 
+    @GetMapping({"/search/by-tags"})
+    public ResponseEntity<?> searchForCertificatesBySeveralTags(@RequestParam("tagsId") List<Long> tagsId, @RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
+        return new ResponseEntity<>(Map.of(OBJECTS, giftCertificateService.getCertificatesBySeveralTags(tagsId, page, size)), HttpStatus.OK);
+    }
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateCertificate(@PathVariable("id") long id, @RequestBody GiftCertificateDTO giftCertificateDTO) {
