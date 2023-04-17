@@ -31,7 +31,7 @@ public class UserController {
         return new ResponseEntity<>(Map.of(OBJECTS, userService.getAllUsers(page, size)), HttpStatus.OK);
     }
 
-    @GetMapping("/search/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable("id") long id) {
         return new ResponseEntity<>(Map.of(USER, userService.getUserById(id)), HttpStatus.OK);
     }

@@ -31,7 +31,7 @@ public class TagController {
         return new ResponseEntity<>(Map.of(OBJECTS, tagService.getAllTags(--page, size)), HttpStatus.OK);
     }
 
-    @GetMapping("/search/by-id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") long id) {
         return new ResponseEntity<>(Map.of(TAG, tagService.getTagById(id)), HttpStatus.OK);
     }
