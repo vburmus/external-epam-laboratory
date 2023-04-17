@@ -1,6 +1,5 @@
 package com.epam.esm.order.model;
 
-import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.giftcertificatehasorder.model.GiftCertificateHasOrder;
 import com.epam.esm.user.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -16,7 +15,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "purchase")
@@ -39,9 +37,10 @@ public class Order extends RepresentationModel<Order> {
     private int isClosed;
     private BigDecimal cost;
     @CreatedDate
+    @Column(name = "create_date")
     private LocalDateTime createDate;
-    @ToString.Exclude
     @LastModifiedDate
+    @Column(name = "last_update_date")
     private LocalDateTime lastUpdateDate;
     @ToString.Exclude
     @ManyToOne
