@@ -51,7 +51,7 @@ public class GiftCertificateService {
                 .withMatcher(NAME, exact())
                 .withMatcher(DESCRIPTION, exact())
                 .withMatcher(DURATION, exact());
-        Example<GiftCertificate> providedGC = Example.of(giftCertificate,gcMatcher);
+        Example<GiftCertificate> providedGC = Example.of(giftCertificate, gcMatcher);
 
         if (giftCertificateRepository.exists(providedGC))
             throw new ObjectAlreadyExistsException("Gift certificate with name = " + giftCertificate.getName() + ", duration = " + giftCertificate.getDuration() + " already exists");
@@ -82,13 +82,13 @@ public class GiftCertificateService {
         return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(giftCertificateRepository.findAll(pageRequest)).map(entityToDtoMapper::toGiftCertificateDTO);
     }
 
-    public GiftCertificate getCertificateById(long id) {
+    public GiftCertificateDTO getCertificateById(long id) {
 
         Optional<GiftCertificate> giftCertificate = giftCertificateRepository.findById(id);
         if (giftCertificate.isEmpty()) {
             throw new NoSuchItemException("GiftCertificate with id = " + id + " doesn't exist");
         }
-        return giftCertificate.get();
+        return entityToDtoMapper.toGiftCertificateDTO(giftCertificate.get());
     }
 
 

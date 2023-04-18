@@ -1,6 +1,6 @@
 package com.epam.esm.user.controller;
 
-import com.epam.esm.user.model.UserDTO;
+import com.epam.esm.user.model.UserHateoas;
 import com.epam.esm.user.service.UserService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
@@ -10,7 +10,6 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static com.epam.esm.utils.Constants.DEFAULT_PAGE;
@@ -31,28 +30,22 @@ public class UserHateoasController {
     }
 
     @GetMapping
-    public CollectionModel<UserDTO> showAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
-        Page<UserDTO> users = userService.getAllUsers(page, size);
-        for (final UserDTO user : users) {
-            Link selfLink = linkTo(methodOn(UserHateoasController.class).getUserById(user.getId())).withSelfRel();
-            user.add(selfLink);
-        }
+    public CollectionModel<UserHateoas> showAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
+        Page<UserHateoas> usersPage = userService.getAllUsers(--page, size).map(UserHateoas::new);
 
         List<Link> links = new ArrayList<>();
         links.add(linkTo(methodOn(UserHateoasController.class).showAll(page, size)).withSelfRel());
         if (page != 1)
             links.add(linkTo(methodOn(UserHateoasController.class).showAll(page - 1, size)).withSelfRel());
-        links.add(linkTo(methodOn(UserHateoasController.class).showAll(page + 1, size)).withSelfRel());
+        if (usersPage.hasNext())
+            links.add(linkTo(methodOn(UserHateoasController.class).showAll(page + 1, size)).withSelfRel());
 
-        return CollectionModel.of(users, links);
+        return CollectionModel.of(usersPage, links);
     }
 
     @GetMapping("/search/{id}")
     public RepresentationModel<?> getUserById(@PathVariable("id") long id) {
-        UserDTO user = userService.getUserById(id);
-        Link selfLink = linkTo(methodOn(UserHateoasController.class).getUserById(id)).withSelfRel();
-        return RepresentationModel.of(user, Collections.singleton(selfLink));
+        return new UserHateoas(userService.getUserById(id));
     }
-
 
 }
