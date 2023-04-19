@@ -27,7 +27,8 @@ public class TagController {
     }
 
     @GetMapping
-    public ResponseEntity<?> showAllTags(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
+    public ResponseEntity<?> showAllTags(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page,
+                                         @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
         return new ResponseEntity<>(Map.of(OBJECTS, tagService.getAllTags(--page, size)), HttpStatus.OK);
     }
 

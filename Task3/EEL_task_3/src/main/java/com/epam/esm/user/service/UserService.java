@@ -4,6 +4,7 @@ import com.epam.esm.exceptionhandler.exceptions.NoSuchItemException;
 import com.epam.esm.user.model.User;
 import com.epam.esm.user.model.UserDTO;
 import com.epam.esm.user.repository.UserRepository;
+import com.epam.esm.utils.datavalidation.ParamsValidation;
 import com.epam.esm.utils.mappers.EntityToDtoMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +24,8 @@ public class UserService {
 
     public Page<UserDTO> getAllUsers(Integer page, Integer size) {
         PageRequest pageRequest = PageRequest.of(--page, size);
-        return userRepository.findAll(pageRequest).map(entityToDtoMapper::toUserDTO);
+        Page<User> allUsers  =userRepository.findAll(pageRequest);
+        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(allUsers).map(entityToDtoMapper::toUserDTO);
     }
 
     public UserDTO getUserById(Long id) {

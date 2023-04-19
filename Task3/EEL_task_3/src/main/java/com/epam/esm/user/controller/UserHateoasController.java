@@ -30,7 +30,8 @@ public class UserHateoasController {
     }
 
     @GetMapping
-    public CollectionModel<UserHateoas> showAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
+    public CollectionModel<UserHateoas> showAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page,
+                                                @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
         Page<UserHateoas> usersPage = userService.getAllUsers(--page, size).map(UserHateoas::new);
 
         List<Link> links = new ArrayList<>();

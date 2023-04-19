@@ -28,16 +28,15 @@ import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatc
 @Service
 public class GiftCertificateService {
 
+    public static final String IS_INVALID = " is invalid";
+    public static final String SORT_REGEX = "^(-)?date$|^(-)?name$";
     private final GiftCertificateRepository giftCertificateRepository;
     private final TagService tagService;
     private final EntityToDtoMapper entityToDtoMapper;
 
-    public static final String IS_INVALID = " is invalid";
 
-    public static final String SORT_REGEX = "^(-)?date$|^(-)?name$";
-
-
-    public GiftCertificateService(GiftCertificateRepository giftCertificateRepository, TagService tagService, EntityToDtoMapper entityToDtoMapper) {
+    public GiftCertificateService(GiftCertificateRepository giftCertificateRepository, TagService tagService,
+                                  EntityToDtoMapper entityToDtoMapper) {
         this.giftCertificateRepository = giftCertificateRepository;
         this.tagService = tagService;
         this.entityToDtoMapper = entityToDtoMapper;
@@ -54,9 +53,11 @@ public class GiftCertificateService {
         Example<GiftCertificate> providedGC = Example.of(giftCertificate, gcMatcher);
 
         if (giftCertificateRepository.exists(providedGC))
-            throw new ObjectAlreadyExistsException("Gift certificate with name = " + giftCertificate.getName() + ", duration = " + giftCertificate.getDuration() + " already exists");
+            throw new ObjectAlreadyExistsException("Gift certificate with name = " + giftCertificate.getName() +
+                    ", duration = " + giftCertificate.getDuration() + " already exists");
         if (!ParamsValidation.isValidCertificate(giftCertificate))
-            throw new ObjectIsInvalidException("Gift certificate with name = " + giftCertificate.getName() + ", duration = " + giftCertificate.getDuration() + " is invalid, please check your params");
+            throw new ObjectIsInvalidException("Gift certificate with name = " + giftCertificate.getName() +
+                    ", duration = " + giftCertificate.getDuration() + " is invalid, please check your params");
 
         giftCertificate.setCreateDate(LocalDateTime.now());
         giftCertificate.setLastUpdateDate(LocalDateTime.now());
@@ -69,17 +70,12 @@ public class GiftCertificateService {
         return entityToDtoMapper.toGiftCertificateDTO(gcResult);
     }
 
-    @Modifying
-    public boolean deleteCertificate(Long id) {
-        if (!giftCertificateRepository.existsById(id)) throw new NoSuchItemException("There is no gc with id= " + id);
 
-        giftCertificateRepository.deleteById(id);
-        return true;
-    }
 
     public Page<GiftCertificateDTO> getAllGiftCertificates(Integer page, Integer size) {
-        PageRequest pageRequest = PageRequest.of(page, size);
-        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(giftCertificateRepository.findAll(pageRequest)).map(entityToDtoMapper::toGiftCertificateDTO);
+        PageRequest pageRequest = PageRequest.of(--page, size);
+        Page<GiftCertificate> allGCs =  giftCertificateRepository.findAll(pageRequest);
+        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(allGCs).map(entityToDtoMapper::toGiftCertificateDTO);
     }
 
     public GiftCertificateDTO getCertificateById(long id) {
@@ -91,6 +87,72 @@ public class GiftCertificateService {
         return entityToDtoMapper.toGiftCertificateDTO(giftCertificate.get());
     }
 
+
+
+    public Page<GiftCertificateDTO> getGiftCertificatesByTagName(String tagName, Integer page, Integer size) {
+
+        if (tagName == null || tagName.isEmpty())
+            throw new ObjectIsInvalidException("Tag name " + tagName + IS_INVALID);
+        if (!tagService.existsByName(tagName))
+            throw new NoSuchItemException("Tag with name " + tagName + " doesn't exist");
+
+        PageRequest pageRequest = PageRequest.of(--page, size);
+        Page<GiftCertificate> gcsByTag = giftCertificateRepository.findByTagsName(tagName, pageRequest);
+        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(gcsByTag).map(entityToDtoMapper::toGiftCertificateDTO);
+    }
+
+    public Page<GiftCertificateDTO> getGiftCertificatesByPart(String part, Integer page, Integer size) {
+
+        if (!ParamsValidation.isPartValidForSearch(part))
+            throw new ObjectIsInvalidException("Part of description -> " + part + IS_INVALID);
+        PageRequest pageRequest = PageRequest.of(--page, size);
+        Page<GiftCertificate> certificates = giftCertificateRepository.findByNameContaining(part, pageRequest);
+        if (!certificates.isEmpty())
+            return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(certificates).map(entityToDtoMapper::toGiftCertificateDTO);
+        Page<GiftCertificate> gcByDescription = giftCertificateRepository.findByDescriptionContaining(part, pageRequest);
+        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(gcByDescription).map(entityToDtoMapper::toGiftCertificateDTO);
+
+
+    }
+
+
+    public Page<GiftCertificateDTO> getCertificatesSortedByParam(String sortString, Integer page, Integer size) {
+
+        String[] sort = sortString.split(",");
+        Pattern sortPattern = Pattern.compile(SORT_REGEX);
+        if (sort.length > 2) throw new ObjectIsInvalidException("To many params for sorting");
+
+        for (String sortParam : sort) {
+            if (!sortPattern.matcher(sortParam).find())
+                throw new ObjectIsInvalidException("Some sort params are invalid.");
+        }
+
+        String firstParam = sort[0];
+        Sort.Direction firstDirection = ParamsValidation.getSortDirection(firstParam);
+
+        firstParam = ParamsValidation.getSortParam(firstParam);
+        Sort sortBy;
+
+        if (sort.length == 1)
+            sortBy = Sort.by(firstDirection, firstParam);
+        else {
+            String secondParam = sort[1];
+            Sort.Direction secondDirection = ParamsValidation.getSortDirection(firstParam);
+            secondParam = ParamsValidation.getSortParam(secondParam);
+            sortBy = Sort.by(new Sort.Order(firstDirection, firstParam), new Sort.Order(secondDirection, secondParam));
+        }
+        PageRequest pageRequest = PageRequest.of(--page, size, sortBy);
+        Page<GiftCertificate> gcSorted = giftCertificateRepository.findAll(pageRequest);
+        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(gcSorted).map(entityToDtoMapper::toGiftCertificateDTO);
+
+    }
+
+    public Page<GiftCertificateDTO> getCertificatesBySeveralTags(List<Long> tagsId, Integer page, Integer size) {
+
+        PageRequest pageRequest = PageRequest.of(--page, size);
+        Page<GiftCertificate> gcsByTags = giftCertificateRepository.findByTagsIdIn(tagsId, pageRequest);
+        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(gcsByTags).map(entityToDtoMapper::toGiftCertificateDTO);
+    }
 
     @Transactional
     @Modifying
@@ -119,66 +181,11 @@ public class GiftCertificateService {
         }
         return entityToDtoMapper.toGiftCertificateDTO(giftCertificateFromDB);
     }
+    @Modifying
+    public boolean deleteCertificate(Long id) {
+        if (!giftCertificateRepository.existsById(id)) throw new NoSuchItemException("There is no gc with id= " + id);
 
-
-    public Page<GiftCertificateDTO> getGiftCertificatesByTagName(String tagName, Integer page, Integer size) {
-
-        if (tagName == null || tagName.isEmpty())
-            throw new ObjectIsInvalidException("Tag name " + tagName + IS_INVALID);
-        if (!tagService.existsByName(tagName))
-            throw new NoSuchItemException("Tag with name " + tagName + " doesn't exist");
-
-        PageRequest pageRequest = PageRequest.of(--page, size);
-        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(giftCertificateRepository.findByTagsName(tagName, pageRequest)).map(entityToDtoMapper::toGiftCertificateDTO);
-    }
-
-    public Page<GiftCertificateDTO> getGiftCertificatesByPart(String part, Integer page, Integer size) {
-
-        if (!ParamsValidation.isPartValidForSearch(part))
-            throw new ObjectIsInvalidException("Part of description -> " + part + IS_INVALID);
-        PageRequest pageRequest = PageRequest.of(--page, size);
-        Page<GiftCertificate> certificates = giftCertificateRepository.findByNameContaining(part, pageRequest);
-        if (!certificates.isEmpty())
-            return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(certificates).map(entityToDtoMapper::toGiftCertificateDTO);
-        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(giftCertificateRepository.findByDescriptionContaining(part, pageRequest)).map(entityToDtoMapper::toGiftCertificateDTO);
-
-
-    }
-
-
-    public Page<GiftCertificateDTO> getCertificatesSortedByParam(String sortString, Integer page, Integer size) {
-
-        String[] sort = sortString.split(",");
-        Pattern sortPattern = Pattern.compile(SORT_REGEX);
-        if (sort.length > 2) throw new ObjectIsInvalidException("To many params for sorting");
-
-        for (String sortParam : sort) {
-            if (!sortPattern.matcher(sortParam).find())
-                throw new ObjectIsInvalidException("Some sort params are invalid.");
-        }
-
-        String firstParam = sort[0];
-        Sort.Direction firstDirection = ParamsValidation.getSortDirection(firstParam);
-        firstParam = ParamsValidation.getSortParam(firstParam);
-        if (sort.length == 1) {
-            Sort sortBy = Sort.by(firstDirection, firstParam);
-            PageRequest pageRequest = PageRequest.of(page, size, sortBy);
-            return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(giftCertificateRepository.findAll(pageRequest)).map(entityToDtoMapper::toGiftCertificateDTO);
-        } else {
-            String secondParam = sort[1];
-            Sort.Direction secondDirection = ParamsValidation.getSortDirection(firstParam);
-            secondParam = ParamsValidation.getSortParam(secondParam);
-            Sort sortBy = Sort.by(new Sort.Order(firstDirection, firstParam), new Sort.Order(secondDirection, secondParam));
-            PageRequest pageRequest = PageRequest.of(--page, size, sortBy);
-            return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(giftCertificateRepository.findAll(pageRequest)).map(entityToDtoMapper::toGiftCertificateDTO);
-
-        }
-
-    }
-
-    public Page<GiftCertificateDTO> getCertificatesBySeveralTags(List<Long> tagsId, Integer page, Integer size) {
-
-        PageRequest pageRequest = PageRequest.of(--page, size);
-        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(giftCertificateRepository.findByTagsIdIn(tagsId, pageRequest)).map(entityToDtoMapper::toGiftCertificateDTO);
+        giftCertificateRepository.deleteById(id);
+        return true;
     }
 }

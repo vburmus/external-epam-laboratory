@@ -30,8 +30,10 @@ public class GiftCertificateHateoasController {
     }
 
     @GetMapping
-    public CollectionModel<GiftCertificateHateoas> showAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
-        Page<GiftCertificateHateoas> certificatesPage = giftCertificateService.getAllGiftCertificates(--page, size).map(GiftCertificateHateoas::new);
+    public CollectionModel<GiftCertificateHateoas> showAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page,
+                                                           @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
+        Page<GiftCertificateHateoas> certificatesPage =
+                giftCertificateService.getAllGiftCertificates(--page, size).map(GiftCertificateHateoas::new);
 
         List<Link> links = new ArrayList<>();
         links.add(linkTo(methodOn(GiftCertificateHateoasController.class).showAll(page, size)).withSelfRel());

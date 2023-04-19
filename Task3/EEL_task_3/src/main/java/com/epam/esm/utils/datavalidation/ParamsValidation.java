@@ -59,8 +59,8 @@ public class ParamsValidation {
         return map;
     }
 
-    public static <T> Page<T> isListIsNotEmptyOrElseThrowNoSuchItem(Page<T> giftCertificates) {
-        if (!giftCertificates.isEmpty()) return giftCertificates;
+    public static <T> Page<T> isListIsNotEmptyOrElseThrowNoSuchItem(Page<T> objects) {
+        if (!objects.isEmpty()) return objects;
         throw new NoSuchItemException("List is empty!");
     }
 
@@ -73,9 +73,7 @@ public class ParamsValidation {
             return true;
         if (updateGc.getDuration() != null && updateGc.getDuration().equals(gcFromDB.getDuration()))
             return true;
-        if (updateGc.getTags() == null || updateGc.getTags() != gcFromDB.getTags())
-            return true;
-        return false;
+        return updateGc.getTags() == null || updateGc.getTags() != gcFromDB.getTags();
     }
 
     public static Sort.Direction getSortDirection(String s) {

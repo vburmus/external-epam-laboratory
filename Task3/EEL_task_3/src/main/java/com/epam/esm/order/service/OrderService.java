@@ -31,26 +31,15 @@ public class OrderService {
     private final GiftCertificateHasOrderRepository giftCertificateHasOrderRepository;
     private final EntityToDtoMapper entityToDtoMapper;
 
-    public OrderService(OrderRepository orderRepository, GiftCertificateRepository giftCertificateRepository, UserRepository userRepository, GiftCertificateHasOrderRepository giftCertificateHasOrderRepository, EntityToDtoMapper entityToDtoMapper) {
+    public OrderService(OrderRepository orderRepository, GiftCertificateRepository giftCertificateRepository,
+                        UserRepository userRepository, GiftCertificateHasOrderRepository giftCertificateHasOrderRepository,
+                        EntityToDtoMapper entityToDtoMapper) {
         this.orderRepository = orderRepository;
         this.giftCertificateRepository = giftCertificateRepository;
         this.userRepository = userRepository;
         this.giftCertificateHasOrderRepository = giftCertificateHasOrderRepository;
         this.entityToDtoMapper = entityToDtoMapper;
     }
-
-    public Page<OrderDTO> getAllOrders(Integer page, Integer size) {
-        PageRequest pageRequest = PageRequest.of(--page, size);
-        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(orderRepository.findAll(pageRequest)).map(entityToDtoMapper::toOrderDTO);
-    }
-
-
-    public String getOrderInfoByID(long id) {
-        Optional<Order> order = orderRepository.findById(id);
-        if (order.isEmpty()) throw new NoSuchItemException("No such order!");
-        return order.get().toString();
-    }
-
 
     @Transactional
     public OrderDTO createOrder(OrderDTO orderDTO) {
@@ -65,7 +54,9 @@ public class OrderService {
         List<GiftCertificateHasOrder> giftCertificateHasOrders = new ArrayList<>();
         for (GiftCertificateHasOrder giftCertificateHasOrder : order.getGiftCertificateHasOrders()) {
             Long giftCertificateId = giftCertificateHasOrder.getGiftCertificate().getId();
-            GiftCertificate giftCertificate = giftCertificateRepository.findById(giftCertificateId).orElseThrow(() -> new NoSuchItemException("Gift certificate not found with id " + giftCertificateId));
+            GiftCertificate giftCertificate =
+                    giftCertificateRepository.findById(giftCertificateId).orElseThrow(() -> new NoSuchItemException("Gift certificate " +
+                            "not" + " found with id " + giftCertificateId));
 
             GiftCertificateOrderID id = new GiftCertificateOrderID();
             id.setGiftCertificateId(giftCertificate.getId());
@@ -83,17 +74,33 @@ public class OrderService {
 
         savedOrder.setGiftCertificateHasOrders(giftCertificateHasOrders);
 
-        BigDecimal orderCost = giftCertificateHasOrders.stream().map(gcho -> gcho.getGiftCertificate().getPrice().multiply(new BigDecimal(gcho.getQuantity()))).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal orderCost =
+                giftCertificateHasOrders.stream().map(gcho -> gcho.getGiftCertificate().getPrice().multiply(new BigDecimal(gcho.getQuantity())))
+                        .reduce(BigDecimal.ZERO, BigDecimal::add);
         savedOrder.setCost(orderCost);
 
         return entityToDtoMapper.toOrderDTO(savedOrder);
     }
 
+    public Page<OrderDTO> getAllOrders(Integer page, Integer size) {
+        PageRequest pageRequest = PageRequest.of(--page, size);
+        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(orderRepository.findAll(pageRequest)).map(entityToDtoMapper::toOrderDTO);
+    }
+
+
+    public String getOrderInfoByID(long id) {
+        Optional<Order> order = orderRepository.findById(id);
+        if (order.isEmpty()) throw new NoSuchItemException("No such order!");
+        return order.get().toString();
+    }
+
+
     public Page<OrderDTO> getOrdersByUsersID(long id, Integer page, Integer size) {
         PageRequest pageRequest = PageRequest.of(--page, size);
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) throw new NoSuchItemException(String.format("No user with id = %d found", id));
-        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(orderRepository.findAllByUser(user.get(), pageRequest)).map(entityToDtoMapper::toOrderDTO);
+        Page<Order> ordersByUSer = orderRepository.findAllByUser(user.get(), pageRequest);
+        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(ordersByUSer).map(entityToDtoMapper::toOrderDTO);
     }
 }
 

@@ -30,10 +30,6 @@ public class TagService {
         this.entityToDtoMapper = entityToDtoMapper;
     }
 
-    public boolean existsByName(String tagName) {
-        return tagRepository.existsByName(tagName);
-    }
-
     @Transactional
     public TagDTO createTag(TagDTO tagDTO) {
         Tag tag = entityToDtoMapper.toTag(tagDTO);
@@ -45,6 +41,28 @@ public class TagService {
 
         Tag tagResult = tagRepository.save(tag);
         return entityToDtoMapper.toTagDTO(tagResult);
+    }
+
+    public Page<TagDTO> getAllTags(Integer page, Integer size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Tag> allTags = tagRepository.findAll(pageRequest);
+        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(allTags).map(entityToDtoMapper::toTagDTO);
+    }
+
+    public TagDTO getTagById(long id) {
+        Optional<Tag> tag = tagRepository.findById(id);
+        if (tag.isEmpty()) throw new NoSuchItemException("Tag with id = " + id + "doesn't exist");
+        return entityToDtoMapper.toTagDTO(tag.get());
+    }
+
+    public TagDTO getMostUsedTag() {
+        return entityToDtoMapper.toTagDTO(tagRepository.getMostUsedTag());
+    }
+
+    public boolean deleteTag(long id) {
+        if (!tagRepository.existsById(id)) throw new NoSuchItemException("There is no tag with id= " + id);
+        tagRepository.deleteById(id);
+        return true;
     }
 
     @Transactional
@@ -70,24 +88,7 @@ public class TagService {
 
     }
 
-    public Page<TagDTO> getAllTags(Integer page, Integer size) {
-        PageRequest pageRequest = PageRequest.of(page, size);
-        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(tagRepository.findAll(pageRequest)).map(entityToDtoMapper::toTagDTO);
-    }
-
-    public TagDTO getTagById(long id) {
-        Optional<Tag> tag = tagRepository.findById(id);
-        if (tag.isEmpty()) throw new NoSuchItemException("Tag with id = " + id + "doesn't exist");
-        return entityToDtoMapper.toTagDTO(tag.get());
-    }
-
-    public boolean deleteTag(long id) {
-        if (!tagRepository.existsById(id)) throw new NoSuchItemException("There is no tag with id= " + id);
-        tagRepository.deleteById(id);
-        return true;
-    }
-
-    public TagDTO getMostUsedTag() {
-        return entityToDtoMapper.toTagDTO(tagRepository.getMostUsedTag());
+    public boolean existsByName(String tagName) {
+        return tagRepository.existsByName(tagName);
     }
 }

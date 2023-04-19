@@ -22,7 +22,8 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<?> showAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
+    public ResponseEntity<?> showAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page,
+                                     @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
         return new ResponseEntity<>(Map.of(OBJECTS, orderService.getAllOrders(page, size)), HttpStatus.OK);
     }
 
@@ -32,7 +33,9 @@ public class OrderController {
     }
 
     @GetMapping("/by-user-id/{id}")
-    public ResponseEntity<?> getOrdersByUsersID(@PathVariable("id") long id, @RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
+    public ResponseEntity<?> getOrdersByUsersID(@PathVariable("id") long id,
+                                                @RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page,
+                                                @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
         return new ResponseEntity<>(Map.of(OBJECTS, orderService.getOrdersByUsersID(id, page, size)), HttpStatus.OK);
     }
 }

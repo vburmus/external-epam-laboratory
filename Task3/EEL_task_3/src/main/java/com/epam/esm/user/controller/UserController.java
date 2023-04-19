@@ -27,7 +27,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<?> showAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
+    public ResponseEntity<?> showAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page,
+                                     @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
         return new ResponseEntity<>(Map.of(OBJECTS, userService.getAllUsers(page, size)), HttpStatus.OK);
     }
 

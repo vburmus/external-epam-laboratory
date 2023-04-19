@@ -30,7 +30,8 @@ public class OrderHateoasController {
     }
 
     @GetMapping
-    public CollectionModel<OrderHateoas> showAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
+    public CollectionModel<OrderHateoas> showAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page,
+                                                 @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
 
         Page<OrderHateoas> ordersPage = orderService.getAllOrders(--page, size).map(OrderHateoas::new);
 
