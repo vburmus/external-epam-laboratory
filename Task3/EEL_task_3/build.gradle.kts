@@ -9,9 +9,11 @@ plugins {
 
 repositories {
     mavenLocal()
+    mavenCentral()
     maven {
         url = uri("https://repo.maven.apache.org/maven2/")
     }
+
 }
 
 dependencies {
@@ -36,6 +38,12 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.22")
     implementation("org.mapstruct:mapstruct-processor:1.5.3.Final")
     annotationProcessor("org.mapstruct:mapstruct-processor:1.5.3.Final")
+
+
+    implementation("com.github.java-json-tools:json-patch:1.13")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.0")
+    implementation ("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2")
+
 }
 
 group = "com.epam.esm"

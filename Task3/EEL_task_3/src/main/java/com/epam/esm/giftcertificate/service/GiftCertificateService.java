@@ -10,15 +10,19 @@ import com.epam.esm.tag.model.Tag;
 import com.epam.esm.tag.service.TagService;
 import com.epam.esm.utils.datavalidation.ParamsValidation;
 import com.epam.esm.utils.mappers.EntityToDtoMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.github.fge.jsonpatch.JsonPatchException;
+import com.github.fge.jsonpatch.mergepatch.JsonMergePatch;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -71,10 +75,9 @@ public class GiftCertificateService {
     }
 
 
-
     public Page<GiftCertificateDTO> getAllGiftCertificates(Integer page, Integer size) {
         PageRequest pageRequest = PageRequest.of(--page, size);
-        Page<GiftCertificate> allGCs =  giftCertificateRepository.findAll(pageRequest);
+        Page<GiftCertificate> allGCs = giftCertificateRepository.findAll(pageRequest);
         return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(allGCs).map(entityToDtoMapper::toGiftCertificateDTO);
     }
 
@@ -86,7 +89,6 @@ public class GiftCertificateService {
         }
         return entityToDtoMapper.toGiftCertificateDTO(giftCertificate.get());
     }
-
 
 
     public Page<GiftCertificateDTO> getGiftCertificatesByTagName(String tagName, Integer page, Integer size) {
@@ -156,31 +158,29 @@ public class GiftCertificateService {
 
     @Transactional
     @Modifying
-    public GiftCertificateDTO updateCertificate(long id, GiftCertificateDTO updatedGiftCertificateDTO) {
-        GiftCertificate updatedGiftCertificate = entityToDtoMapper.toGiftCertificate(updatedGiftCertificateDTO);
+    public GiftCertificateDTO updateCertificate(long id, JsonMergePatch jsonPatch) throws JsonPatchException, JsonProcessingException {
+
         Optional<GiftCertificate> gc = giftCertificateRepository.findById(id);
         if (gc.isEmpty()) throw new NoSuchItemException("No gift certificate with id = " + id);
 
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+
         GiftCertificate giftCertificateFromDB = gc.get();
-        if (ParamsValidation.ifCertificateNeedsAnUpdate(updatedGiftCertificate, giftCertificateFromDB)) {
-            Map<String, String> updatingMap = ParamsValidation.isPatchCertificateValid(updatedGiftCertificate);
 
-            if (updatingMap.containsKey(NAME)) giftCertificateFromDB.setName(updatingMap.get(NAME));
-            if (updatingMap.containsKey(DESCRIPTION))
-                giftCertificateFromDB.setDescription(updatingMap.get(DESCRIPTION));
-            if (updatingMap.containsKey(PRICE))
-                giftCertificateFromDB.setPrice(new BigDecimal(updatingMap.get(PRICE)));
-            if (updatingMap.containsKey(DURATION))
-                giftCertificateFromDB.setDuration(Integer.valueOf(updatingMap.get(DURATION)));
-            giftCertificateFromDB.setLastUpdateDate(LocalDateTime.now());
+        JsonNode patched = jsonPatch.apply(objectMapper.convertValue(giftCertificateFromDB, JsonNode.class));
+        GiftCertificate updatedGiftCertificate = objectMapper.treeToValue(patched, GiftCertificate.class);
 
-            List<Tag> tags = tagService.checkTagsAndSaveIfDontExist(updatedGiftCertificate);
-            giftCertificateFromDB.setTags(tags);
-            GiftCertificate gcResult = giftCertificateRepository.save(giftCertificateFromDB);
-            return entityToDtoMapper.toGiftCertificateDTO(gcResult);
-        }
-        return entityToDtoMapper.toGiftCertificateDTO(giftCertificateFromDB);
+        giftCertificateFromDB.setPrice(updatedGiftCertificate.getPrice());
+        giftCertificateFromDB.setName(updatedGiftCertificate.getName());
+        giftCertificateFromDB.setDuration(updatedGiftCertificate.getDuration());
+        giftCertificateFromDB.setTags(tagService.checkTagsAndSaveIfDontExist(updatedGiftCertificate));
+        giftCertificateFromDB.setDescription(updatedGiftCertificate.getDescription());
+
+        GiftCertificate savedGc = giftCertificateRepository.save(giftCertificateFromDB);
+        return entityToDtoMapper.toGiftCertificateDTO(savedGc);
     }
+
     @Modifying
     public boolean deleteCertificate(Long id) {
         if (!giftCertificateRepository.existsById(id)) throw new NoSuchItemException("There is no gc with id= " + id);

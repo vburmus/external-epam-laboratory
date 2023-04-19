@@ -2,6 +2,9 @@ package com.epam.esm.giftcertificate.controller;
 
 import com.epam.esm.giftcertificate.model.GiftCertificateDTO;
 import com.epam.esm.giftcertificate.service.GiftCertificateService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.fge.jsonpatch.JsonPatchException;
+import com.github.fge.jsonpatch.mergepatch.JsonMergePatch;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
@@ -75,9 +78,10 @@ public class GiftCertificateController {
                 HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<?> updateCertificate(@PathVariable("id") long id, @RequestBody GiftCertificateDTO giftCertificateDTO) {
-        return new ResponseEntity<>(Map.of(RESULT, giftCertificateService.updateCertificate(id, giftCertificateDTO)), HttpStatus.OK);
+    @PatchMapping(value = "/{id}", consumes = "application/json-patch+json")
+    public ResponseEntity<?> updateCertificate(@PathVariable("id") long id,
+                                               @RequestBody JsonMergePatch patch) throws JsonPatchException, JsonProcessingException {
+        return new ResponseEntity<>(Map.of(RESULT, giftCertificateService.updateCertificate(id, patch)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

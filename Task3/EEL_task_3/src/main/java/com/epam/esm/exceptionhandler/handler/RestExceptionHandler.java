@@ -1,6 +1,8 @@
 package com.epam.esm.exceptionhandler.handler;
 
 import com.epam.esm.exceptionhandler.exceptions.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -33,8 +35,15 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handlePageException(RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
+
     @ExceptionHandler(ObjectNotFoundException.class)
     public ResponseEntity<Object> handleObjectNotFoundException(RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler({JsonPatchException.class, JsonProcessingException.class})
+    public ResponseEntity<Object> handleJson(RuntimeException ex, WebRequest request) {
+        return handleExceptionInternal(ex, "An error occurred, check your request", new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR,
+                request);
     }
 }
