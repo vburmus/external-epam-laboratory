@@ -39,8 +39,8 @@ dependencies {
 }
 
 group = "com.epam.esm"
-version = "1.0-SNAPSHOT"
-description = "untitled Maven Webapp"
+version = "1.0"
+description = "v_burmus Web-app"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 publishing {
