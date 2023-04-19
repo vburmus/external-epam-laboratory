@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Hibernate;
-import org.springframework.context.annotation.Profile;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -24,7 +23,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Profile("hateoas")
 public class OrderHateoas extends RepresentationModel<OrderHateoas> {
     private Long id;
     private String description;
@@ -44,7 +42,8 @@ public class OrderHateoas extends RepresentationModel<OrderHateoas> {
         this.lastUpdateDate = orderDTO.getLastUpdateDate();
         this.user = orderDTO.getUser();
         this.giftCertificateHasOrders = orderDTO.getGiftCertificateHasOrders();
-        Link selfLink = linkTo(methodOn(OrderHateoasController.class).getOrdersInfoByID(orderDTO.getId())).withSelfRel();
+        Link selfLink =
+                linkTo(methodOn(OrderHateoasController.class).getOrdersInfoByID(orderDTO.getId())).withSelfRel();
         this.add(selfLink);
     }
 

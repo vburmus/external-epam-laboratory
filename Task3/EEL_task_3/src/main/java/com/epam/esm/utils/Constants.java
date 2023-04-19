@@ -20,4 +20,7 @@ public class Constants {
     public static final String ID = "id";
     public static final String TAGS = "tags";
     public static final String PRICE = "price";
+    public static final String SORT_DESCTIPTION =
+            "Sorting criteria, e.g. -name,date. The " + "'-' prefix indicates descending order. " + "The default " +
+                    "order is ascending. The first sorting criterion " + "is name. Example: sort=-name,date";
 }

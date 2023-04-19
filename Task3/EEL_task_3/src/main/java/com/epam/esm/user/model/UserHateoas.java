@@ -5,7 +5,6 @@ import com.epam.esm.user.controller.UserHateoasController;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
-import org.springframework.context.annotation.Profile;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -18,7 +17,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Profile("hateoas")
+
 public class UserHateoas extends RepresentationModel<UserHateoas> {
     private Long id;
     private String name;

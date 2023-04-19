@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Hibernate;
-import org.springframework.context.annotation.Profile;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -23,7 +22,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Profile("hateoas")
 public class GiftCertificateHateoas extends RepresentationModel<GiftCertificateHateoas> {
     private Long id;
     private String name;
@@ -43,7 +41,8 @@ public class GiftCertificateHateoas extends RepresentationModel<GiftCertificateH
         this.tags = giftCertificateDTO.getTags();
         this.createDate = giftCertificateDTO.getCreateDate();
         this.lastUpdateDate = giftCertificateDTO.getLastUpdateDate();
-        Link selfLink = linkTo(methodOn(OrderHateoasController.class).getOrdersInfoByID(giftCertificateDTO.getId())).withSelfRel();
+        Link selfLink =
+                linkTo(methodOn(OrderHateoasController.class).getOrdersInfoByID(giftCertificateDTO.getId())).withSelfRel();
         this.add(selfLink);
     }
 
