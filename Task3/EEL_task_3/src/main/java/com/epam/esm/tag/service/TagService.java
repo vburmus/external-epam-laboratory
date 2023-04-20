@@ -56,7 +56,10 @@ public class TagService {
     }
 
     public TagDTO getMostUsedTag() {
-        return entityToDtoMapper.toTagDTO(tagRepository.getMostUsedTag());
+        Optional<Tag> tag = tagRepository.getMostUsedTag();
+        if (tag.isEmpty())
+            throw new NoSuchItemException("There is no tags in this purchase");
+        return entityToDtoMapper.toTagDTO(tag.get());
     }
 
     public boolean deleteTag(long id) {
