@@ -1,12 +1,10 @@
 package com.epam.esm.user.model;
 
 
-import com.epam.esm.order.model.Order;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -26,14 +24,6 @@ public class User {
     private String surname;
     private String number;
 
-    @OneToMany
-    @ToString.Exclude
-    @JoinTable(
-            name = "user_orders",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id")
-    )
-    private List<Order> orders;
 
     @Override
     public boolean equals(Object o) {
