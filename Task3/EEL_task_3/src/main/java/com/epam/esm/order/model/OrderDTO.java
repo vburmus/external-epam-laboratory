@@ -31,7 +31,7 @@ public class OrderDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Order order = (Order) o;
+        OrderDTO order = (OrderDTO) o;
         return id != null && Objects.equals(id, order.getId());
     }
 

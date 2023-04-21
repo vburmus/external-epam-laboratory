@@ -30,7 +30,7 @@ public class GiftCertificateDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        GiftCertificate that = (GiftCertificate) o;
+        GiftCertificateDTO that = (GiftCertificateDTO) o;
         return id != null && Objects.equals(id, that.getId());
     }
 

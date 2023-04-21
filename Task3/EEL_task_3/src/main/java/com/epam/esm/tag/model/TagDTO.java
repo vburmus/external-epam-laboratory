@@ -19,7 +19,7 @@ public class TagDTO extends RepresentationModel<TagDTO> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Tag tag = (Tag) o;
+        TagDTO tag = (TagDTO) o;
         return id != null && Objects.equals(id, tag.getId());
     }
 
