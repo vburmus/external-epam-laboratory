@@ -110,7 +110,7 @@ public class GiftCertificateService {
         PageRequest pageRequest = PageRequest.of(--page, size);
         Page<GiftCertificate> certificates = giftCertificateRepository.findByNameContaining(part, pageRequest);
         if (!certificates.isEmpty())
-            return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(certificates).map(entityToDtoMapper::toGiftCertificateDTO);
+            return certificates.map(entityToDtoMapper::toGiftCertificateDTO);
         Page<GiftCertificate> gcByDescription = giftCertificateRepository.findByDescriptionContaining(part, pageRequest);
         return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(gcByDescription).map(entityToDtoMapper::toGiftCertificateDTO);
 
