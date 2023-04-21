@@ -44,7 +44,7 @@ public class TagService {
     }
 
     public Page<TagDTO> getAllTags(Integer page, Integer size) {
-        PageRequest pageRequest = PageRequest.of(page, size);
+        PageRequest pageRequest = PageRequest.of(--page, size);
         Page<Tag> allTags = tagRepository.findAll(pageRequest);
         return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(allTags).map(entityToDtoMapper::toTagDTO);
     }
