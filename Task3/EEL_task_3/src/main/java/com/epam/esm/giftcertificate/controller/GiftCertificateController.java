@@ -8,6 +8,7 @@ import com.github.fge.jsonpatch.mergepatch.JsonMergePatch;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ import java.util.Map;
 import static com.epam.esm.utils.Constants.*;
 
 @RestController
-@RequestMapping(value = "/certificate")
+@RequestMapping(value = "/certificate", produces = MediaType.APPLICATION_JSON_VALUE)
 @Profile("default")
 public class GiftCertificateController {
 

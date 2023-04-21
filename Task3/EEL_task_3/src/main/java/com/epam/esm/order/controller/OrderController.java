@@ -3,6 +3,7 @@ package com.epam.esm.order.controller;
 import com.epam.esm.order.service.OrderService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +12,7 @@ import java.util.Map;
 import static com.epam.esm.utils.Constants.*;
 
 @RestController
-@RequestMapping("/order")
+@RequestMapping(value = "/order", produces = MediaType.APPLICATION_JSON_VALUE)
 @Profile("default")
 public class OrderController {
 

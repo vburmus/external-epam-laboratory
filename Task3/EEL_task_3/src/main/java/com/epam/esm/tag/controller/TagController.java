@@ -4,6 +4,7 @@ package com.epam.esm.tag.controller;
 import com.epam.esm.tag.model.TagDTO;
 import com.epam.esm.tag.service.TagService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +13,7 @@ import java.util.Map;
 import static com.epam.esm.utils.Constants.*;
 
 @RestController
-@RequestMapping(value = "/tag")
+@RequestMapping(value = "/tag", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TagController {
 
     private final TagService tagService;
