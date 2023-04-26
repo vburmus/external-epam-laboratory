@@ -1,50 +1,22 @@
 package com.epam.esm.giftcertificate.repository;
 
 import com.epam.esm.giftcertificate.model.GiftCertificate;
-import com.epam.esm.tag.model.Tag;
-import com.epam.esm.giftcertificate.direction.DirectionEnum;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
-
-public interface GiftCertificateRepository {
-
-    boolean createGiftCertificate(GiftCertificate giftCertificate);
-
-    boolean createTagDependenciesForGiftCertificate(List<Long> tags, long giftCertificateID);
 
 
-    List<GiftCertificate> getAllGiftCertificates(Integer page,Integer size);
+@Repository
+public interface GiftCertificateRepository extends JpaRepository<GiftCertificate, Long> {
 
-    GiftCertificate getGiftCertificateByID(long id);
+    Page<GiftCertificate> findByNameContaining(String partialName, Pageable pageable);
 
-    boolean updateGiftCertificate(long id, Map<String, String> updatedCertificate);
+    Page<GiftCertificate> findByDescriptionContaining(String partialDescription, Pageable pageable);
 
-    boolean deleteGiftCertificate(long id);
+    Page<GiftCertificate> findByTagsName(String tagName, Pageable pageable);
 
-    boolean deleteTagDependenciesForGiftCertificate(List<Long> tags, long giftCertificateID);
-
-    boolean isGiftCertificateExist(GiftCertificate giftCertificate);
-
-    long getGiftCertificatesID(GiftCertificate giftCertificate);
-
-    List<Tag> getAllTagsIdByCertificateId(long id);
-
-    List<GiftCertificate> getGiftCertificatesByTagName(String tagName,Integer page,Integer size);
-
-    List<GiftCertificate> getGiftCertificatesByPartOfName(String part,Integer page,Integer size);
-
-    List<GiftCertificate> getGiftCertificatesByPartOfDescription(String part,Integer page,Integer size);
-
-    List<GiftCertificate> getCertificatesSortedByDate(DirectionEnum direction,Integer page,Integer size);
-
-    List<GiftCertificate> getCertificatesSortedByName(DirectionEnum direction,Integer page,Integer size);
-
-    List<GiftCertificate> getCertificatesSortedByDateName(DirectionEnum directionDate, DirectionEnum directionName,Integer page,Integer size);
-
-    List<GiftCertificate> getCertificatesBySeveralTags(List<Long> tags,Integer page,Integer size);
-
-    BigDecimal getCertificatesPriceByID(long id);
+    Page<GiftCertificate> findByTagsIdIn(List<Long> tags, Pageable pageable);
 }
