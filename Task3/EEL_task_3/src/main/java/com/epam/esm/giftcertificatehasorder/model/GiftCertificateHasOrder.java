@@ -2,10 +2,10 @@ package com.epam.esm.giftcertificatehasorder.model;
 
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.order.model.Order;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
-import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
