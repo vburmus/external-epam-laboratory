@@ -2,8 +2,8 @@ package com.epam.esm.auth.controller;
 
 import com.epam.esm.auth.models.AuthenticationRequest;
 import com.epam.esm.auth.models.AuthenticationResponse;
-import com.epam.esm.auth.service.AuthenticationService;
 import com.epam.esm.auth.models.RegisterRequest;
+import com.epam.esm.auth.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
