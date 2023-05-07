@@ -1,9 +1,11 @@
 package com.epam.esm.utils.config;
 
 import com.epam.esm.auth.tokenjwt.JwtAuthenticationFilter;
+import com.epam.esm.user.model.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -25,28 +27,43 @@ public class SecurityConfig {
         http
                 .csrf()
                 .disable()
+                .cors()
+                .disable()
                 .authorizeHttpRequests()
                 .requestMatchers(
-                        "/api/v1/auth/**",
-                        "/v2/api-docs",
+                        "/auth/**",
                         "/v3/api-docs",
                         "/v3/api-docs/**",
-                        "/swagger-resources",
-                        "/swagger-resources/**",
-                        "/configuration/ui",
-                        "/configuration/security",
                         "/swagger-ui/**",
                         "/webjars/**",
                         "/swagger-ui.html")
                 .permitAll()
-                .anyRequest()
+                .requestMatchers(HttpMethod.GET,
+                        "/certificate",
+                        "/certificate/*",
+                        "/certificate/**")
                 .permitAll()
+                .requestMatchers(HttpMethod.GET,
+                        "/**",
+                        "/*"
+                )
+                .hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
+                .requestMatchers(HttpMethod.POST,
+                        "/user/create-order"
+                )
+                .hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
+                .requestMatchers(
+                        "/**"
+                )
+                .hasAuthority(Role.ADMIN.name())
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling();
+
         return http.build();
 
     }
