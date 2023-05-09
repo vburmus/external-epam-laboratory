@@ -21,7 +21,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web:3.0.4'
     implementation 'org.springframework.boot:spring-boot-starter:2.7.2'
     implementation 'org.springframework.boot:spring-boot-starter-tomcat:3.0.4'
-
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client:3.0.4'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.0.4'
 
     implementation 'org.springframework.boot:spring-boot-starter-hateoas:3.0.4'

@@ -10,9 +10,18 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
-
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: ${GITHUB_CLIENT_ID}
+            client-secret: ${GITHUB_CLIENT_SECRET}
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
 jwt:
-  secret: 2F413F4428472B4B6250655368566D597133743677397A244326452948404D63
+  secret: ${JWT_SECRET}
 
 springdoc:
   swagger-ui:

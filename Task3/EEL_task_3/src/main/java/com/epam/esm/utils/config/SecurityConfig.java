@@ -31,12 +31,14 @@ public class SecurityConfig {
                 .disable()
                 .authorizeHttpRequests()
                 .requestMatchers(
+                        "/",
                         "/auth/**",
                         "/v3/api-docs",
                         "/v3/api-docs/**",
                         "/swagger-ui/**",
                         "/webjars/**",
-                        "/swagger-ui.html")
+                        "/swagger-ui.html",
+                        "/error")
                 .permitAll()
                 .requestMatchers(HttpMethod.GET,
                         "/certificate",
@@ -56,13 +58,19 @@ public class SecurityConfig {
                         "/**"
                 )
                 .hasAuthority(Role.ADMIN.name())
+                .anyRequest()
+                .authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling();
+                .logout(l -> l.logoutSuccessUrl("/").permitAll())
+                .exceptionHandling()
+                .and()
+                .oauth2Login();
+
 
         return http.build();
 
