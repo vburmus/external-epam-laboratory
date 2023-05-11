@@ -42,8 +42,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({JsonPatchException.class, JsonProcessingException.class})
-    public ResponseEntity<Object> handleJson(RuntimeException ex, WebRequest request) {
+    public ResponseEntity<Object> handleJsonException(RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(ex, "An error occurred, check your request", new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR,
+                request);
+    }
+
+    @ExceptionHandler(UserCreationFailureException.class)
+    public ResponseEntity<Object> handleUserCreationException(RuntimeException ex, WebRequest request) {
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT,
                 request);
     }
 }
