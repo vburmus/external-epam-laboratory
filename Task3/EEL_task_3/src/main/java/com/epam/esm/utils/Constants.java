@@ -23,4 +23,10 @@ public class Constants {
     public static final String SORT_DESCTIPTION =
             "Sorting criteria, e.g. -name,date. The " + "'-' prefix indicates descending order. " + "The default " +
                     "order is ascending. The first sorting criterion " + "is name. Example: sort=-name,date";
+
+    public static final String LOCAL_PROVIDER = "LOCAL";
+
+    public static final String ALREADY_REGISTERED = "Such user has already registered";
+    public static final String USER_DOESNT_EXIST = "Such user doesnt exist";
+
 }

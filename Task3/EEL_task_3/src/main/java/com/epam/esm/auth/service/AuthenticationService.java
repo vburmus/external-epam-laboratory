@@ -15,11 +15,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import static com.epam.esm.utils.Constants.*;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    public static final String ALREADY_REGISTERED = "Such user has already registered";
-    public static final String USER_DOESNT_EXIST = "Such user doesnt exist";
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -36,6 +37,7 @@ public class AuthenticationService {
                 .password(
                         passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
+                .provider(LOCAL_PROVIDER)
                 .build();
         userRepository.save(user);
         String jwtToken = jwtService.generateToken(user);
