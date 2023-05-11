@@ -8,7 +8,6 @@ import org.hibernate.Hibernate;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -27,6 +26,7 @@ public class UserHateoas extends RepresentationModel<UserHateoas> {
     private String email;
     private String password;
     private Role role;
+    private String provider;
     private Set<Order> orders;
 
     public UserHateoas(UserDTO userDTO) {
@@ -38,6 +38,7 @@ public class UserHateoas extends RepresentationModel<UserHateoas> {
         this.password = userDTO.getPassword();
         this.role = userDTO.getRole();
         this.orders = userDTO.getOrders();
+        this.provider = userDTO.getProvider();
         Link selfLink = linkTo(methodOn(UserHateoasController.class).getUserById(userDTO.getId())).withSelfRel();
         this.add(selfLink);
     }

@@ -34,7 +34,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
     private String password;
-
+    private String provider;
     @OneToMany
     @ToString.Exclude
     private transient Set<Order> orders;
