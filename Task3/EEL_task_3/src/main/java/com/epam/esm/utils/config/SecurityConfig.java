@@ -1,6 +1,8 @@
 package com.epam.esm.utils.config;
 
 import com.epam.esm.auth.tokenjwt.JwtAuthenticationFilter;
+import com.epam.esm.oauth.service.CustomOauth2UserService;
+import com.epam.esm.oauth.service.CustomOidcUserService;
 import com.epam.esm.user.model.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,12 +23,14 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;
+    private final CustomOidcUserService customOidcUserService;
+    private final CustomOauth2UserService customOauth2UserService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf()
-                .disable()
+                .and()
                 .cors()
                 .disable()
                 .authorizeHttpRequests()
@@ -66,10 +70,12 @@ public class SecurityConfig {
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .logout(l -> l.logoutSuccessUrl("/").permitAll())
                 .exceptionHandling()
                 .and()
-                .oauth2Login();
+                .oauth2Login()
+                .userInfoEndpoint()
+                .userService(customOauth2UserService)
+                .oidcUserService(customOidcUserService);
 
 
         return http.build();
