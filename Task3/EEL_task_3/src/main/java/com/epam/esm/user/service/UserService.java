@@ -1,9 +1,6 @@
 package com.epam.esm.user.service;
 
 import com.epam.esm.exceptionhandler.exceptions.NoSuchItemException;
-import com.epam.esm.exceptionhandler.exceptions.ObjectNotFoundException;
-import com.epam.esm.exceptionhandler.exceptions.UserCreationFailureException;
-import com.epam.esm.user.model.Role;
 import com.epam.esm.user.model.User;
 import com.epam.esm.user.model.UserDTO;
 import com.epam.esm.user.repository.UserRepository;
@@ -11,16 +8,12 @@ import com.epam.esm.utils.datavalidation.ParamsValidation;
 import com.epam.esm.utils.mappers.EntityToDtoMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService {
     private final UserRepository userRepository;
     private final EntityToDtoMapper entityToDtoMapper;
 
@@ -41,28 +34,6 @@ public class UserService implements UserDetailsService {
         return entityToDtoMapper.toUserDTO(user.get());
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username).orElseThrow(() -> new ObjectNotFoundException("User not found"));
-    }
 
-    public void createUserFromAttributes(Map<String, Object> attributes, String provider) {
-        String email = (String) attributes.get("email");
-
-        Optional<User> existingUser = userRepository.findByEmail(email);
-        if (existingUser.isEmpty()) {
-            String[] fullName = attributes.get("name").toString().split(" ");
-            User newUser = User.builder()
-                    .name(fullName[0])
-                    .surname(fullName[1])
-                    .email(email)
-                    .role(Role.USER)
-                    .provider(provider)
-                    .build();
-            userRepository.save(newUser);
-        }
-        if(userRepository.findByEmail(email).isEmpty())
-            throw new UserCreationFailureException("Failed to create or retrieve user");
-    }
 }
 
