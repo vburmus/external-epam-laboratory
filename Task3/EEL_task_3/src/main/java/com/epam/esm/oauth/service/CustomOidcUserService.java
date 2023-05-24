@@ -1,6 +1,5 @@
 package com.epam.esm.oauth.service;
 
-import com.epam.esm.user.repository.UserRepository;
 import com.epam.esm.user.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,7 +20,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class CustomOidcUserService extends OidcUserService {
 
-    private final UserRepository userRepository; // Your custom UserRepository
     private final CustomUserDetailsService customUserDetailsService;
 
     @Override

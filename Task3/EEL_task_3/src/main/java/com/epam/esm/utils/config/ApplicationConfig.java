@@ -1,7 +1,6 @@
 package com.epam.esm.utils.config;
 
 import com.epam.esm.user.service.CustomUserDetailsService;
-import com.epam.esm.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
