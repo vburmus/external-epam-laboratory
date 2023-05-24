@@ -1,13 +1,14 @@
 package com.epam.esm.auth.service;
 
 import com.epam.esm.auth.models.AuthenticationRequest;
-import com.epam.esm.auth.models.AuthenticationResponse;
 import com.epam.esm.auth.models.RegisterRequest;
-import com.epam.esm.auth.tokenjwt.JwtService;
+import com.epam.esm.auth.tokenjwt.TokenDTO;
+import com.epam.esm.auth.tokenjwt.TokenGenerator;
 import com.epam.esm.exceptionhandler.exceptions.ObjectAlreadyExistsException;
 import com.epam.esm.user.model.Role;
 import com.epam.esm.user.model.User;
 import com.epam.esm.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,10 +24,11 @@ public class AuthenticationService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final TokenGenerator tokenGenerator;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    @Transactional
+    public TokenDTO register(RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent())
             throw new ObjectAlreadyExistsException(ALREADY_REGISTERED);
 
@@ -37,24 +39,25 @@ public class AuthenticationService {
                 .password(
                         passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
+                .number(request.getNumber())
                 .provider(LOCAL_PROVIDER)
                 .build();
         userRepository.save(user);
-        String jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user
+                , request.getPassword());
+        return tokenGenerator.createToken(usernamePasswordAuthenticationToken);
+
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public TokenDTO authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException(USER_DOESNT_EXIST));
-        String jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user,
+                request.getPassword());
+
+        return tokenGenerator.createToken(usernamePasswordAuthenticationToken);
     }
 }
