@@ -14,19 +14,19 @@ spring:
     oauth2:
       client:
         registration:
-          github:
-            client-id: ${GITHUB_CLIENT_ID}
-            client-secret: ${GITHUB_CLIENT_SECRET}
-            scope: read:user, user:email
-
           google:
             client-id: ${GOOGLE_CLIENT_ID}
             client-secret: ${GOOGLE_CLIENT_SECRET}
-            scope: openid,profile,email
+            scope: profile,email #,openid
+
+      resourceserver:
+        jwt:
+          issuer-uri: https://accounts.google.com
+          jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
 
 
-jwt:
-  secret: ${JWT_SECRET}
+
+
 
 springdoc:
   swagger-ui:
@@ -37,3 +37,10 @@ logging:
   level:
     root: info
     org.springdoc: info
+
+access-token:
+  private: ${ACCESS_TOKEN_PRIVATE_KEY}
+  public: ${ACCESS_TOKEN_PUBLIC_KEY}
+refresh-token:
+  private: ${REFRESH_TOKEN_PRIVATE_KEY}
+  public: ${REFRESH_TOKEN_PUBLIC_KEY}
