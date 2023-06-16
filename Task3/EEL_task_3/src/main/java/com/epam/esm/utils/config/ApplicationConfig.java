@@ -1,7 +1,11 @@
 package com.epam.esm.utils.config;
 
 import com.epam.esm.user.service.CustomUserDetailsService;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,10 +15,16 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Arrays;
+
 @Configuration
 @RequiredArgsConstructor
+@EnableCaching
 public class ApplicationConfig {
 
+    public static final String ACCESS_TOKENS = "accessTokens";
+    public static final String REFRESH_TOKENS = "refreshTokens";
+    public static final String BLACK_LIST = "blackList";
     private final CustomUserDetailsService userService;
 
     @Bean
@@ -35,4 +45,16 @@ public class ApplicationConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public Caffeine<Object, Object> caffeineConfig() {
+        return Caffeine.newBuilder();
+    }
+
+    @Bean
+    public CacheManager cacheManager(Caffeine<Object, Object> caffeine) {
+        CaffeineCacheManager cacheManager = new CaffeineCacheManager();
+        cacheManager.setCacheNames(Arrays.asList(ACCESS_TOKENS, REFRESH_TOKENS, BLACK_LIST));
+        cacheManager.setCaffeine(caffeine);
+        return cacheManager;
+    }
 }
