@@ -1,5 +1,6 @@
-package com.epam.esm.auth.tokenjwt;
+package com.epam.esm.auth.tokenjwt.filter;
 
+import com.epam.esm.auth.tokenjwt.service.JwtService;
 import com.epam.esm.user.service.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -19,8 +20,8 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    public static final String AUTHENTICATION_HEADER = "Authorization";
-    public static final String AUTHENTICATION_BEARER_TOKEN = "Bearer ";
+
+
     private final JwtService jwtService;
     private final CustomUserDetailsService customUserDetailsService;
 
@@ -29,17 +30,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
-        final String authenticationHeader = request.getHeader(AUTHENTICATION_HEADER);
-        final String jwt;
-        if (authenticationHeader == null || !authenticationHeader.startsWith(AUTHENTICATION_BEARER_TOKEN)) {
+
+        final String jwt = jwtService.resolveToken(request);
+
+        if (jwt == null) {
             filterChain.doFilter(request, response);
             return;
         }
-        jwt = authenticationHeader.substring(7);
+
         String userEmail = jwtService.extractUsername(jwt);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.customUserDetailsService.loadUserByUsername(userEmail);
-            if (jwtService.isTokenValid(jwt, userDetails)) {
+            if (isEndpointAllowed(request) || (jwtService.isTokenValid(jwt, userDetails) && !jwtService.isRefreshToken(jwt))) {
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
@@ -48,9 +50,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            } else {
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                return;
             }
+            filterChain.doFilter(request, response);
         }
-        filterChain.doFilter(request, response);
+    }
 
+    private boolean isEndpointAllowed(HttpServletRequest request) {
+        String requestURI = request.getRequestURI();
+        return requestURI.equals("/auth/refresh-token");
     }
 }

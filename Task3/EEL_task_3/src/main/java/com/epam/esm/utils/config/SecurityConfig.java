@@ -1,10 +1,10 @@
 package com.epam.esm.utils.config;
 
-import com.epam.esm.auth.tokenjwt.JwtAuthenticationFilter;
-import com.epam.esm.auth.tokenjwt.JwtToUserConverter;
+import com.epam.esm.auth.tokenjwt.filter.JwtAuthenticationFilter;
 import com.epam.esm.oauth.service.CustomOauth2UserService;
 import com.epam.esm.oauth.service.CustomOidcUserService;
 import com.epam.esm.user.model.Role;
+import com.epam.esm.utils.converters.JwtToUserConverter;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -59,7 +59,8 @@ public class SecurityConfig {
                         "/swagger-ui/**",
                         "/webjars/**",
                         "/swagger-ui.html",
-                        "/error")
+                        "/error",
+                        "/refresh-token")
                 .permitAll()
                 .requestMatchers(HttpMethod.GET,
                         "/certificate",
@@ -87,10 +88,7 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .oauth2ResourceServer(server -> server.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtToUserConverter)))
                 .oauth2Login(login -> login.userInfoEndpoint(info -> info.userService(customOauth2UserService)
-                            .oidcUserService(customOidcUserService)));
-        /*.exceptionHandling(e -> e.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint()).accessDeniedHandler(new
-        BearerTokenAccessDeniedHandler()))*/
-        ;
+                        .oidcUserService(customOidcUserService)));
 
 
         return http.build();

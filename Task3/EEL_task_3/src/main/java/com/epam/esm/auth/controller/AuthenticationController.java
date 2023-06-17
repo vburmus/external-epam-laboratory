@@ -3,6 +3,8 @@ package com.epam.esm.auth.controller;
 import com.epam.esm.auth.models.AuthenticationRequest;
 import com.epam.esm.auth.models.RegisterRequest;
 import com.epam.esm.auth.service.AuthenticationService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,5 +26,10 @@ public class AuthenticationController {
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
+    }
+
+    @PostMapping("/refresh-token")
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) {
+        authenticationService.refreshToken(request, response);
     }
 }

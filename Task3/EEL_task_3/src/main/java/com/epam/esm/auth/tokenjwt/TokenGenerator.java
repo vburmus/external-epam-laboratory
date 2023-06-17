@@ -1,88 +1,103 @@
 package com.epam.esm.auth.tokenjwt;
 
-import com.epam.esm.exceptionhandler.exceptions.WrongAuthenticationInstance;
+import com.epam.esm.auth.tokenjwt.model.TokenDTO;
+import com.epam.esm.auth.tokenjwt.service.JwtService;
+import com.epam.esm.exceptionhandler.exceptions.nonrest.CacheError;
+import com.epam.esm.exceptionhandler.exceptions.nonrest.IncorrectTokenTypeException;
+import com.epam.esm.exceptionhandler.exceptions.rest.WrongAuthenticationInstanceException;
 import com.epam.esm.user.model.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.CacheManager;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
+import static com.epam.esm.utils.Constants.*;
+import static com.epam.esm.utils.config.ApplicationConfig.ACCESS_TOKENS;
+import static com.epam.esm.utils.config.ApplicationConfig.REFRESH_TOKENS;
+
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class TokenGenerator {
     private final JwtEncoder jwtAccessTokenEncoder;
     private final JwtEncoder jwtRefreshTokenEncoder;
+    private final CacheManager cacheManager;
+    private final JwtService jwtService;
 
-    private String createAccessToken(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+    private static JwtClaimsSet makeJwtClaimSet(User user, TokenType tokenType) {
         Instant now = Instant.now();
-
-        JwtClaimsSet jwtClaimSet = JwtClaimsSet.builder()
-                .issuer("epam")
-                .issuedAt(now)
-                .expiresAt(now.plus(60, ChronoUnit.MINUTES))
+        var jwtClaimsSet = JwtClaimsSet.builder()
+                .claim(ID, user.getId())
                 .subject(user.getEmail())
-                .claim("id", user.getId())
-                .claim("role", user.getRole())
-                .claim("name", user.getName())
-                .claim("surname", user.getSurname())
-                .claim("provider", user.getProvider())
-                .build();
-
-        return jwtAccessTokenEncoder.encode(JwtEncoderParameters.from(jwtClaimSet)).getTokenValue();
+                .claim(NAME, user.getName())
+                .claim(SURNAME, user.getSurname())
+                .claim(ROLE, user.getRole())
+                .issuer(EPAM)
+                .claim(PROVIDER, user.getProvider())
+                .claim(TYPE, tokenType)
+                .issuedAt(now);
+        if (tokenType == TokenType.ACCESS_TOKEN) {
+            return jwtClaimsSet.expiresAt(now.plus(60, ChronoUnit.SECONDS)).build();
+        } else if (tokenType == TokenType.REFRESH_TOKEN) {
+            return jwtClaimsSet.expiresAt(now.plus(7, ChronoUnit.DAYS)).build();
+        }
+        throw new IncorrectTokenTypeException();
     }
 
-    private String createRefreshToken(Authentication authentication) {
+    public String createAccessToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        Instant now = Instant.now();
 
-        JwtClaimsSet jwtClaimSet = JwtClaimsSet.builder()
-                .claim("id", user.getId())
-                .subject(user.getEmail())
-                .issuer("epam")
-                .claim("name", user.getName())
-                .claim("surname", user.getSurname())
-                .claim("role", user.getRole())
-                .issuedAt(now)
-                .expiresAt(now.plus(60, ChronoUnit.MINUTES))
-                .claim("provider", user.getProvider())
-                .build();
-        return jwtRefreshTokenEncoder.encode(JwtEncoderParameters.from(jwtClaimSet)).getTokenValue();
+        try {
+            jwtService.invalidateTokenIfExist(user.getId(), TokenType.ACCESS_TOKEN);
+        } catch (IncorrectTokenTypeException e) {
+            log.error(e.getMessage());
+        }
+
+        JwtClaimsSet jwtClaimSet = makeJwtClaimSet(user, TokenType.ACCESS_TOKEN);
+
+        return encodeAndPutJwt(user, jwtClaimSet, jwtAccessTokenEncoder, ACCESS_TOKENS);
+    }
+
+    private String encodeAndPutJwt(User user, JwtClaimsSet jwtClaimSet, JwtEncoder jwtAccessTokenEncoder, String accessTokens) {
+        String jwt = jwtAccessTokenEncoder.encode(JwtEncoderParameters.from(jwtClaimSet)).getTokenValue();
+        var cache = cacheManager.getCache(accessTokens);
+        if (cache == null) {
+            throw new CacheError(CACHE_NOT_FOUND);
+        }
+        cache.put(user.getId(), jwt);
+        return jwt;
+    }
+
+    public String createRefreshToken(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        try {
+            jwtService.invalidateTokenIfExist(user.getId(), TokenType.REFRESH_TOKEN);
+        } catch (IncorrectTokenTypeException e) {
+            log.error(e.getMessage());
+        }
+        JwtClaimsSet jwtClaimSet = makeJwtClaimSet(user, TokenType.REFRESH_TOKEN);
+
+        return encodeAndPutJwt(user, jwtClaimSet, jwtRefreshTokenEncoder, REFRESH_TOKENS);
     }
 
     public TokenDTO createToken(Authentication authentication) {
+
         if (!(authentication.getPrincipal() instanceof User user)) {
-            throw new WrongAuthenticationInstance("Expected User instance, but other instance detected.");
+            throw new WrongAuthenticationInstanceException(OTHER_INSTANCE_DETECTED);
         }
 
         TokenDTO tokenDTO = new TokenDTO();
         tokenDTO.setUserId(user.getId());
         tokenDTO.setAccessToken(createAccessToken(authentication));
-
-
-        String refreshToken;
-        if (authentication.getCredentials() instanceof Jwt jwt) {
-            Instant now = Instant.now();
-            Instant expiresAt = jwt.getExpiresAt();
-            Duration duration = Duration.between(now, expiresAt);
-            long daysUntilExpired = duration.toDays();
-            if (daysUntilExpired < 7) {
-                refreshToken = createRefreshToken(authentication);
-            } else {
-                refreshToken = jwt.getTokenValue();
-            }
-        } else {
-            refreshToken = createRefreshToken(authentication);
-        }
-
-        tokenDTO.setRefreshToken(refreshToken);
+        tokenDTO.setRefreshToken(createRefreshToken(authentication));
 
         return tokenDTO;
     }
