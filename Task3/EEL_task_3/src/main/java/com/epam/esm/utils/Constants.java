@@ -15,7 +15,7 @@ public class Constants {
     public static final String DESCRIPTION = "description";
     public static final String DURATION = "duration";
     public static final String CREATE_DATE = "createDate";
-    public static final String DATE = "Date";
+    public static final String DATE = "date";
     public static final String LAST_UPDATE_DATE = "lastUpdateDate";
     public static final String ID = "id";
     public static final String ROLE = "role";

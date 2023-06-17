@@ -46,7 +46,7 @@ public class TagService {
     }
 
     public Page<TagDTO> getAllTags(Integer page, Integer size) {
-        PageRequest pageRequest = PageRequest.of(page, size);
+        PageRequest pageRequest = PageRequest.of(--page, size);
         Page<Tag> allTags = tagRepository.findAll(pageRequest);
         return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(allTags).map(entityToDtoMapper::toTagDTO);
     }
@@ -65,7 +65,7 @@ public class TagService {
     }
 
     public boolean deleteTag(long id) {
-        if (!tagRepository.existsById(id)) throw new NoSuchItemException(TAG_WITH_ID + id + DOESN_T_EXIST);
+        if (!tagRepository.existsById(id)) throw new NoSuchItemException(THERE_IS_NO_GC_WITH_ID + id );
         tagRepository.deleteById(id);
         return true;
     }

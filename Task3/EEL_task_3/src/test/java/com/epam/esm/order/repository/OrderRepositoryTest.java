@@ -1,6 +1,7 @@
 package com.epam.esm.order.repository;
 
 import com.epam.esm.order.model.Order;
+import com.epam.esm.user.model.Role;
 import com.epam.esm.user.model.User;
 import com.epam.esm.user.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -32,8 +33,13 @@ class OrderRepositoryTest {
     @BeforeEach
     void setUp() {
         User user1 = User.builder()
+                .email(EMAIL1)
                 .name(USER_1)
                 .surname(USER_1)
+                .number("afsgdf")
+                .password("sad")
+                .provider("google")
+                .role(Role.ADMIN)
                 .build();
         entityManager.persist(user1);
         Order order1 = Order.builder()
@@ -46,6 +52,8 @@ class OrderRepositoryTest {
         User user2 = User.builder()
                 .name(USER_2)
                 .surname(USER_2)
+                .email(EMAIL2)
+                .role(Role.ADMIN)
                 .build();
         entityManager.persist(user2);
         Order order2 = Order.builder()

@@ -3,6 +3,7 @@ package com.epam.esm.giftcertificate.repository;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.tag.model.Tag;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ class GiftCertificateRepositoryTest {
     private TestEntityManager entityManager;
 
     @BeforeEach
-    private void setUp() {
+    public void setUp() {
         GiftCertificate gc1 =
                 GiftCertificate.builder().name(GC_1).price(new BigDecimal(5)).description(TEST_DESCRIPTION).duration(5).build();
         entityManager.persist(gc1);

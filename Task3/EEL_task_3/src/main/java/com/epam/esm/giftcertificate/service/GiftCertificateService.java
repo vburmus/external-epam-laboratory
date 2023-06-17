@@ -137,7 +137,7 @@ public class GiftCertificateService {
             sortBy = Sort.by(firstDirection, firstParam);
         else {
             String secondParam = sort[1];
-            Sort.Direction secondDirection = ParamsValidation.getSortDirection(firstParam);
+            Sort.Direction secondDirection = ParamsValidation.getSortDirection(secondParam);
             secondParam = ParamsValidation.getSortParam(secondParam);
             sortBy = Sort.by(new Sort.Order(firstDirection, firstParam), new Sort.Order(secondDirection, secondParam));
         }

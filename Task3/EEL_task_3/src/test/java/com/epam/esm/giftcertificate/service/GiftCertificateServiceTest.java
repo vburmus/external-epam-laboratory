@@ -29,9 +29,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.epam.esm.Constants.*;
-
-import static com.epam.esm.utils.Constants.CREATE_DATE;
-import static com.epam.esm.utils.Constants.LAST_UPDATE_DATE;
+import static com.epam.esm.utils.Constants.THERE_IS_NO_GC_WITH_ID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -142,7 +140,7 @@ class GiftCertificateServiceTest {
                 .build();
         when(giftCertificateRepositoryMocked.existsById(gc.getId())).thenReturn(false);
         NoSuchItemException e = assertThrows(NoSuchItemException.class, () -> giftCertificateServiceMocked.deleteCertificate(ID1));
-        assertEquals("There is no gc with id= " + ID1, e.getMessage());
+        assertEquals(THERE_IS_NO_GC_WITH_ID + ID1, e.getMessage());
     }
 
 
@@ -151,7 +149,7 @@ class GiftCertificateServiceTest {
         when(giftCertificateRepositoryMocked.findById(ID1)).thenReturn(Optional.empty());
         NoSuchItemException thrown = assertThrows(NoSuchItemException.class,
                 () -> giftCertificateServiceMocked.updateCertificate(ID1, null));
-        assertEquals("No gift certificate with id = " + ID1, thrown.getMessage());
+        assertEquals(THERE_IS_NO_GC_WITH_ID + ID1, thrown.getMessage());
 
     }
 
