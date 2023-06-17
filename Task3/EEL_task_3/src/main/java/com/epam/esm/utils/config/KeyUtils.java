@@ -1,7 +1,7 @@
 package com.epam.esm.utils.config;
 
-import com.epam.esm.exceptionhandler.exceptions.KeyPairCreationException;
-import com.epam.esm.exceptionhandler.exceptions.KeyPairNotFoundException;
+import com.epam.esm.exceptionhandler.exceptions.rest.KeyPairCreationException;
+import com.epam.esm.exceptionhandler.exceptions.rest.KeyPairNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -21,11 +21,13 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.Objects;
 
+import static com.epam.esm.utils.Constants.*;
+
 @Component
 @RequiredArgsConstructor
 public class KeyUtils {
 
-    private final Environment environment;
+        private final Environment environment;
 
     @Value("${access-token.private}")
     private String accessTokenPrivateKeyPath;
@@ -57,7 +59,7 @@ public class KeyUtils {
     private KeyPair getKeyPair(String tokenPrivateKeyPath, String tokenPublicKeyPath) {
 
         KeyPair keyPair;
-        KeyFactory keyFactory = null;
+        KeyFactory keyFactory;
 
 
         File publicKeyFile = new File(tokenPublicKeyPath);
@@ -78,11 +80,11 @@ public class KeyUtils {
                 keyPair = new KeyPair(publicKey, privateKey);
                 return keyPair;
             } catch (NoSuchAlgorithmException | IOException | InvalidKeySpecException e) {
-                throw new KeyPairCreationException("An error occurred while loading keys.");
+                throw new KeyPairCreationException(ERROR_LOADING_KEYS);
             }
         } else {
-            if (Arrays.asList(environment.getActiveProfiles()).contains("default")) {
-                throw new KeyPairNotFoundException("Public and private keys don't exist.");
+            if (Arrays.asList(environment.getActiveProfiles()).contains(DEFAULT_PROFILE)) {
+                throw new KeyPairNotFoundException(KEYS_DON_T_EXIST);
             }
         }
         try {
@@ -99,7 +101,7 @@ public class KeyUtils {
                 fos.write(keySpec.getEncoded());
             }
         } catch (NoSuchAlgorithmException | IOException e) {
-            throw new KeyPairCreationException("An error occurred while creating keys.");
+            throw new KeyPairCreationException(ERROR_CREATING_KEYS);
         }
         return keyPair;
 

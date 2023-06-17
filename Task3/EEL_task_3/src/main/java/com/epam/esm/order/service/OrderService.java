@@ -1,6 +1,6 @@
 package com.epam.esm.order.service;
 
-import com.epam.esm.exceptionhandler.exceptions.NoSuchItemException;
+import com.epam.esm.exceptionhandler.exceptions.rest.NoSuchItemException;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.giftcertificate.repository.GiftCertificateRepository;
 import com.epam.esm.giftcertificatehasorder.model.GiftCertificateHasOrder;
@@ -23,8 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.epam.esm.utils.Constants.*;
+
 @Service
 public class OrderService {
+
     private final OrderRepository orderRepository;
     private final GiftCertificateRepository giftCertificateRepository;
     private final UserRepository userRepository;
@@ -45,7 +48,8 @@ public class OrderService {
     public OrderDTO createOrder(OrderDTO orderDTO) {
         Order order = entityToDtoMapper.toOrder(orderDTO);
         Long userId = order.getUser().getId();
-        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchItemException("User not found with id " + userId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchItemException(String.format(NO_USER_WITH_ID_D_FOUND,
+                userId)));
 
         order.setUser(user);
 
@@ -55,8 +59,7 @@ public class OrderService {
         for (GiftCertificateHasOrder giftCertificateHasOrder : order.getGiftCertificateHasOrders()) {
             Long giftCertificateId = giftCertificateHasOrder.getGiftCertificate().getId();
             GiftCertificate giftCertificate =
-                    giftCertificateRepository.findById(giftCertificateId).orElseThrow(() -> new NoSuchItemException("Gift certificate " +
-                            "not" + " found with id " + giftCertificateId));
+                    giftCertificateRepository.findById(giftCertificateId).orElseThrow(() -> new NoSuchItemException(THERE_IS_NO_GC_WITH_ID + giftCertificateId));
 
             GiftCertificateOrderID id = new GiftCertificateOrderID();
             id.setGiftCertificateId(giftCertificate.getId());
@@ -90,7 +93,7 @@ public class OrderService {
 
     public String getOrderInfoByID(long id) {
         Optional<Order> order = orderRepository.findById(id);
-        if (order.isEmpty()) throw new NoSuchItemException("No such order!");
+        if (order.isEmpty()) throw new NoSuchItemException(NO_SUCH_ORDER);
         return order.get().toString();
     }
 
@@ -98,7 +101,7 @@ public class OrderService {
     public Page<OrderDTO> getOrdersByUsersID(long id, Integer page, Integer size) {
         PageRequest pageRequest = PageRequest.of(--page, size);
         Optional<User> user = userRepository.findById(id);
-        if (user.isEmpty()) throw new NoSuchItemException(String.format("No user with id = %d found", id));
+        if (user.isEmpty()) throw new NoSuchItemException(String.format(NO_USER_WITH_ID_D_FOUND, id));
         Page<Order> ordersByUSer = orderRepository.findAllByUser(user.get(), pageRequest);
         return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(ordersByUSer).map(entityToDtoMapper::toOrderDTO);
     }

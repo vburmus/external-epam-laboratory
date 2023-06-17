@@ -1,4 +1,4 @@
-package com.epam.esm.auth.tokenjwt;
+package com.epam.esm.utils.converters;
 
 import com.epam.esm.user.model.Role;
 import com.epam.esm.user.model.User;
@@ -12,16 +12,18 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.epam.esm.utils.Constants.*;
+
 @Component
 public class JwtToUserConverter implements Converter<Jwt, UsernamePasswordAuthenticationToken> {
 
     @Override
     public UsernamePasswordAuthenticationToken convert(Jwt jwt) {
         User user = User.builder()
-                .id(jwt.getClaim("id"))
-                .role(Role.valueOf(jwt.getClaim("role")))
-                .name(jwt.getClaim("name"))
-                .surname(jwt.getClaim("surname"))
+                .id(jwt.getClaim(ID))
+                .role(Role.valueOf(jwt.getClaim(ROLE)))
+                .name(jwt.getClaim(NAME))
+                .surname(jwt.getClaim(SURNAME))
                 .email(jwt.getSubject())
                 .build();
         List<GrantedAuthority> authorities = new ArrayList<>();

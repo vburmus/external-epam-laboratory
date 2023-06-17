@@ -1,4 +1,4 @@
-package com.epam.esm.auth.tokenjwt;
+package com.epam.esm.auth.tokenjwt.model;
 
 import lombok.Data;
 

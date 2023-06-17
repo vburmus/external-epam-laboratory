@@ -1,7 +1,7 @@
 package com.epam.esm.user.service;
 
-import com.epam.esm.exceptionhandler.exceptions.ObjectNotFoundException;
-import com.epam.esm.exceptionhandler.exceptions.UserCreationFailureException;
+import com.epam.esm.exceptionhandler.exceptions.rest.ObjectNotFoundException;
+import com.epam.esm.exceptionhandler.exceptions.rest.UserCreationFailureException;
 import com.epam.esm.user.model.Role;
 import com.epam.esm.user.model.User;
 import com.epam.esm.user.repository.UserRepository;
@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.epam.esm.utils.Constants.EMAIL;
+import static com.epam.esm.utils.Constants.NAME;
+
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
@@ -25,11 +28,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public User createUserFromAttributes(Map<String, Object> attributes, String provider) {
-        String email = (String) attributes.get("email");
+        String email = (String) attributes.get(EMAIL);
 
         Optional<User> existingUser = userRepository.findByEmail(email);
         if (existingUser.isEmpty()) {
-            String[] fullName = attributes.get("name").toString().split(" ");
+            String[] fullName = attributes.get(NAME).toString().split(" ");
             User newUser = User.builder()
                     .name(fullName[0])
                     .surname(fullName[1])

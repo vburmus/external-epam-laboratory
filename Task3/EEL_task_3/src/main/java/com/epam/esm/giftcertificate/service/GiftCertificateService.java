@@ -1,8 +1,8 @@
 package com.epam.esm.giftcertificate.service;
 
-import com.epam.esm.exceptionhandler.exceptions.NoSuchItemException;
-import com.epam.esm.exceptionhandler.exceptions.ObjectAlreadyExistsException;
-import com.epam.esm.exceptionhandler.exceptions.ObjectIsInvalidException;
+import com.epam.esm.exceptionhandler.exceptions.rest.NoSuchItemException;
+import com.epam.esm.exceptionhandler.exceptions.rest.ObjectAlreadyExistsException;
+import com.epam.esm.exceptionhandler.exceptions.rest.ObjectIsInvalidException;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.giftcertificate.model.GiftCertificateDTO;
 import com.epam.esm.giftcertificate.repository.GiftCertificateRepository;
@@ -32,8 +32,6 @@ import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatc
 @Service
 public class GiftCertificateService {
 
-    public static final String IS_INVALID = " is invalid";
-    public static final String SORT_REGEX = "^(-)?date$|^(-)?name$";
     private final GiftCertificateRepository giftCertificateRepository;
     private final TagService tagService;
     private final EntityToDtoMapper entityToDtoMapper;
@@ -57,11 +55,11 @@ public class GiftCertificateService {
         Example<GiftCertificate> providedGC = Example.of(giftCertificate, gcMatcher);
 
         if (giftCertificateRepository.exists(providedGC))
-            throw new ObjectAlreadyExistsException("Gift certificate with name = " + giftCertificate.getName() +
-                    ", duration = " + giftCertificate.getDuration() + " already exists");
+            throw new ObjectAlreadyExistsException(GIFT_CERTIFICATE_WITH_NAME + giftCertificate.getName() +
+                    DURATION1 + giftCertificate.getDuration() + ALREADY_EXISTS);
         if (!ParamsValidation.isValidCertificate(giftCertificate))
-            throw new ObjectIsInvalidException("Gift certificate with name = " + giftCertificate.getName() +
-                    ", duration = " + giftCertificate.getDuration() + " is invalid, please check your params");
+            throw new ObjectIsInvalidException(GIFT_CERTIFICATE_WITH_NAME + giftCertificate.getName() +
+                    DURATION1 + giftCertificate.getDuration() + IS_INVALID_PLEASE_CHECK_YOUR_PARAMS);
 
         giftCertificate.setCreateDate(LocalDateTime.now());
         giftCertificate.setLastUpdateDate(LocalDateTime.now());
@@ -85,7 +83,7 @@ public class GiftCertificateService {
 
         Optional<GiftCertificate> giftCertificate = giftCertificateRepository.findById(id);
         if (giftCertificate.isEmpty()) {
-            throw new NoSuchItemException("GiftCertificate with id = " + id + " doesn't exist");
+            throw new NoSuchItemException(GIFT_CERTIFICATE_WITH_ID + id + DOESN_T_EXIST1);
         }
         return entityToDtoMapper.toGiftCertificateDTO(giftCertificate.get());
     }
@@ -94,9 +92,9 @@ public class GiftCertificateService {
     public Page<GiftCertificateDTO> getGiftCertificatesByTagName(String tagName, Integer page, Integer size) {
 
         if (tagName == null || tagName.isEmpty())
-            throw new ObjectIsInvalidException("Tag name " + tagName + IS_INVALID);
+            throw new ObjectIsInvalidException(TAG_NAME + tagName + IS_INVALID);
         if (!tagService.existsByName(tagName))
-            throw new NoSuchItemException("Tag with name " + tagName + " doesn't exist");
+            throw new NoSuchItemException(TAG_WITH_NAME1 + tagName + DOESN_T_EXIST1);
 
         PageRequest pageRequest = PageRequest.of(--page, size);
         Page<GiftCertificate> gcsByTag = giftCertificateRepository.findByTagsName(tagName, pageRequest);
@@ -106,7 +104,7 @@ public class GiftCertificateService {
     public Page<GiftCertificateDTO> getGiftCertificatesByPart(String part, Integer page, Integer size) {
 
         if (!ParamsValidation.isPartValidForSearch(part))
-            throw new ObjectIsInvalidException("Part of description -> " + part + IS_INVALID);
+            throw new ObjectIsInvalidException(PART_OF_DESCRIPTION + part + IS_INVALID);
         PageRequest pageRequest = PageRequest.of(--page, size);
         Page<GiftCertificate> certificates = giftCertificateRepository.findByNameContaining(part, pageRequest);
         if (!certificates.isEmpty())
@@ -122,11 +120,11 @@ public class GiftCertificateService {
 
         String[] sort = sortString.split(",");
         Pattern sortPattern = Pattern.compile(SORT_REGEX);
-        if (sort.length > 2) throw new ObjectIsInvalidException("To many params for sorting");
+        if (sort.length > 2) throw new ObjectIsInvalidException(TO_MANY_PARAMS_FOR_SORTING);
 
         for (String sortParam : sort) {
             if (!sortPattern.matcher(sortParam).find())
-                throw new ObjectIsInvalidException("Some sort params are invalid.");
+                throw new ObjectIsInvalidException(SOME_SORT_PARAMS_ARE_INVALID);
         }
 
         String firstParam = sort[0];
@@ -161,7 +159,7 @@ public class GiftCertificateService {
     public GiftCertificateDTO updateCertificate(long id, JsonMergePatch jsonPatch) throws JsonPatchException, JsonProcessingException {
 
         Optional<GiftCertificate> gc = giftCertificateRepository.findById(id);
-        if (gc.isEmpty()) throw new NoSuchItemException("No gift certificate with id = " + id);
+        if (gc.isEmpty()) throw new NoSuchItemException(THERE_IS_NO_GC_WITH_ID + id);
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
@@ -183,7 +181,7 @@ public class GiftCertificateService {
 
     @Modifying
     public boolean deleteCertificate(Long id) {
-        if (!giftCertificateRepository.existsById(id)) throw new NoSuchItemException("There is no gc with id= " + id);
+        if (!giftCertificateRepository.existsById(id)) throw new NoSuchItemException(THERE_IS_NO_GC_WITH_ID + id);
 
         giftCertificateRepository.deleteById(id);
         return true;

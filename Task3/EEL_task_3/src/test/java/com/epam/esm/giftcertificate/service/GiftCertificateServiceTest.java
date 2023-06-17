@@ -1,8 +1,8 @@
 package com.epam.esm.giftcertificate.service;
 
-import com.epam.esm.exceptionhandler.exceptions.NoSuchItemException;
-import com.epam.esm.exceptionhandler.exceptions.ObjectAlreadyExistsException;
-import com.epam.esm.exceptionhandler.exceptions.ObjectIsInvalidException;
+import com.epam.esm.exceptionhandler.exceptions.rest.NoSuchItemException;
+import com.epam.esm.exceptionhandler.exceptions.rest.ObjectAlreadyExistsException;
+import com.epam.esm.exceptionhandler.exceptions.rest.ObjectIsInvalidException;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.giftcertificate.model.GiftCertificateDTO;
 import com.epam.esm.giftcertificate.repository.GiftCertificateRepository;
