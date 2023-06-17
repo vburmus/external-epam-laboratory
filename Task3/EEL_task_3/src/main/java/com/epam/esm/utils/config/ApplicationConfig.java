@@ -17,14 +17,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
 
+import static com.epam.esm.utils.Constants.*;
+
 @Configuration
 @RequiredArgsConstructor
 @EnableCaching
 public class ApplicationConfig {
 
-    public static final String ACCESS_TOKENS = "accessTokens";
-    public static final String REFRESH_TOKENS = "refreshTokens";
-    public static final String BLACK_LIST = "blackList";
+
     private final CustomUserDetailsService userService;
 
     @Bean

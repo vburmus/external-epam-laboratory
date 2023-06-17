@@ -22,7 +22,7 @@ public class Constants {
     public static final String EPAM = "epam";
     public static final String TAGS = "tags";
     public static final String EMAIL = "email";
-    public static final String PROVIDER = "epam";
+    public static final String PROVIDER = "provider";
     public static final String TYPE = "tags";
     public static final String PRICE = "price";
     public static final String SORT_DESCTIPTION =
@@ -74,5 +74,9 @@ public class Constants {
     public static final String KEYS_DON_T_EXIST = "Public and private keys don't exist.";
     public static final String DEFAULT_PROFILE = "default";
     public static final String ERROR_CREATING_KEYS = "An error occurred while creating keys.";
+
+    public static final String ACCESS_TOKENS = "accessTokens";
+    public static final String REFRESH_TOKENS = "refreshTokens";
+    public static final String BLACK_LIST = "blackList";
 
 }

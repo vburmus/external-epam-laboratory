@@ -52,6 +52,7 @@ public class SecurityConfig {
                 .disable()
                 .authorizeHttpRequests()
                 .requestMatchers(
+                        "/",
                         "/login",
                         "/auth/**",
                         "/v3/api-docs",
@@ -87,8 +88,11 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .oauth2ResourceServer(server -> server.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtToUserConverter)))
-                .oauth2Login(login -> login.userInfoEndpoint(info -> info.userService(customOauth2UserService)
-                        .oidcUserService(customOidcUserService)));
+                .oauth2Login(login -> {
+                    login.userInfoEndpoint(info -> info.userService(customOauth2UserService)
+                            .oidcUserService(customOidcUserService));
+                    login.defaultSuccessUrl("/");
+                });
 
 
         return http.build();

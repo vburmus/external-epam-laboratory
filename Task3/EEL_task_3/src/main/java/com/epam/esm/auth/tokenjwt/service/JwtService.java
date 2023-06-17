@@ -22,7 +22,6 @@ import java.util.Objects;
 import java.util.function.Function;
 
 import static com.epam.esm.utils.Constants.*;
-import static com.epam.esm.utils.config.ApplicationConfig.*;
 
 @Service
 @RequiredArgsConstructor

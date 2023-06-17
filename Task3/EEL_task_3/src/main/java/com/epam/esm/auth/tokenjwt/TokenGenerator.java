@@ -19,8 +19,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
 import static com.epam.esm.utils.Constants.*;
-import static com.epam.esm.utils.config.ApplicationConfig.ACCESS_TOKENS;
-import static com.epam.esm.utils.config.ApplicationConfig.REFRESH_TOKENS;
 
 @Component
 @RequiredArgsConstructor
