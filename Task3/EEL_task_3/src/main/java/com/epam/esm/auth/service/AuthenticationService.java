@@ -5,8 +5,8 @@ import com.epam.esm.auth.models.RegisterRequest;
 import com.epam.esm.auth.tokenjwt.TokenGenerator;
 import com.epam.esm.auth.tokenjwt.model.TokenDTO;
 import com.epam.esm.auth.tokenjwt.service.JwtService;
-import com.epam.esm.exceptionhandler.exceptions.rest.EmailNotFoundError;
-import com.epam.esm.exceptionhandler.exceptions.rest.InvalidTokenError;
+import com.epam.esm.exceptionhandler.exceptions.rest.EmailNotFoundException;
+import com.epam.esm.exceptionhandler.exceptions.rest.InvalidTokenException;
 import com.epam.esm.exceptionhandler.exceptions.rest.ObjectAlreadyExistsException;
 import com.epam.esm.user.model.Role;
 import com.epam.esm.user.model.User;
@@ -78,11 +78,11 @@ public class AuthenticationService {
 
         String userEmail = jwtService.extractUsername(jwt);
         if (userEmail == null) {
-            throw new EmailNotFoundError(MISSING_USER_EMAIL);
+            throw new EmailNotFoundException(MISSING_USER_EMAIL);
         }
         UserDetails userDetails = this.customUserDetailsService.loadUserByUsername(userEmail);
         if (!jwtService.isTokenValid(jwt, userDetails)) {
-            throw new InvalidTokenError(TOKEN_IS_INVALID);
+            throw new InvalidTokenException(TOKEN_IS_INVALID);
         }
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails,
                 userDetails.getAuthorities());

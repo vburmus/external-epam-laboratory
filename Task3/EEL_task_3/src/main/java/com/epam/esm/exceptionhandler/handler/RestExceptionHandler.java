@@ -1,6 +1,6 @@
 package com.epam.esm.exceptionhandler.handler;
 
-import com.epam.esm.exceptionhandler.exceptions.*;
+import com.epam.esm.exceptionhandler.exceptions.rest.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.core.Ordered;
@@ -13,11 +13,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import static com.epam.esm.utils.Constants.CHECK_YOUR_REQUEST;
+
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice()
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(NoSuchItemException.class)
-    public ResponseEntity<Object> handleNoSuchItemException(RuntimeException ex, WebRequest request) {
+
+
+    @ExceptionHandler({NoSuchItemException.class, PageException.class, ObjectNotFoundException.class})
+    public ResponseEntity<Object> handleNotFoundException(RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
@@ -31,19 +35,9 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
-    @ExceptionHandler(PageException.class)
-    public ResponseEntity<Object> handlePageException(RuntimeException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
-    }
-
-    @ExceptionHandler(ObjectNotFoundException.class)
-    public ResponseEntity<Object> handleObjectNotFoundException(RuntimeException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
-    }
-
     @ExceptionHandler({JsonPatchException.class, JsonProcessingException.class})
     public ResponseEntity<Object> handleJsonException(RuntimeException ex, WebRequest request) {
-        return handleExceptionInternal(ex, "An error occurred, check your request", new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR,
+        return handleExceptionInternal(ex, CHECK_YOUR_REQUEST, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR,
                 request);
     }
 
@@ -52,4 +46,21 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT,
                 request);
     }
+
+    @ExceptionHandler(EmailNotFoundException.class)
+    public ResponseEntity<Object> emailNotFoundException(RuntimeException ex, WebRequest request) {
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<Object> invalidTokenException(RuntimeException ex, WebRequest request) {
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.FORBIDDEN, request);
+    }
+
+    @ExceptionHandler(WrongAuthenticationInstanceException.class)
+    public ResponseEntity<Object> wrongInstanceDetectedException(RuntimeException ex, WebRequest request) {
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.FORBIDDEN, request);
+    }
+
+
 }

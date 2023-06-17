@@ -1,4 +1,4 @@
-package com.epam.esm.exceptionhandler.exceptions.rest;
+package com.epam.esm.exceptionhandler.exceptions.nonrest;
 
 public class KeyPairNotFoundException extends RuntimeException {
     public KeyPairNotFoundException(String e) {

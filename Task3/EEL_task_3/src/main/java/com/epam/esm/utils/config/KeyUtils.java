@@ -1,7 +1,7 @@
 package com.epam.esm.utils.config;
 
-import com.epam.esm.exceptionhandler.exceptions.rest.KeyPairCreationException;
-import com.epam.esm.exceptionhandler.exceptions.rest.KeyPairNotFoundException;
+import com.epam.esm.exceptionhandler.exceptions.nonrest.KeyPairCreationException;
+import com.epam.esm.exceptionhandler.exceptions.nonrest.KeyPairNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
