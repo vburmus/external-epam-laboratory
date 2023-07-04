@@ -5,7 +5,6 @@ plugins {
 }
 
 group = 'com.epam.esm'
-version = '1.0'
 description = 'vburmus Web-app'
 java.sourceCompatibility = JavaVersion.VERSION_17
 
@@ -64,12 +63,6 @@ dependencies {
 
 }
 
-
-
 test {
     useJUnitPlatform()
 }
-
-
-
-

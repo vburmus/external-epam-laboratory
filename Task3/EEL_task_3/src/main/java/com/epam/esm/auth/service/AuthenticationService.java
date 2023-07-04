@@ -12,8 +12,6 @@ import com.epam.esm.user.model.Role;
 import com.epam.esm.user.model.User;
 import com.epam.esm.user.repository.UserRepository;
 import com.epam.esm.user.service.CustomUserDetailsService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,11 +69,7 @@ public class AuthenticationService {
         return tokenGenerator.createToken(usernamePasswordAuthenticationToken);
     }
 
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response) {
-
-
-        final String jwt = jwtService.resolveToken(request);
-
+    public String refreshToken(String jwt) {
         String userEmail = jwtService.extractUsername(jwt);
         if (userEmail == null) {
             throw new EmailNotFoundException(MISSING_USER_EMAIL);
@@ -86,7 +80,7 @@ public class AuthenticationService {
         }
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails,
                 userDetails.getAuthorities());
-        response.setHeader(AUTHORIZATION_HEADER,
-                AUTHENTICATION_BEARER_TOKEN + tokenGenerator.createAccessToken(usernamePasswordAuthenticationToken));
+        return tokenGenerator.createAccessToken(usernamePasswordAuthenticationToken);
+
     }
 }

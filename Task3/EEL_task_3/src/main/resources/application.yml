@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/lab_task
+    url: ${SQL_URL}
     username: ${SQL_USERNAME}
     password: ${SQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -18,9 +18,9 @@ spring:
             client-id: ${GOOGLE_CLIENT_ID}
             client-secret: ${GOOGLE_CLIENT_SECRET}
             scope:
-            - profile
-            - email
-            - openid
+              - profile
+              - email
+              - openid
 
       resourceserver:
         jwt:

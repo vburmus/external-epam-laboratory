@@ -6,14 +6,12 @@ import com.epam.esm.exceptionhandler.exceptions.nonrest.IncorrectTokenTypeExcept
 import com.epam.esm.utils.config.KeyUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -138,15 +136,6 @@ public class JwtService {
 
     public boolean isRefreshToken(String token) {
         return Objects.equals(extractType(token), TokenType.REFRESH_TOKEN.name());
-    }
-
-    public String resolveToken(HttpServletRequest request) {
-
-        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(AUTHENTICATION_BEARER_TOKEN)) {
-            return bearerToken.substring(7);
-        }
-        return null;
     }
 
 }

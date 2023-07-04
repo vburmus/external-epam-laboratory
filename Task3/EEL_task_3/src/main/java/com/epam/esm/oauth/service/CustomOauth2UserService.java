@@ -29,12 +29,10 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
         Map<String, Object> attributes = new HashMap<>(oAuth2User.getAttributes());
 
         customUserDetailsService.createUserFromAttributes(attributes, userRequest.getClientRegistration().getRegistrationId());
-
         Set<GrantedAuthority> authoritySet = new HashSet<>(oAuth2User.getAuthorities());
 
         authoritySet.add(new SimpleGrantedAuthority("USER"));
         return new DefaultOAuth2User(authoritySet, attributes, "sub");
     }
-
 
 }

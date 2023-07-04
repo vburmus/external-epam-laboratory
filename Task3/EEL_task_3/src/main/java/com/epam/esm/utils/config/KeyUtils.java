@@ -27,7 +27,7 @@ import static com.epam.esm.utils.Constants.*;
 @RequiredArgsConstructor
 public class KeyUtils {
 
-        private final Environment environment;
+    private final Environment environment;
 
     @Value("${access-token.private}")
     private String accessTokenPrivateKeyPath;
@@ -37,30 +37,28 @@ public class KeyUtils {
     private String refreshTokenPrivateKeyPath;
     @Value("${refresh-token.public}")
     private String refreshTokenPublicKeyPath;
-    private KeyPair _accessTokenKeyPair;
-    private KeyPair _refreshTokenKeyPair;
+    private KeyPair accessTokenKeyPair;
+    private KeyPair refreshTokenKeyPair;
 
     public KeyPair getAccessTokenKeyPair() {
-        if (Objects.isNull(_accessTokenKeyPair)) {
-            _accessTokenKeyPair = getKeyPair(accessTokenPrivateKeyPath, accessTokenPublicKeyPath);
+        if (Objects.isNull(accessTokenKeyPair)) {
+            accessTokenKeyPair = getKeyPair(accessTokenPrivateKeyPath, accessTokenPublicKeyPath);
         }
 
-        return _accessTokenKeyPair;
+        return accessTokenKeyPair;
     }
 
     public KeyPair getRefreshTokenKeyPair() {
-        if (Objects.isNull(_refreshTokenKeyPair)) {
-            _refreshTokenKeyPair = getKeyPair(refreshTokenPrivateKeyPath, refreshTokenPublicKeyPath);
+        if (Objects.isNull(refreshTokenKeyPair)) {
+            refreshTokenKeyPair = getKeyPair(refreshTokenPrivateKeyPath, refreshTokenPublicKeyPath);
         }
 
-        return _refreshTokenKeyPair;
+        return refreshTokenKeyPair;
     }
 
     private KeyPair getKeyPair(String tokenPrivateKeyPath, String tokenPublicKeyPath) {
-
         KeyPair keyPair;
         KeyFactory keyFactory;
-
 
         File publicKeyFile = new File(tokenPublicKeyPath);
         File privateKeyFile = new File(tokenPrivateKeyPath);
