@@ -3,7 +3,7 @@ package com.epam.esm.auth.tokenjwt.service;
 import com.epam.esm.auth.tokenjwt.TokenType;
 import com.epam.esm.exceptionhandler.exceptions.nonrest.CacheError;
 import com.epam.esm.exceptionhandler.exceptions.nonrest.IncorrectTokenTypeException;
-import com.epam.esm.utils.config.KeyUtils;
+import com.epam.esm.utils.KeyUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.epam.esm.utils.config;
+package com.epam.esm.utils;
 
 import com.epam.esm.exceptionhandler.exceptions.nonrest.KeyPairCreationException;
 import com.epam.esm.exceptionhandler.exceptions.nonrest.KeyPairNotFoundException;

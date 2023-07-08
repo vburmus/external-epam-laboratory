@@ -4,6 +4,7 @@ import com.epam.esm.auth.tokenjwt.filter.JwtAuthenticationFilter;
 import com.epam.esm.oauth.service.CustomOauth2UserService;
 import com.epam.esm.oauth.service.CustomOidcUserService;
 import com.epam.esm.user.model.Role;
+import com.epam.esm.utils.KeyUtils;
 import com.epam.esm.utils.converters.JwtToUserConverter;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
