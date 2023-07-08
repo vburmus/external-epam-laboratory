@@ -5,62 +5,72 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.zalando.problem.Problem;
+import org.zalando.problem.Status;
 
-import static com.epam.esm.utils.Constants.CHECK_YOUR_REQUEST;
+import static com.epam.esm.utils.Constants.*;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
-@ControllerAdvice()
-public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-
+@ControllerAdvice
+public class RestExceptionHandler {
 
     @ExceptionHandler({NoSuchItemException.class, PageException.class, ObjectNotFoundException.class})
-    public ResponseEntity<?> handleNotFoundException(RuntimeException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    public ResponseEntity<Problem> handleNotFoundException(RuntimeException ex) {
+        Problem problem = buildProblem(Status.NOT_FOUND, NOT_FOUND, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problem);
     }
 
     @ExceptionHandler(ObjectAlreadyExistsException.class)
-    public ResponseEntity<?> handleObjectAlreadyExists(RuntimeException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
+    public ResponseEntity<Problem> handleObjectAlreadyExists(RuntimeException ex) {
+        Problem problem = buildProblem(Status.CONFLICT, ALREADY_EXIST, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(problem);
     }
 
     @ExceptionHandler(ObjectIsInvalidException.class)
-    public ResponseEntity<?> handleObjectIsInvalid(RuntimeException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    public ResponseEntity<Problem> handleObjectIsInvalid(RuntimeException ex) {
+        Problem problem = buildProblem(Status.BAD_REQUEST, INVALID_OBJECT, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
     }
 
     @ExceptionHandler({JsonPatchException.class, JsonProcessingException.class})
-    public ResponseEntity<?> handleJsonException(RuntimeException ex, WebRequest request) {
-        return handleExceptionInternal(ex, CHECK_YOUR_REQUEST, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR,
-                request);
+    public ResponseEntity<Problem> handleJsonException(RuntimeException ex) {
+        Problem problem = buildProblem(Status.INTERNAL_SERVER_ERROR, JSON_EXCEPTION, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(problem);
     }
 
     @ExceptionHandler(UserCreationFailureException.class)
-    public ResponseEntity<?> handleUserCreationException(RuntimeException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT,
-                request);
+    public ResponseEntity<Problem> handleUserCreationException(RuntimeException ex) {
+        Problem problem = buildProblem(Status.CONFLICT, FAILED_TO_CREATE_USER, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(problem);
     }
 
     @ExceptionHandler(EmailNotFoundException.class)
-    public ResponseEntity<?> emailNotFoundException(RuntimeException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    public ResponseEntity<Problem> handleEmailNotFoundException(RuntimeException ex) {
+        Problem problem = buildProblem(Status.BAD_REQUEST, EMAIL_NOT_FOUND, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
     }
 
     @ExceptionHandler(InvalidTokenException.class)
-    public ResponseEntity<?> invalidTokenException(RuntimeException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.FORBIDDEN, request);
+    public ResponseEntity<Problem> handleInvalidTokenException(RuntimeException ex) {
+        Problem problem = buildProblem(Status.FORBIDDEN, INVALID_TOKEN, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(problem);
     }
 
     @ExceptionHandler(WrongAuthenticationInstanceException.class)
-    public ResponseEntity<?> wrongInstanceDetectedException(RuntimeException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.FORBIDDEN, request);
+    public ResponseEntity<Problem> handleWrongInstanceDetectedException(RuntimeException ex) {
+        Problem problem = buildProblem(Status.FORBIDDEN, WRONG_AUTHENTICATION_INSTANCE, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(problem);
     }
 
-
+    private Problem buildProblem(Status status, String title, String detail) {
+        return Problem.builder()
+                .withStatus(status)
+                .withTitle(title)
+                .withDetail(detail)
+                .build();
+    }
 }

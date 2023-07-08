@@ -42,7 +42,6 @@ public class Constants {
     public static final String DOESN_T_EXIST = "doesn't exist";
     public static final String THERE_IS_NO_TAGS_IN_THIS_PURCHASE = "There is no tags in this purchase";
 
-    public static final String CHECK_YOUR_REQUEST = "An error occurred, check your request";
     public static final String LIST_IS_EMPTY = "List is empty!";
 
     public static final String NO_SUCH_ORDER = "No such order!";
@@ -78,5 +77,14 @@ public class Constants {
     public static final String ACCESS_TOKENS = "accessTokens";
     public static final String REFRESH_TOKENS = "refreshTokens";
     public static final String BLACK_LIST = "blackList";
+
+    public static final String NOT_FOUND = "Not Found";
+    public static final String ALREADY_EXIST = "Already Exist";
+    public static final String INVALID_OBJECT = "Invalid Object";
+    public static final String JSON_EXCEPTION = "Json Exception";
+    public static final String FAILED_TO_CREATE_USER = "Failed to Create User";
+    public static final String EMAIL_NOT_FOUND = "Email Not Found";
+    public static final String INVALID_TOKEN = "Invalid Token";
+    public static final String WRONG_AUTHENTICATION_INSTANCE = "Wrong Authentication Instance";
 
 }

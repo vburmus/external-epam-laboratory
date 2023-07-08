@@ -26,6 +26,11 @@ spring:
         jwt:
           issuer-uri: https://accounts.google.com
           jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
 
 springdoc:
   swagger-ui:
@@ -43,3 +48,8 @@ access-token:
 refresh-token:
   private: ${REFRESH_TOKEN_PRIVATE_KEY}
   public: ${REFRESH_TOKEN_PUBLIC_KEY}
+
+server:
+  servlet:
+    encoding:
+      force: true

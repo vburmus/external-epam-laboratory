@@ -1,6 +1,7 @@
 package com.epam.esm.utils.config;
 
 import com.epam.esm.user.service.CustomUserDetailsService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.CacheManager;
@@ -14,6 +15,8 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.zalando.problem.jackson.ProblemModule;
+import org.zalando.problem.violations.ConstraintViolationProblemModule;
 
 import java.util.Arrays;
 
@@ -56,5 +59,11 @@ public class ApplicationConfig {
         cacheManager.setCacheNames(Arrays.asList(ACCESS_TOKENS, REFRESH_TOKENS, BLACK_LIST));
         cacheManager.setCaffeine(caffeine);
         return cacheManager;
+    }
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper().registerModules(
+                new ProblemModule(),
+                new ConstraintViolationProblemModule());
     }
 }
