@@ -25,35 +25,28 @@ dependencies {
     implementation 'org.springframework.security:spring-security-oauth2-resource-server:6.0.3'
     implementation 'org.springframework.security:spring-security-jwt:1.1.1.RELEASE'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.0.4'
-
     implementation 'org.springframework.boot:spring-boot-starter-hateoas:3.0.4'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-cache:3.1.0'
-
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4'
-
     implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
     implementation 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
-
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2'
     implementation 'org.projectlombok:lombok:1.18.26'
     implementation 'com.github.java-json-tools:json-patch:1.13'
-
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
     implementation 'com.github.ben-manes.caffeine:caffeine:3.0.4'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-
     implementation 'org.zalando:problem-spring-web:0.27.0'
-
+    implementation 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 
     annotationProcessor 'org.projectlombok:lombok:1.18.26'
-    compileOnly 'org.projectlombok:lombok:1.18.26'
-    implementation 'org.mapstruct:mapstruct-processor:1.5.3.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+    compileOnly 'org.projectlombok:lombok:1.18.26'
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
@@ -62,7 +55,6 @@ dependencies {
     testImplementation 'com.h2database:h2:2.1.214'
     testImplementation 'org.springframework.boot:spring-boot-starter-test:3.0.4'
     testImplementation 'org.springframework.security:spring-security-test'
-
 }
 
 test {

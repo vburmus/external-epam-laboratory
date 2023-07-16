@@ -27,7 +27,6 @@ import static com.epam.esm.utils.Constants.*;
 @EnableCaching
 public class ApplicationConfig {
 
-
     private final CustomUserDetailsService userService;
 
     @Bean

@@ -45,12 +45,10 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
     @ToString.Exclude
     @OneToMany(mappedBy = "order")
     @JsonIgnore
     private List<GiftCertificateHasOrder> giftCertificateHasOrders;
-
 
     @Override
     public boolean equals(Object o) {
@@ -64,5 +62,4 @@ public class Order {
     public int hashCode() {
         return getClass().hashCode();
     }
-
 }

@@ -36,7 +36,6 @@ public class GiftCertificateService {
     private final TagService tagService;
     private final EntityToDtoMapper entityToDtoMapper;
 
-
     public GiftCertificateService(GiftCertificateRepository giftCertificateRepository, TagService tagService,
                                   EntityToDtoMapper entityToDtoMapper) {
         this.giftCertificateRepository = giftCertificateRepository;
@@ -80,7 +79,6 @@ public class GiftCertificateService {
     }
 
     public GiftCertificateDTO getCertificateById(long id) {
-
         Optional<GiftCertificate> giftCertificate = giftCertificateRepository.findById(id);
         if (giftCertificate.isEmpty()) {
             throw new NoSuchItemException(GIFT_CERTIFICATE_WITH_ID + id + DOESN_T_EXIST1);
@@ -88,9 +86,7 @@ public class GiftCertificateService {
         return entityToDtoMapper.toGiftCertificateDTO(giftCertificate.get());
     }
 
-
     public Page<GiftCertificateDTO> getGiftCertificatesByTagName(String tagName, Integer page, Integer size) {
-
         if (tagName == null || tagName.isEmpty())
             throw new ObjectIsInvalidException(TAG_NAME + tagName + IS_INVALID);
         if (!tagService.existsByName(tagName))
@@ -102,7 +98,6 @@ public class GiftCertificateService {
     }
 
     public Page<GiftCertificateDTO> getGiftCertificatesByPart(String part, Integer page, Integer size) {
-
         if (!ParamsValidation.isPartValidForSearch(part))
             throw new ObjectIsInvalidException(PART_OF_DESCRIPTION + part + IS_INVALID);
         PageRequest pageRequest = PageRequest.of(--page, size);
@@ -111,13 +106,9 @@ public class GiftCertificateService {
             return certificates.map(entityToDtoMapper::toGiftCertificateDTO);
         Page<GiftCertificate> gcByDescription = giftCertificateRepository.findByDescriptionContaining(part, pageRequest);
         return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(gcByDescription).map(entityToDtoMapper::toGiftCertificateDTO);
-
-
     }
 
-
     public Page<GiftCertificateDTO> getCertificatesSortedByParam(String sortString, Integer page, Integer size) {
-
         String[] sort = sortString.split(",");
         Pattern sortPattern = Pattern.compile(SORT_REGEX);
         if (sort.length > 2) throw new ObjectIsInvalidException(TO_MANY_PARAMS_FOR_SORTING);
@@ -144,11 +135,9 @@ public class GiftCertificateService {
         PageRequest pageRequest = PageRequest.of(--page, size, sortBy);
         Page<GiftCertificate> gcSorted = giftCertificateRepository.findAll(pageRequest);
         return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(gcSorted).map(entityToDtoMapper::toGiftCertificateDTO);
-
     }
 
     public Page<GiftCertificateDTO> getCertificatesBySeveralTags(List<Long> tagsId, Integer page, Integer size) {
-
         PageRequest pageRequest = PageRequest.of(--page, size);
         Page<GiftCertificate> gcsByTags = giftCertificateRepository.findByTagsIdIn(tagsId, pageRequest);
         return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(gcsByTags).map(entityToDtoMapper::toGiftCertificateDTO);
@@ -157,7 +146,6 @@ public class GiftCertificateService {
     @Transactional
     @Modifying
     public GiftCertificateDTO updateCertificate(long id, JsonMergePatch jsonPatch) throws JsonPatchException, JsonProcessingException {
-
         Optional<GiftCertificate> gc = giftCertificateRepository.findById(id);
         if (gc.isEmpty()) throw new NoSuchItemException(THERE_IS_NO_GC_WITH_ID + id);
 
@@ -182,7 +170,6 @@ public class GiftCertificateService {
     @Modifying
     public boolean deleteCertificate(Long id) {
         if (!giftCertificateRepository.existsById(id)) throw new NoSuchItemException(THERE_IS_NO_GC_WITH_ID + id);
-
         giftCertificateRepository.deleteById(id);
         return true;
     }

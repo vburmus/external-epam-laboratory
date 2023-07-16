@@ -28,8 +28,6 @@ import static com.epam.esm.utils.Constants.*;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthenticationService {
-
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -81,6 +79,5 @@ public class AuthenticationService {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails,
                 userDetails.getAuthorities());
         return tokenGenerator.createAccessToken(usernamePasswordAuthenticationToken);
-
     }
 }

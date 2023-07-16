@@ -90,13 +90,11 @@ public class OrderService {
         return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(orderRepository.findAll(pageRequest)).map(entityToDtoMapper::toOrderDTO);
     }
 
-
     public String getOrderInfoByID(long id) {
         Optional<Order> order = orderRepository.findById(id);
         if (order.isEmpty()) throw new NoSuchItemException(NO_SUCH_ORDER);
         return order.get().toString();
     }
-
 
     public Page<OrderDTO> getOrdersByUsersID(long id, Integer page, Integer size) {
         PageRequest pageRequest = PageRequest.of(--page, size);
@@ -106,4 +104,3 @@ public class OrderService {
         return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(ordersByUSer).map(entityToDtoMapper::toOrderDTO);
     }
 }
-

@@ -35,7 +35,4 @@ public class UserService {
         if (user.isEmpty()) throw new NoSuchItemException(USER_DOESNT_EXIST);
         return entityToDtoMapper.toUserDTO(user.get());
     }
-
-
 }
-

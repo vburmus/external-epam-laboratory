@@ -23,8 +23,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class UserHateoasController {
 
     private final UserService userService;
-
-
     public UserHateoasController(UserService userService) {
         this.userService = userService;
     }
@@ -40,7 +38,6 @@ public class UserHateoasController {
             links.add(linkTo(methodOn(UserHateoasController.class).showAll(page - 1, size)).withSelfRel());
         if (usersPage.hasNext())
             links.add(linkTo(methodOn(UserHateoasController.class).showAll(page + 1, size)).withSelfRel());
-
         return CollectionModel.of(usersPage, links);
     }
 
@@ -48,5 +45,4 @@ public class UserHateoasController {
     public RepresentationModel<?> getUserById(@PathVariable("id") long id) {
         return new UserHateoas(userService.getUserById(id));
     }
-
 }

@@ -39,5 +39,4 @@ public class OrderDTO {
     public int hashCode() {
         return getClass().hashCode();
     }
-
 }

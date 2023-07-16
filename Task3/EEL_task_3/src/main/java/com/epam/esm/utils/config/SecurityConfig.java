@@ -94,8 +94,6 @@ public class SecurityConfig {
                             .oidcUserService(customOidcUserService));
                     login.defaultSuccessUrl("/");
                 });
-
-
         return http.build();
 
     }
@@ -135,5 +133,4 @@ public class SecurityConfig {
         provider.setJwtAuthenticationConverter(jwtToUserConverter);
         return provider;
     }
-
 }

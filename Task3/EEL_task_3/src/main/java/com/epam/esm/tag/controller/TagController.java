@@ -47,6 +47,4 @@ public class TagController {
     public ResponseEntity<?> delete(@PathVariable("id") long id) {
         return new ResponseEntity<>(Map.of(RESULT, tagService.deleteTag(id)), HttpStatus.OK);
     }
-
-
 }

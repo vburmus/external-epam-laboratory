@@ -22,7 +22,6 @@ import static com.epam.esm.utils.Constants.*;
 @Profile("default")
 public class GiftCertificateController {
 
-
     private final GiftCertificateService giftCertificateService;
 
     public GiftCertificateController(GiftCertificateService giftCertificateService) {
@@ -46,7 +45,6 @@ public class GiftCertificateController {
         return ResponseEntity.ok(Map.of(GIFT_CERTIFICATE, giftCertificateService.getCertificateById(id)));
     }
 
-
     @GetMapping("/search/by-tag")
     public ResponseEntity<?> getCertificatesByTagName(@RequestParam("name") String name,
                                                       @RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page,
@@ -61,7 +59,6 @@ public class GiftCertificateController {
         return new ResponseEntity<>(Map.of(OBJECTS, giftCertificateService.getGiftCertificatesByPart(nameOrDescriptionPart, page, size)),
                 HttpStatus.OK);
     }
-
 
     @GetMapping("/sort")
     public ResponseEntity<?> getSortedCertificates(@Parameter(description = SORT_DESCTIPTION) @RequestParam("sort") String sortString,
@@ -89,7 +86,4 @@ public class GiftCertificateController {
     public ResponseEntity<?> deleteCertificate(@PathVariable("id") long id) {
         return new ResponseEntity<>(Map.of(RESULT, giftCertificateService.deleteCertificate(id)), HttpStatus.OK);
     }
-
-
 }
-

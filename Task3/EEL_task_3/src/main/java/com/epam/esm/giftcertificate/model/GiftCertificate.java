@@ -55,5 +55,4 @@ public class GiftCertificate {
     public int hashCode() {
         return getClass().hashCode();
     }
-
 }

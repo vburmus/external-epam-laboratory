@@ -18,7 +18,6 @@ import static com.epam.esm.utils.Constants.*;
 @Profile("default")
 public class UserController {
 
-
     private final UserService userService;
     private final OrderService orderService;
 
@@ -42,6 +41,4 @@ public class UserController {
     public ResponseEntity<?> createNewOrder(@RequestBody OrderDTO orderDTO) {
         return new ResponseEntity<>(Map.of(ORDER, orderService.createOrder(orderDTO)), HttpStatus.CREATED);
     }
-
-
 }

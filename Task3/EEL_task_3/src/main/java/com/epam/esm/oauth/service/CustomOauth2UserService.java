@@ -20,7 +20,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class CustomOauth2UserService extends DefaultOAuth2UserService {
 
-
     private final CustomUserDetailsService customUserDetailsService;
 
     @Override
@@ -34,5 +33,4 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
         authoritySet.add(new SimpleGrantedAuthority("USER"));
         return new DefaultOAuth2User(authoritySet, attributes, "sub");
     }
-
 }

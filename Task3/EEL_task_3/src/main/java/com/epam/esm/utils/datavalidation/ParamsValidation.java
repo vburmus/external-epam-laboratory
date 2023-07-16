@@ -52,6 +52,4 @@ public class ParamsValidation {
     public static boolean isPartValidForSearch(String part) {
         return part != null && !part.isEmpty();
     }
-
-
 }
