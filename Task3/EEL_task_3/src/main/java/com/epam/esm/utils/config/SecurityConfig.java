@@ -62,7 +62,8 @@ public class SecurityConfig {
                         "/webjars/**",
                         "/swagger-ui.html",
                         "/error",
-                        "/refresh-token")
+                        "/refresh-token",
+                        "/actuator/**")
                 .permitAll()
                 .requestMatchers(HttpMethod.GET,
                         "/certificate",
