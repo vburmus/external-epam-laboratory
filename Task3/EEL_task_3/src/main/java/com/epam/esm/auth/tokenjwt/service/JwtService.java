@@ -122,13 +122,10 @@ public class JwtService {
         if (blackList == null) {
             throw new CacheError(CACHE_NOT_FOUND);
         }
-        var cachedList = blackList.get(userId);
+        List<String> jwtList = (List<String>) blackList.get(userId);
 
-        List<String> jwtList;
-        if (cachedList == null) {
+        if (jwtList == null) {
             jwtList = new ArrayList<>();
-        } else {
-            jwtList = (List<String>) cachedList.get();
         }
         jwtList.add(cachedJwt);
         blackList.put(userId, jwtList);
@@ -137,5 +134,4 @@ public class JwtService {
     public boolean isRefreshToken(String token) {
         return Objects.equals(extractType(token), TokenType.REFRESH_TOKEN.name());
     }
-
 }
