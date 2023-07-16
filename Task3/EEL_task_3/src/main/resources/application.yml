@@ -1,4 +1,7 @@
 spring:
+  config:
+    activate:
+      on-profile: default,hateoas
   datasource:
     url: ${SQL_URL}
     username: ${SQL_USERNAME}
