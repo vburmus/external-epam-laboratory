@@ -1,6 +1,7 @@
 package com.epam.esm.auth.controller;
 
 import com.epam.esm.auth.models.AuthenticationRequest;
+import com.epam.esm.auth.models.AuthenticationResponse;
 import com.epam.esm.auth.models.RegisterRequest;
 import com.epam.esm.auth.service.AuthenticationService;
 import com.epam.esm.exceptionhandler.exceptions.rest.InvalidTokenException;
@@ -24,17 +25,19 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(authenticationService.register(request));
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
+        AuthenticationResponse registerResponse = new AuthenticationResponse(authenticationService.register(request));
+        return ResponseEntity.ok(registerResponse);
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
+        AuthenticationResponse authenticationResponse = new AuthenticationResponse(authenticationService.authenticate(request));
+        return ResponseEntity.ok(authenticationResponse);
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<?> refreshToken(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<Void> refreshToken(HttpServletRequest request, HttpServletResponse response) {
         final String jwt;
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(AUTHENTICATION_BEARER_TOKEN)) {

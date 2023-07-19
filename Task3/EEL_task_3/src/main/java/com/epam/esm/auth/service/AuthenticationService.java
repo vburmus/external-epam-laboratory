@@ -63,7 +63,6 @@ public class AuthenticationService {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user,
                 request.getPassword());
 
-
         return tokenGenerator.createToken(usernamePasswordAuthenticationToken);
     }
 
