@@ -24,7 +24,6 @@ public class GiftCertificateHateoasController {
 
     private final GiftCertificateService giftCertificateService;
 
-
     public GiftCertificateHateoasController(GiftCertificateService giftCertificateService) {
         this.giftCertificateService = giftCertificateService;
     }

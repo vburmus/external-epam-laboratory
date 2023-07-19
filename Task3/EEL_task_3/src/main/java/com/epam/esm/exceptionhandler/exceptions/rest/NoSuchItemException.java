@@ -1,4 +1,4 @@
-package com.epam.esm.exceptionhandler.exceptions;
+package com.epam.esm.exceptionhandler.exceptions.rest;
 
 public class NoSuchItemException extends AppMainException {
     public NoSuchItemException(String exception) {

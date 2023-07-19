@@ -32,7 +32,6 @@ public class OrderHateoasController {
     @GetMapping
     public CollectionModel<OrderHateoas> showAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page,
                                                  @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
-
         Page<OrderHateoas> ordersPage = orderService.getAllOrders(--page, size).map(OrderHateoas::new);
 
         List<Link> links = new ArrayList<>();
@@ -45,10 +44,8 @@ public class OrderHateoasController {
         return CollectionModel.of(ordersPage, links);
     }
 
-
     @GetMapping("/info/{id}")
     public ResponseEntity<?> getOrdersInfoByID(@PathVariable("id") long id) {
         return new ResponseEntity<>(Map.of(INFO, orderService.getOrderInfoByID(id)), HttpStatus.OK);
     }
-
 }

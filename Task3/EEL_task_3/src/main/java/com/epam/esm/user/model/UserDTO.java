@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.hateoas.RepresentationModel;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -18,7 +18,11 @@ public class UserDTO extends RepresentationModel<UserDTO> {
     private String name;
     private String surname;
     private String number;
-    private List<Order> orders;
+    private String email;
+    private String password;
+    private Role role;
+    private String provider;
+    private Set<Order> orders;
 
     @Override
     public boolean equals(Object o) {

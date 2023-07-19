@@ -1,8 +1,8 @@
 package com.epam.esm.tag.service;
 
-import com.epam.esm.exceptionhandler.exceptions.NoSuchItemException;
-import com.epam.esm.exceptionhandler.exceptions.ObjectAlreadyExistsException;
-import com.epam.esm.exceptionhandler.exceptions.ObjectIsInvalidException;
+import com.epam.esm.exceptionhandler.exceptions.rest.NoSuchItemException;
+import com.epam.esm.exceptionhandler.exceptions.rest.ObjectAlreadyExistsException;
+import com.epam.esm.exceptionhandler.exceptions.rest.ObjectIsInvalidException;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.tag.model.Tag;
 import com.epam.esm.tag.model.TagDTO;
@@ -20,6 +20,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static com.epam.esm.utils.Constants.*;
+
 @Service
 public class TagService {
     private final TagRepository tagRepository;
@@ -35,9 +37,9 @@ public class TagService {
         Tag tag = entityToDtoMapper.toTag(tagDTO);
 
         if (tagRepository.exists(Example.of(tag)))
-            throw new ObjectAlreadyExistsException("Tag with name = " + tag.getName() + " already exists");
+            throw new ObjectAlreadyExistsException(TAG_WITH_NAME + tag.getName() + ALREADY_EXISTS);
         if (!ParamsValidation.isTagValid(tag))
-            throw new ObjectIsInvalidException("Tag with name = " + tag.getName() + " is invalid");
+            throw new ObjectIsInvalidException(TAG_WITH_NAME + tag.getName() + IS_INVALID);
 
         Tag tagResult = tagRepository.save(tag);
         return entityToDtoMapper.toTagDTO(tagResult);
@@ -51,19 +53,19 @@ public class TagService {
 
     public TagDTO getTagById(long id) {
         Optional<Tag> tag = tagRepository.findById(id);
-        if (tag.isEmpty()) throw new NoSuchItemException("Tag with id = " + id + "doesn't exist");
+        if (tag.isEmpty()) throw new NoSuchItemException(TAG_WITH_ID + id + DOESN_T_EXIST);
         return entityToDtoMapper.toTagDTO(tag.get());
     }
 
     public TagDTO getMostUsedTag() {
         Optional<Tag> tag = tagRepository.getMostUsedTag();
         if (tag.isEmpty())
-            throw new NoSuchItemException("There is no tags in this purchase");
+            throw new NoSuchItemException(THERE_IS_NO_TAGS_IN_THIS_PURCHASE);
         return entityToDtoMapper.toTagDTO(tag.get());
     }
 
     public boolean deleteTag(long id) {
-        if (!tagRepository.existsById(id)) throw new NoSuchItemException("There is no tag with id= " + id);
+        if (!tagRepository.existsById(id)) throw new NoSuchItemException(THERE_IS_NO_GC_WITH_ID + id );
         tagRepository.deleteById(id);
         return true;
     }

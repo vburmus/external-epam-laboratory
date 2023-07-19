@@ -33,7 +33,7 @@ class TagRepositoryTest {
     private TestEntityManager entityManager;
 
     @BeforeEach
-    private void setUp() {
+    public void setUp() {
         Tag tag1 = Tag.builder().name(TAG_1).build();
         Tag tag2 = Tag.builder().name(TAG_2).build();
         entityManager.persist(tag1);

@@ -59,5 +59,4 @@ public class OrderHateoas extends RepresentationModel<OrderHateoas> {
     public int hashCode() {
         return getClass().hashCode();
     }
-
 }

@@ -1,8 +1,8 @@
 package com.epam.esm.tag.service;
 
-import com.epam.esm.exceptionhandler.exceptions.NoSuchItemException;
-import com.epam.esm.exceptionhandler.exceptions.ObjectAlreadyExistsException;
-import com.epam.esm.exceptionhandler.exceptions.ObjectIsInvalidException;
+import com.epam.esm.exceptionhandler.exceptions.rest.NoSuchItemException;
+import com.epam.esm.exceptionhandler.exceptions.rest.ObjectAlreadyExistsException;
+import com.epam.esm.exceptionhandler.exceptions.rest.ObjectIsInvalidException;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.tag.model.Tag;
 import com.epam.esm.tag.model.TagDTO;
@@ -23,10 +23,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static com.epam.esm.Constants.*;
+import static com.epam.esm.utils.Constants.THERE_IS_NO_GC_WITH_ID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static com.epam.esm.Constants.*;
+
 @ExtendWith(MockitoExtension.class)
 class TagServiceTest {
 
@@ -117,7 +119,7 @@ class TagServiceTest {
 
         NoSuchItemException thrown = assertThrows(NoSuchItemException.class,
                 () -> tagServiceMocked.deleteTag(ID1));
-        assertEquals("There is no tag with id= " + ID1, thrown.getMessage());
+        assertEquals(THERE_IS_NO_GC_WITH_ID + ID1, thrown.getMessage());
 
     }
 

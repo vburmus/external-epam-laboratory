@@ -18,6 +18,9 @@ public class Constants {
     public static final BigDecimal PRICE = new BigDecimal("20.0");
     public final static String NAME = "name";
     public static final long ID1 = 1L;
+    public static final String EMAIL1 = "test@test1.com";
+
+    public static final String EMAIL2 = "test@test2.com";
     public static final long ID2 = 2L;
     public static final String NEW = "new";
     public static final String WRONG_SORT_PARAM = "date,date,date";

@@ -8,8 +8,8 @@ import org.hibernate.Hibernate;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -23,14 +23,22 @@ public class UserHateoas extends RepresentationModel<UserHateoas> {
     private String name;
     private String surname;
     private String number;
-    private List<Order> orders;
+    private String email;
+    private String password;
+    private Role role;
+    private String provider;
+    private Set<Order> orders;
 
     public UserHateoas(UserDTO userDTO) {
         this.id = userDTO.getId();
         this.name = userDTO.getName();
         this.surname = userDTO.getSurname();
         this.number = userDTO.getNumber();
+        this.email = userDTO.getEmail();
+        this.password = userDTO.getPassword();
+        this.role = userDTO.getRole();
         this.orders = userDTO.getOrders();
+        this.provider = userDTO.getProvider();
         Link selfLink = linkTo(methodOn(UserHateoasController.class).getUserById(userDTO.getId())).withSelfRel();
         this.add(selfLink);
     }
