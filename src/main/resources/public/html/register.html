@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script>
+        $(function () {
+            $('#header').load('header.html')
+        });
+    </script>
+    <script>
+        $(function () {
+            $('#footer').load('footer.html')
+        });
+    </script>
+    <link href="../../static/styles/css/register.css" rel="stylesheet">
+    <link href="../../static/styles/css/main.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="header"></div>
+<main>
+    <div class="register">
+        <div class="register-header">
+            <h2> Register</h2>
+        </div>
+        <form class="register-form">
+            <div class="flex-container">
+                <div class="flex-item">
+                    <label for="email">Email</label>
+                    <input id="email" type="value">
+                </div>
+                <div class="flex-item">
+                    <label for="password">Password</label>
+                    <input id="password" type="password">
+                </div>
+                <div class="flex-item">
+                    <label for="name">Name</label>
+                    <input id="name" type="value">
+                </div>
+                <div class="flex-item">
+                    <label for="repeat-password">Repeat password</label>
+                    <input id="repeat-password" type="password">
+                </div>
+                <div class="flex-item">
+                    <label for="surname">Surname</label>
+                    <input id="surname" type="value">
+                </div>
+
+                <div class="flex-item">
+                    <label for="number">Number</label>
+                    <input id="number" type="value">
+                </div>
+                <div class="flex-item">
+                    <label for="photo">Photo</label>
+                    <input id="photo" type="file">
+                </div>
+            </div>
+            <div class="buttons">
+                <button class="cancel-button">Cancel</button>
+                <button class="submit-button" type="submit">Sign Up</button>
+            </div>
+        </form>
+    </div>
+</main>
+<div id="footer"></div>
+</body>
+</html>
