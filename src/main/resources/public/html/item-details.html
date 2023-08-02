@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script>
+        $(function () {
+            $('#header').load('header.html')
+        });
+    </script>
+    <script>
+        $(function () {
+            $('#footer').load('footer.html')
+        });
+    </script>
+    <link href="../../static/styles/css/main.css" rel="stylesheet">
+    <link href="../../static/styles/css/item-details.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="header"></div>
+<main>
+    <div class="certificate-container">
+        <div class="long-details-container">
+            <div class="image-container">
+                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
+            </div>
+            <div class="info-container">
+                <h3>Item detailed Description</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                    et dolore magna aliqua. Sem fringilla ut morbi tincidunt. Commodo ullamcorper a lacus vestibulum sed
+                    arcu non odio euismod. Malesuada bibendum arcu vitae elementum curabitur. Ultrices eros in cursus
+                    turpis massa tincidunt. Purus sit amet volutpat consequat mauris nunc congue nisi. Quis commodo odio
+                    aenean sed adipiscing diam donec adipiscing tristique. Nullam non nisi est sit amet facilisis. Purus
+                    in massa tempor nec feugiat. Sit amet aliquam id diam maecenas ultricies mi eget mauris. Sem viverra
+                    aliquet eget sit amet tellus cras adipiscing enim. Gravida dictum fusce ut placerat orci nulla
+                    pellentesque. Aliquet nibh praesent tristique magna sit amet.</p>
+            </div>
+        </div>
+        <div class="short-details-container">
+            <h3>Coupon Name</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Sem fringilla ut morbi tincidunt. Commodo ullamcorper a lacus vestibulum sed arcu
+                non odio euismod. </p>
+            <p>Time Left To Buy </p>
+            <p><b>12 days 14 hours</b></p>
+            <div class="info-container">
+                <h4>Price $</h4>
+                <button class="add-to-cart-button">Add to cart</button>
+            </div>
+        </div>
+    </div>
+</main>
+<div id="footer"></div>
+</body>
+</html>
