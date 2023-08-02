@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script>
+        $(function () {
+            $('#header').load('header.html')
+        });
+    </script>
+    <script>
+        $(function () {
+            $('#footer').load('footer.html')
+        });
+    </script>
+    <link href="../../static/styles/css/main.css" rel="stylesheet">
+    <link href="../../static/styles/css/add-item.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="header"></div>
+<main>
+    <div class="add-item-header">
+        <h2>Add new item</h2>
+    </div>
+    <div class="add-item">
+        <form class="add-item-form">
+            <div class="flex-container">
+                <div class="flex-item">
+                    <label for="name">Name</label>
+                    <input id="name" type="text">
+                </div>
+                <div class="flex-item">
+                    <label for="price">Price</label>
+                    <input id="price" type="number">
+                </div>
+                <div class="flex-item">
+                    <label for="valid-to">Valid to</label>
+                    <input id="valid-to" type="date">
+                </div>
+                <div class="flex-item">
+                    <label for="category">Category</label>
+                    <select id="category">
+                        <option value="1">cat1</option>
+                        <option value="2">cat2</option>
+                        <option value="3">cat3</option>
+                    </select>
+                </div>
+                <div class="flex-item ">
+                    <label for="long-description">Long description</label>
+                    <input id="long-description" type="text">
+                </div>
+                <div class="flex-item">
+                    <label for="short-description">Short description</label>
+                    <input id="short-description" type="text">
+                </div>
+            </div>
+            <div class="buttons">
+                <button class="cancel-button">Cancel</button>
+                <button class="submit-button" type="submit">Sign Up</button>
+            </div>
+        </form>
+    </div>
+</main>
+<div id="footer"></div>
+</body>
+</html>
