@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script>
+        $(function () {
+            $('#header').load('header.html')
+        });
+    </script>
+    <script>
+        $(function () {
+            $('#footer').load('footer.html')
+        });
+    </script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+    <link href="../../static/styles/css/main.css" rel="stylesheet">
+    <link href="../../static/styles/css/checkout.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="header"></div>
+<main>
+    <div class="checkout-header">
+        <h2>Checkout</h2>
+    </div>
+    <div class="checkout-container">
+        <div class="checkout-item">
+            <div class="image-container">
+                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
+            </div>
+            <div class="flex-item">
+                <h2>Coupon Name</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                    et dolore magna aliqua. Sem fringilla ut morbi tincidunt. Commodo ullamcorper a lacus vestibulum sed
+                    arcu non odio euismod. </p>
+            </div>
+            <h3>Price$</h3>
+        </div>
+        <div class="checkout-item">
+            <div class="image-container">
+                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
+            </div>
+            <div class="flex-item">
+                <h2>Coupon Name</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                    et dolore magna aliqua. Sem fringilla ut morbi tincidunt. Commodo ullamcorper a lacus vestibulum sed
+                    arcu non odio euismod. </p>
+            </div>
+            <h3>Price$</h3>
+        </div>
+        <div class="checkout-item">
+            <div class="image-container">
+                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
+            </div>
+            <div class="flex-item">
+                <h2>Coupon Name</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                    et dolore magna aliqua. Sem fringilla ut morbi tincidunt. Commodo ullamcorper a lacus vestibulum sed
+                    arcu non odio euismod. </p>
+            </div>
+            <h3>Price$</h3>
+        </div>
+        <br>
+        <hr>
+        <div class="buttons">
+            <h3>Total Price$</h3>
+            <br>
+            <button class="cancel-button">Go Back</button>
+            <button class="submit-button">Checkout</button>
+        </div>
+    </div>
+
+</main>
+<div id="footer"></div>
+</body>
+</html>
