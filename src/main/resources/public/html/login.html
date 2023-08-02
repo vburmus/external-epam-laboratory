@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script>
+        $(function () {
+            $('#header').load('header.html')
+        });
+    </script>
+    <script>
+        $(function () {
+            $('#footer').load('footer.html')
+        });
+    </script>
+    <link href="../../static/styles/css/main.css" rel="stylesheet">
+    <link href="../../static/styles/css/login.css" rel="stylesheet">
+</head>
+<body>
+<div id="header"></div>
+<main>
+    <div class="login">
+        <img src="../images/logo.png" alt="logo"/>
+        <form>
+            <input placeholder="Email">
+            <input placeholder="Password">
+            <button class="submit-button" type="submit">Login</button>
+        </form>
+    </div>
+</main>
+<div id="footer"></div>
+</body>
+</html>
