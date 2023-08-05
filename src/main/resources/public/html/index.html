@@ -3,26 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
-            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
-    <script>
-        $(function () {
-            $('#header').load('header.html')
-        });
-    </script>
-    <script>
-        $(function () {
-            $('#footer').load('footer.html')
-        });
-    </script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-          rel="stylesheet">
     <link href="../../static/styles/css/main.css" rel="stylesheet">
     <link href="../../static/styles/css/index.css" rel="stylesheet">
+    <link href="../../static/styles/css/header.css" rel="stylesheet">
+    <link href="../../static/styles/css/footer.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
 </head>
 
 <body>
-<div id="header"></div>
+<header>
+    <div class="logo">
+        <img src="../images/logo.png" alt="logo"/>
+        <div class="dropdown">
+            <span class="material-icons">menu</span>
+            <div class="dropdown-content">
+                <a href="index.html">Main page</a>
+                <a href="add-item.html">Add item</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <input type="text" placeholder="Search item by name">
+        <button>Clear</button>
+    </form>
+    <div class="navbar-manage">
+        <a href="checkout.html"><span class="material-icons">shopping_cart</span></a>
+        <a href=""><span class="material-icons">favorite_border</span></a>
+        <div>
+            <a href="login.html">Login</a>
+            <span>|</span>
+            <a href="register.html">Sign Up</a>
+        </div>
+    </div>
+</header>
 <main>
     <div class="categories">
         <div>
@@ -338,6 +352,11 @@
         </div>
     </div>
 </main>
-<div id="footer"></div>
+<footer>
+    <div class="contact-info">
+        <p>Email: info@example.com</p>
+        <p>Phone: (123) 456-7890</p>
+    </div>
+</footer>
 </body>
 </html>
