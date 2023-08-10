@@ -68,6 +68,24 @@ const removeInfiniteScroll = () => {
 };
 
 
+function filterCertificates() {
+    let filteredCertificates = retrieveCertificatesFromLocalStorage()
+    let inputValue = filter.input
+    if (!inputValue.isEmpty) {
+        filteredCertificates = filteredCertificates.filter((certificate) => {
+            return certificate.name.includes(inputValue) || certificate.shortDescription.includes(inputValue)
+        });
+    }
+    let filterTags = filter.tags;
+    if (filterTags) {
+        filteredCertificates = filteredCertificates.filter((certificate) => {
+            let gcTags = certificate.tags.map(tag => tag.id);
+            return filterTags.every(id => gcTags.includes(id))
+        })
+    }
+    certificates = filteredCertificates
+}
+
 
 /***
  * @param date - date, until certificate is valid
@@ -130,7 +148,19 @@ const createTagCard = (index) => {
         tagCard.classList.add("chosen")
     }
     tagsContainer.appendChild(tagCard);
-
+    tagCard.addEventListener("click", _.debounce( function(){
+        //if is not active as filter parameter - add to filter
+        if (!filter.tags.includes(tag.id)) {
+            tagCard.classList.add("chosen")
+            filter.tags.push(tag.id)
+        } else {
+            filter.tags.splice(filter.tags.indexOf(tag.id), 1)
+            tagCard.classList.remove("chosen")
+        }
+        filterCertificates()
+        reloadCertificatePages()
+        reloadCertificates()
+    },500,{leading:true, trailing:false}));
 }
 
 /***
@@ -207,3 +237,15 @@ const addTagsCards = (pageIndex) => {
         addRightButton();
     }
 };
+
+const clearFilters = _.debounce( function (){
+    document.querySelectorAll(".tag-container").forEach((tagContainer =>
+            tagContainer.classList.remove("chosen")
+    ));
+    filter.tags = []
+    filter.input = ""
+    searchInput.value = ""
+    certificates = retrieveCertificatesFromLocalStorage()
+    reloadCertificatePages()
+    reloadCertificates()
+},500,{leading:true, trailing:false});
