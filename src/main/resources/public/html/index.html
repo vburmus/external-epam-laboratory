@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet">
 </head>
-
 <body>
 <header>
     <div class="logo">
@@ -23,10 +22,10 @@
             </div>
         </div>
     </div>
-    <form>
-        <input type="text" placeholder="Search item by name">
-        <button>Clear</button>
-    </form>
+    <div class="search-bar">
+        <input id="search-input" type="text" placeholder="Search item by name">
+        <button onclick="">Clear</button>
+    </div>
     <div class="navbar-manage">
         <a href="checkout.html"><span class="material-icons">shopping_cart</span></a>
         <a href=""><span class="material-icons">favorite_border</span></a>
@@ -38,319 +37,12 @@
     </div>
 </header>
 <main>
-    <div class="categories">
-        <a>
-            <img src="../images/category.png" alt="category"/>
-            <p>Category</p>
-        </a>
-        <a>
-            <img src="../images/category.png" alt="category"/>
-            <p>Category</p>
-        </a>
-        <a>
-            <img src="../images/category.png" alt="category"/>
-            <p>Category</p>
-        </a>
-        <a>
-            <img src="../images/category.png" alt="category"/>
-            <p>Category</p>
-        </a>
-        <a>
-            <img src="../images/category.png" alt="category"/>
-            <p>Category</p>
-        </a>
-        <a>
-            <img src="../images/category.png" alt="category"/>
-            <p>Category</p>
-        </a>
-        <a>
-            <img src="../images/category.png" alt="category"/>
-            <p>Category</p>
-        </a>
-
+    <div class="tags">
     </div>
     <div class="certificates">
-        <div class="certificate-container">
-            <div class="image-container">
-                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
-            </div>
-            <div class="info-container">
-                <a href = "item-details.html"><h3>Coupon name</h3></a>
-                <a href=""><span class="material-icons">favorite_border</span></a>
-                <h6>Brief description</h6>
-                <p>Expires in 3 days</p>
-                <hr>
-                <h4>Price $</h4>
-                <button class="add-to-cart-button">Add to cart</button>
-            </div>
-        </div>
-        <div class="certificate-container">
-            <div class="image-container">
-                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
-            </div>
-            <div class="info-container">
-                <a href = "item-details.html"><h3>Coupon name</h3></a>
-                <a href=""><span class="material-icons">favorite_border</span></a>
-                <h6>Brief description</h6>
-                <p>Expires in 3 days</p>
-                <hr>
-                <h4>Price $</h4>
-                <button class="add-to-cart-button">Add to cart</button>
-            </div>
-        </div>
-        <div class="certificate-container">
-            <div class="image-container">
-                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
-            </div>
-            <div class="info-container">
-                <a href = "item-details.html"><h3>Coupon name</h3></a>
-                <a href=""><span class="material-icons">favorite_border</span></a>
-                <h6>Brief description</h6>
-                <p>Expires in 3 days</p>
-                <hr>
-                <h4>Price $</h4>
-                <button class="add-to-cart-button">Add to cart</button>
-            </div>
-        </div>
-        <div class="certificate-container">
-            <div class="image-container">
-                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
-            </div>
-            <div class="info-container">
-                <a href = "item-details.html"><h3>Coupon name</h3></a>
-                <a href=""><span class="material-icons">favorite_border</span></a>
-                <h6>Brief description</h6>
-                <p>Expires in 3 days</p>
-                <hr>
-                <h4>Price $</h4>
-                <button class="add-to-cart-button">Add to cart</button>
-            </div>
-        </div>
-        <div class="certificate-container">
-            <div class="image-container">
-                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
-            </div>
-            <div class="info-container">
-                <a href = "item-details.html"><h3>Coupon name</h3></a>
-                <a href=""><span class="material-icons">favorite_border</span></a>
-                <h6>Brief description</h6>
-                <p>Expires in 3 days</p>
-                <hr>
-                <h4>Price $</h4>
-                <button class="add-to-cart-button">Add to cart</button>
-            </div>
-        </div>
-        <div class="certificate-container">
-            <div class="image-container">
-                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
-            </div>
-            <div class="info-container">
-                <a href = "item-details.html"><h3>Coupon name</h3></a>
-                <a href=""><span class="material-icons">favorite_border</span></a>
-                <h6>Brief description</h6>
-                <p>Expires in 3 days</p>
-                <hr>
-                <h4>Price $</h4>
-                <button class="add-to-cart-button">Add to cart</button>
-            </div>
-        </div>
-        <div class="certificate-container">
-            <div class="image-container">
-                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
-            </div>
-            <div class="info-container">
-                <a href = "item-details.html"><h3>Coupon name</h3></a>
-                <a href=""><span class="material-icons">favorite_border</span></a>
-                <h6>Brief description</h6>
-                <p>Expires in 3 days</p>
-                <hr>
-                <h4>Price $</h4>
-                <button class="add-to-cart-button">Add to cart</button>
-            </div>
-        </div>
-        <div class="certificate-container">
-            <div class="image-container">
-                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
-            </div>
-            <div class="info-container">
-                <a href = "item-details.html"><h3>Coupon name</h3></a>
-                <a href=""><span class="material-icons">favorite_border</span></a>
-                <h6>Brief description</h6>
-                <p>Expires in 3 days</p>
-                <hr>
-                <h4>Price $</h4>
-                <button class="add-to-cart-button">Add to cart</button>
-            </div>
-        </div>
-        <div class="certificate-container">
-            <div class="image-container">
-                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
-            </div>
-            <div class="info-container">
-                <a href = "item-details.html"><h3>Coupon name</h3></a>
-                <a href=""><span class="material-icons">favorite_border</span></a>
-                <h6>Brief description</h6>
-                <p>Expires in 3 days</p>
-                <hr>
-                <h4>Price $</h4>
-                <button class="add-to-cart-button">Add to cart</button>
-            </div>
-        </div>
-        <div class="certificate-container">
-            <div class="image-container">
-                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
-            </div>
-            <div class="info-container">
-                <a href = "item-details.html"><h3>Coupon name</h3></a>
-                <a href=""><span class="material-icons">favorite_border</span></a>
-                <h6>Brief description</h6>
-                <p>Expires in 3 days</p>
-                <hr>
-                <h4>Price $</h4>
-                <button class="add-to-cart-button">Add to cart</button>
-            </div>
-        </div>
-        <div class="certificate-container">
-            <div class="image-container">
-                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
-            </div>
-            <div class="info-container">
-                <a href = "item-details.html"><h3>Coupon name</h3></a>
-                <a href=""><span class="material-icons">favorite_border</span></a>
-                <h6>Brief description</h6>
-                <p>Expires in 3 days</p>
-                <hr>
-                <h4>Price $</h4>
-                <button class="add-to-cart-button">Add to cart</button>
-            </div>
-        </div>
-        <div class="certificate-container">
-            <div class="image-container">
-                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
-            </div>
-            <div class="info-container">
-                <a href = "item-details.html"><h3>Coupon name</h3></a>
-                <a href=""><span class="material-icons">favorite_border</span></a>
-                <h6>Brief description</h6>
-                <p>Expires in 3 days</p>
-                <hr>
-                <h4>Price $</h4>
-                <button class="add-to-cart-button">Add to cart</button>
-            </div>
-        </div>
-        <div class="certificate-container">
-            <div class="image-container">
-                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
-            </div>
-            <div class="info-container">
-                <a href = "item-details.html"><h3>Coupon name</h3></a>
-                <a href=""><span class="material-icons">favorite_border</span></a>
-                <h6>Brief description</h6>
-                <p>Expires in 3 days</p>
-                <hr>
-                <h4>Price $</h4>
-                <button class="add-to-cart-button">Add to cart</button>
-            </div>
-        </div>
-        <div class="certificate-container">
-            <div class="image-container">
-                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
-            </div>
-            <div class="info-container">
-                <a href = "item-details.html"><h3>Coupon name</h3></a>
-                <a href=""><span class="material-icons">favorite_border</span></a>
-                <h6>Brief description</h6>
-                <p>Expires in 3 days</p>
-                <hr>
-                <h4>Price $</h4>
-                <button class="add-to-cart-button">Add to cart</button>
-            </div>
-        </div>
-        <div class="certificate-container">
-            <div class="image-container">
-                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
-            </div>
-            <div class="info-container">
-                <a href = "item-details.html"><h3>Coupon name</h3></a>
-                <a href=""><span class="material-icons">favorite_border</span></a>
-                <h6>Brief description</h6>
-                <p>Expires in 3 days</p>
-                <hr>
-                <h4>Price $</h4>
-                <button class="add-to-cart-button">Add to cart</button>
-            </div>
-        </div>
-        <div class="certificate-container">
-            <div class="image-container">
-                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
-            </div>
-            <div class="info-container">
-                <a href = "item-details.html"><h3>Coupon name</h3></a>
-                <a href=""><span class="material-icons">favorite_border</span></a>
-                <h6>Brief description</h6>
-                <p>Expires in 3 days</p>
-                <hr>
-                <h4>Price $</h4>
-                <button class="add-to-cart-button">Add to cart</button>
-            </div>
-        </div>
-        <div class="certificate-container">
-            <div class="image-container">
-                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
-            </div>
-            <div class="info-container">
-                <a href = "item-details.html"><h3>Coupon name</h3></a>
-                <a href=""><span class="material-icons">favorite_border</span></a>
-                <h6>Brief description</h6>
-                <p>Expires in 3 days</p>
-                <hr>
-                <h4>Price $</h4>
-                <button class="add-to-cart-button">Add to cart</button>
-            </div>
-        </div>
-        <div class="certificate-container">
-            <div class="image-container">
-                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
-            </div>
-            <div class="info-container">
-                <a href = "item-details.html"><h3>Coupon name</h3></a>
-                <a href=""><span class="material-icons">favorite_border</span></a>
-                <h6>Brief description</h6>
-                <p>Expires in 3 days</p>
-                <hr>
-                <h4>Price $</h4>
-                <button class="add-to-cart-button">Add to cart</button>
-            </div>
-        </div>
-        <div class="certificate-container">
-            <div class="image-container">
-                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
-            </div>
-            <div class="info-container">
-                <a href = "item-details.html"><h3>Coupon name</h3></a>
-                <a href=""><span class="material-icons">favorite_border</span></a>
-                <h6>Brief description</h6>
-                <p>Expires in 3 days</p>
-                <hr>
-                <h4>Price $</h4>
-                <button class="add-to-cart-button">Add to cart</button>
-            </div>
-        </div>
-        <div class="certificate-container">
-            <div class="image-container">
-                <img src="../images/gc.png" class="scaled-image" alt="Image 2">
-            </div>
-            <div class="info-container">
-                <a href = "item-details.html"><h3>Coupon name</h3></a>
-                <a href=""><span class="material-icons">favorite_border</span></a>
-                <h6>Brief description</h6>
-                <p>Expires in 3 days</p>
-                <hr>
-                <h4>Price $</h4>
-                <button class="add-to-cart-button">Add to cart</button>
-            </div>
-        </div>
     </div>
+    <div class="loader"><div></div><div></div><div></div><div></div></div>
+    <button onclick="" id="scroll-top-button" title="Go to top"><span class="material-icons">expand_less</span></button>
 </main>
 <footer>
     <div class="contact-info">
@@ -358,5 +50,7 @@
         <p>Phone: (123) 456-7890</p>
     </div>
 </footer>
+<script src="../../static/js/index.js"></script>
+
 </body>
 </html>
