@@ -33,6 +33,27 @@ function retrieveTagsFromLocalStorage() {
     return JSON.parse(storedData);
 }
 
+function reloadCertificatePages() {
+    currentCertificatePage = 1
+    certificateCardLimit = certificates.length
+    certificatePageCount = Math.ceil(certificateCardLimit / certificateCardIncrease)
+    window.addEventListener("scroll", handleInfiniteScroll)
+    document.querySelector(".loader").style.display = "inline-block";
+}
+
+function reloadTagPages() {
+    tags = retrieveTagsFromLocalStorage()
+    currentTagPage = 1
+    tagCardLimit = tags.length
+    tagPageCount = Math.ceil(tagCardLimit / tagCardIncrease)
+}
+
+function reloadCertificates() {
+    certificatesContainer.innerHTML = ""
+    addCertificateCards(currentCertificatePage)
+}
+
+
 /***
  * @param date - date, until certificate is valid
  * @return  number date duration
