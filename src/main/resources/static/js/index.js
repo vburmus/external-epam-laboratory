@@ -86,6 +86,32 @@ function filterCertificates() {
     certificates = filteredCertificates
 }
 
+window.onload = function () {
+    //restore filter if it was
+    let historyFilter = localStorage.getItem("filter");
+    if (historyFilter) {
+        filter = JSON.parse(historyFilter)
+        filterCertificates()
+    }
+
+    reloadTagPages();
+    addTagsCards(currentTagPage)
+    reloadCertificatePages()
+    //restore scroll position if needed
+    let scrollPosition = +localStorage.getItem("scrollHistory")
+    let historyPage = Math.ceil(scrollPosition / (500 + 0.02 * window.innerHeight))
+        addCertificateCards(currentCertificatePage)
+
+    // show scroll top button
+    window.onscroll = () => {
+        let myButton = document.getElementById("scroll-top-button");
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            myButton.style.display = "block";
+        } else {
+            myButton.style.display = "none";
+        }
+    }
+};
 
 /***
  * @param date - date, until certificate is valid
@@ -248,4 +274,11 @@ const clearFilters = _.debounce( function (){
     certificates = retrieveCertificatesFromLocalStorage()
     reloadCertificatePages()
     reloadCertificates()
+},500,{leading:true, trailing:false});
+
+const scrollTopFunction = _.debounce(function (){
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+    });
 },500,{leading:true, trailing:false});
