@@ -32,3 +32,10 @@ function retrieveTagsFromLocalStorage() {
     const storedData = localStorage.getItem("tags");
     return JSON.parse(storedData);
 }
+
+const scrollTopFunction = _.debounce(function (){
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+    });
+},500,{leading:true, trailing:false});
