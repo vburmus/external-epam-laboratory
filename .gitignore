@@ -1,2 +1,6 @@
 /src/main/resources/static/styles/css
 /.idea
+/node_modules/
+/Task3
+package-lock.json
+package.json
