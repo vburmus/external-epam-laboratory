@@ -136,6 +136,13 @@ window.onload = function () {
             myButton.style.display = "none";
         }
     }
+    searchInput.addEventListener("keyup", _.debounce(() => {
+        filter.input = searchInput.value
+        filterCertificates()
+        reloadCertificatePages()
+        reloadCertificates()
+    }, 500))
+    window.addEventListener("unload", storeScrollPosition)
 };
 
 /***
