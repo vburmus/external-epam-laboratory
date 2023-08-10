@@ -87,6 +87,27 @@ function filterCertificates() {
 }
 
 window.onload = function () {
+    //to remove standard browser scroll restore
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+    //to handle scroll position
+    const storeScrollPosition = () => {
+        window.removeEventListener("scroll", handleInfiniteScroll);
+        localStorage.setItem("scrollHistory", window.pageYOffset);
+        localStorage.setItem("filter", JSON.stringify(filter))
+    };
+
+    const restoreScrollPosition = (historyPage, scrollPosition) => {
+        while (currentCertificatePage <= historyPage) {
+            addCertificateCards(currentCertificatePage++);
+        }
+        window.scrollTo({
+            top: scrollPosition,
+            behavior: 'smooth',
+        });
+    };
+
     //restore filter if it was
     let historyFilter = localStorage.getItem("filter");
     if (historyFilter) {
@@ -100,7 +121,11 @@ window.onload = function () {
     //restore scroll position if needed
     let scrollPosition = +localStorage.getItem("scrollHistory")
     let historyPage = Math.ceil(scrollPosition / (500 + 0.02 * window.innerHeight))
+    if (historyPage > 1) {
+        restoreScrollPosition(historyPage, scrollPosition);
+    } else {
         addCertificateCards(currentCertificatePage)
+    }
 
     // show scroll top button
     window.onscroll = () => {
