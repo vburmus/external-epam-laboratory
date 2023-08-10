@@ -3,205 +3,216 @@ package com.epam.esm.giftcertificate.service;
 import com.epam.esm.exceptionhandler.exceptions.NoSuchItemException;
 import com.epam.esm.exceptionhandler.exceptions.ObjectAlreadyExistsException;
 import com.epam.esm.exceptionhandler.exceptions.ObjectIsInvalidException;
-import com.epam.esm.giftcertificate.direction.DirectionEnum;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
+import com.epam.esm.giftcertificate.model.GiftCertificateDTO;
 import com.epam.esm.giftcertificate.repository.GiftCertificateRepository;
 import com.epam.esm.tag.model.Tag;
-import com.epam.esm.tag.repository.TagRepository;
 import com.epam.esm.tag.service.TagService;
+import com.epam.esm.utils.Constants;
+import com.epam.esm.utils.mappers.EntityToDtoMapper;
+import com.epam.esm.utils.mappers.EntityToDtoMapperImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.github.fge.jsonpatch.JsonPatchException;
+import com.github.fge.jsonpatch.mergepatch.JsonMergePatch;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
 
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
+import static com.epam.esm.Constants.*;
+
+import static com.epam.esm.utils.Constants.CREATE_DATE;
+import static com.epam.esm.utils.Constants.LAST_UPDATE_DATE;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.exact;
 
 @ExtendWith(MockitoExtension.class)
 class GiftCertificateServiceTest {
-    public static final String TEST_TAG = "TestTag";
-    public static final String TEST_CERT = "Test";
-    public static final int DURATION = 1;
-    public static final BigDecimal PRICE = new BigDecimal("20.0");
-    public final static String NAME = "name";
-    public static final long ID1 = 1L;
-    public static final long ID2 = 2L;
-    public static final String FAULT_DIRECTION = "A";
-    public static final DirectionEnum ASC = DirectionEnum.ASC;
-    public static final DirectionEnum DESC = DirectionEnum.DESC;
-    public static final String TEST_TAG_1 = "TestTag1";
-    public static final String TEST_CERT_1 = "Test1";
-    public static final String DESCRIPTION = "...";
-    public static final String TEST_CERT_2 = "Test2";
-    public static final String TEST_TAG_2 = "TestTag2";
+
+
+    private final EntityToDtoMapper entityMapper = new EntityToDtoMapperImpl();
     @Mock
     private GiftCertificateRepository giftCertificateRepositoryMocked;
-
     @Mock
     private TagService tagServiceMocked;
-
     @Mock
-    private TagRepository tagRepositoryMocked;
+    private EntityToDtoMapper entityToDtoMapper;
     @InjectMocks
     private GiftCertificateService giftCertificateServiceMocked;
 
     @Test
     void createCertificateSuccess() {
-        GiftCertificate gc = new GiftCertificate();
-        Tag t = new Tag();
-        t.setName(TEST_TAG);
-        t.setId(ID1);
-        gc.setId(ID1);
-        gc.setName(TEST_CERT);
-        gc.setDuration(DURATION);
-        gc.setPrice(PRICE);
-        gc.setDescription(TEST_CERT);
-        gc.setTags(List.of(t));
+        Tag t = Tag.builder()
+                .id(ID1)
+                .name(TEST_TAG)
+                .build();
 
-        when(giftCertificateRepositoryMocked.isGiftCertificateExist(gc)).thenReturn(false);
-        when(giftCertificateRepositoryMocked.createGiftCertificate(gc)).thenReturn(true);
+        GiftCertificate gc = GiftCertificate.builder()
+                .id(ID1)
+                .name(TEST_CERT)
+                .duration(DURATION_VAL)
+                .price(PRICE)
+                .description(TEST_CERT)
+                .tags(Collections.singletonList(t))
+                .build();
+        GiftCertificateDTO giftCertificateDTO = entityMapper.toGiftCertificateDTO(gc);
 
-        when(tagServiceMocked.getTagsIds(gc.getTags())).thenReturn(List.of(ID1));
 
-        when(giftCertificateRepositoryMocked.getGiftCertificatesID(gc)).thenReturn(gc.getId());
-        when(giftCertificateRepositoryMocked.createTagDependenciesForGiftCertificate(List.of(ID1), ID1)).thenReturn(true);
-        when(giftCertificateServiceMocked.getAllTagsByCertificate(gc)).thenReturn(gc.getTags());
-        when(giftCertificateRepositoryMocked.getGiftCertificatesID(gc)).thenReturn(gc.getId());
-        when(giftCertificateRepositoryMocked.getGiftCertificateByID(ID1)).thenReturn(gc);
-        assertEquals(gc, giftCertificateServiceMocked.createCertificate(gc));
+        when(entityToDtoMapper.toGiftCertificate(giftCertificateDTO)).thenReturn(gc);
+        when(giftCertificateRepositoryMocked.exists(getGiftCertificateExample(gc))).thenReturn(false);
+        when(giftCertificateRepositoryMocked.save(gc)).thenReturn(gc);
+        when(tagServiceMocked.checkTagsAndSaveIfDontExist(gc)).thenReturn(gc.getTags());
+        when(giftCertificateRepositoryMocked.save(gc)).thenReturn(gc);
+        when(entityToDtoMapper.toGiftCertificateDTO(gc)).thenReturn(giftCertificateDTO);
+
+        assertEquals(giftCertificateDTO, giftCertificateServiceMocked.createCertificate(giftCertificateDTO));
     }
 
     @Test
     void createCertificateIsInvalid() {
-        GiftCertificate gc = new GiftCertificate();
-        gc.setId(ID1);
-        gc.setName(TEST_CERT);
-        gc.setDuration(DURATION);
-        when(giftCertificateRepositoryMocked.isGiftCertificateExist(gc)).thenReturn(false);
+        GiftCertificateDTO gcDTO = new GiftCertificateDTO();
+        gcDTO.setId(ID1);
+        gcDTO.setName(TEST_CERT);
+        gcDTO.setDuration(DURATION_VAL);
+        GiftCertificate gc = entityMapper.toGiftCertificate(gcDTO);
+
+        when(entityToDtoMapper.toGiftCertificate(gcDTO)).thenReturn(gc);
+
+        when(giftCertificateRepositoryMocked.exists(getGiftCertificateExample(gc))).thenReturn(false);
         ObjectIsInvalidException thrown = assertThrows(ObjectIsInvalidException.class,
-                () -> giftCertificateServiceMocked.createCertificate(gc));
-        assertEquals("Gift certificate with name = " + TEST_CERT + ", duration = " + DURATION + "is invalid, please check your params", thrown.getMessage());
+                () -> giftCertificateServiceMocked.createCertificate(gcDTO));
+        assertEquals("Gift certificate with name = " + TEST_CERT + ", duration = " + DURATION_VAL + " is invalid, please check your params",
+                thrown.getMessage());
     }
 
     @Test
     void createCertificateAlreadyExists() {
-        GiftCertificate gc = new GiftCertificate();
-        Tag t = new Tag();
-        t.setName(TEST_TAG);
-        t.setId(ID1);
-        gc.setId(ID1);
-        gc.setName(TEST_CERT);
-        gc.setDuration(DURATION);
-        gc.setPrice(PRICE);
-        gc.setDescription(TEST_CERT);
-        gc.setTags(List.of(t));
-        when(giftCertificateRepositoryMocked.isGiftCertificateExist(gc)).thenReturn(true);
+        GiftCertificateDTO gcDTO = new GiftCertificateDTO();
+        GiftCertificate gc = entityMapper.toGiftCertificate(gcDTO);
+        when(entityToDtoMapper.toGiftCertificate(gcDTO)).thenReturn(gc);
+        when(giftCertificateRepositoryMocked.exists(getGiftCertificateExample(gc))).thenReturn(true);
         ObjectAlreadyExistsException thrown = assertThrows(ObjectAlreadyExistsException.class,
-                () -> giftCertificateServiceMocked.createCertificate(gc));
-        assertEquals("Gift certificate with name = " + TEST_CERT + ", duration = " + DURATION + " already exists", thrown.getMessage());
+                () -> giftCertificateServiceMocked.createCertificate(gcDTO));
+        assertEquals("Gift certificate with name = " + null + ", duration = " + null + " already exists", thrown.getMessage());
 
+    }
+
+    private Example<GiftCertificate> getGiftCertificateExample(GiftCertificate gc) {
+        ExampleMatcher gcMatcher = ExampleMatcher.matching()
+                .withIgnorePaths(CREATE_DATE, LAST_UPDATE_DATE, ID, TAGS, Constants.PRICE)
+                .withMatcher(NAME, exact())
+                .withMatcher(Constants.DESCRIPTION, exact())
+                .withMatcher(Constants.DURATION, exact());
+        return Example.of(gc, gcMatcher);
     }
 
     @Test
     void deleteCertificateSuccess() {
-        GiftCertificate gc = new GiftCertificate();
-        Tag t = new Tag();
-        t.setName(TEST_TAG);
-        t.setId(ID1);
-        gc.setId(ID1);
-        gc.setName(TEST_CERT);
-        gc.setDuration(DURATION);
-        gc.setPrice(PRICE);
-        gc.setDescription(TEST_CERT);
-        gc.setTags(List.of(t));
-        when(giftCertificateRepositoryMocked.deleteGiftCertificate(ID1)).thenReturn(true);
+        when(giftCertificateRepositoryMocked.existsById(ID1)).thenReturn(true);
+        doNothing().when(giftCertificateRepositoryMocked).deleteById(ID1);
         assertTrue(giftCertificateServiceMocked.deleteCertificate(ID1));
 
     }
 
     @Test
-    void deleteCertificateFalse() {
-        GiftCertificate gc = new GiftCertificate();
-        Tag t = new Tag();
-        t.setName(TEST_TAG);
-        t.setId(ID1);
-        gc.setId(ID1);
-        gc.setName(TEST_CERT);
-        gc.setDuration(DURATION);
-        gc.setPrice(PRICE);
-        gc.setDescription(TEST_CERT);
-        gc.setTags(List.of(t));
-        when(giftCertificateRepositoryMocked.deleteGiftCertificate(gc.getId())).thenReturn(false);
+    void deleteCertificateError() {
+        Tag t = Tag.builder()
+                .id(ID1)
+                .name(TEST_TAG)
+                .build();
 
-        assertFalse(giftCertificateServiceMocked.deleteCertificate(ID1));
-
+        GiftCertificate gc = GiftCertificate.builder()
+                .id(ID1)
+                .name(TEST_CERT)
+                .duration(DURATION_VAL)
+                .price(PRICE)
+                .description(TEST_CERT)
+                .tags(Collections.singletonList(t))
+                .build();
+        when(giftCertificateRepositoryMocked.existsById(gc.getId())).thenReturn(false);
+        NoSuchItemException e = assertThrows(NoSuchItemException.class, () -> giftCertificateServiceMocked.deleteCertificate(ID1));
+        assertEquals("There is no gc with id= " + ID1, e.getMessage());
     }
 
 
     @Test
     void updateCertificateObjectIsInvalidCertificate() {
-        GiftCertificate gc = new GiftCertificate();
-        ObjectIsInvalidException thrown = assertThrows(ObjectIsInvalidException.class,
-                () -> giftCertificateServiceMocked.updateCertificate(ID1, gc));
-        assertEquals("Please check params for certificate name = " + null, thrown.getMessage());
+        when(giftCertificateRepositoryMocked.findById(ID1)).thenReturn(Optional.empty());
+        NoSuchItemException thrown = assertThrows(NoSuchItemException.class,
+                () -> giftCertificateServiceMocked.updateCertificate(ID1, null));
+        assertEquals("No gift certificate with id = " + ID1, thrown.getMessage());
 
     }
 
     @Test
-    void updateCertificateObjectIsInvalidTag() {
-        GiftCertificate gc = new GiftCertificate();
+    void updateCertificateSuccess() {
+        Tag t = Tag.builder()
+                .id(ID1)
+                .name(TEST_TAG)
+                .build();
 
-        gc.setId(1L);
-        gc.setName(TEST_CERT);
-        gc.setDuration(DURATION);
-        gc.setPrice(PRICE);
-        gc.setDescription(TEST_CERT);
-        Tag t = new Tag();
-        gc.setTags(List.of(t));
-        ObjectIsInvalidException thrown = assertThrows(ObjectIsInvalidException.class,
-                () -> giftCertificateServiceMocked.updateCertificate(ID1, gc));
-        assertEquals("Some tags are invalid", thrown.getMessage());
+        GiftCertificate gc = GiftCertificate.builder()
+                .id(ID1)
+                .name(TEST_CERT)
+                .duration(DURATION_VAL)
+                .price(PRICE)
+                .description(TEST_CERT)
+                .tags(Collections.singletonList(t))
+                .build();
+        when(giftCertificateRepositoryMocked.findById(ID1)).thenReturn(Optional.of(gc));
 
+        when(tagServiceMocked.checkTagsAndSaveIfDontExist(gc)).thenReturn(gc.getTags());
+        when(giftCertificateRepositoryMocked.save(gc)).thenReturn(gc);
+        GiftCertificateDTO gcDTO = entityMapper.toGiftCertificateDTO(gc);
+        gc.setName(NEW);
+        when(entityToDtoMapper.toGiftCertificateDTO(gc)).thenReturn(gcDTO);
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
+            JsonMergePatch jsonMergePatch = JsonMergePatch.fromJson(objectMapper.convertValue(gc, JsonNode.class));
+            assertEquals(gcDTO, giftCertificateServiceMocked.updateCertificate(ID1, jsonMergePatch));
+        } catch (JsonPatchException | JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    @Test
-    void updateCertificateWithNoTags() {
-        GiftCertificate gc = new GiftCertificate();
-        gc.setId(ID1);
-        gc.setName(TEST_CERT);
-        gc.setDuration(DURATION);
-        gc.setPrice(PRICE);
-        gc.setDescription(TEST_CERT);
-        when(giftCertificateServiceMocked.updateCertificate(ID1, gc)).thenReturn(true);
-        assertTrue(giftCertificateServiceMocked.updateCertificate(ID1, gc));
-
-    }
 
     @Test
     void getCertificateByIdSuccess() {
-        GiftCertificate gc = new GiftCertificate();
-        Tag t = new Tag();
-        t.setName(TEST_TAG);
-        t.setId(ID1);
-        gc.setId(ID1);
-        gc.setName(TEST_CERT);
-        gc.setDuration(DURATION);
-        gc.setPrice(PRICE);
-        gc.setDescription(TEST_CERT);
-        gc.setTags(List.of(t));
-        when(giftCertificateRepositoryMocked.getGiftCertificateByID(ID1)).thenReturn(gc);
-        assertEquals(gc, giftCertificateServiceMocked.getCertificateById(ID1));
+        Tag t = Tag.builder()
+                .id(ID1)
+                .name(TEST_TAG)
+                .build();
+
+        GiftCertificate gc = GiftCertificate.builder()
+                .id(ID1)
+                .name(TEST_CERT)
+                .duration(DURATION_VAL)
+                .price(PRICE)
+                .description(TEST_CERT)
+                .tags(Collections.singletonList(t))
+                .build();
+        when(giftCertificateRepositoryMocked.findById(ID1)).thenReturn(Optional.of(gc));
+        GiftCertificateDTO gcDTO = entityMapper.toGiftCertificateDTO(gc);
+        when(entityToDtoMapper.toGiftCertificateDTO(gc)).thenReturn(gcDTO);
+        assertEquals(gcDTO, giftCertificateServiceMocked.getCertificateById(ID1));
 
     }
 
     @Test
     void getCertificateByIdNoSuchItem() {
-        when(giftCertificateRepositoryMocked.getGiftCertificateByID(ID1)).thenReturn(null);
+        when(giftCertificateRepositoryMocked.findById(ID1)).thenReturn(Optional.empty());
         NoSuchItemException thrown = assertThrows(NoSuchItemException.class,
                 () -> giftCertificateServiceMocked.getCertificateById(ID1));
         assertEquals("GiftCertificate with id = " + ID1 + " doesn't exist", thrown.getMessage());
@@ -221,7 +232,7 @@ class GiftCertificateServiceTest {
 
     @Test
     void getGiftCertificatesByTagNameNoSuchItem() {
-        when(tagServiceMocked.isTagWithNameExists(NAME)).thenReturn(false);
+        when(tagServiceMocked.existsByName(NAME)).thenReturn(false);
         NoSuchItemException thrown = assertThrows(NoSuchItemException.class,
                 () -> giftCertificateServiceMocked.getGiftCertificatesByTagName(NAME, 1, 10));
         assertEquals("Tag with name " + NAME + " doesn't exist", thrown.getMessage());
@@ -230,196 +241,248 @@ class GiftCertificateServiceTest {
 
     @Test
     void getGiftCertificatesByTagNameSuccess() {
-        GiftCertificate gc = new GiftCertificate();
-        Tag t = new Tag();
-        t.setName(TEST_TAG_1);
-        t.setId(ID1);
-        gc.setId(ID1);
-        gc.setName(TEST_CERT_1);
-        gc.setDuration(DURATION);
-        gc.setPrice(PRICE);
-        gc.setDescription(TEST_CERT_1);
-        gc.setTags(List.of(t));
+        Tag t = Tag.builder()
+                .id(ID1)
+                .name(TEST_TAG)
+                .build();
 
-        GiftCertificate gc2 = new GiftCertificate();
-        Tag t2 = new Tag();
-        t2.setName(TEST_TAG_2);
-        t2.setId(ID2);
-        gc2.setId(ID2);
-        gc2.setName(TEST_CERT_2);
-        gc2.setDuration(DURATION);
-        gc2.setPrice(PRICE);
-        gc2.setDescription(DESCRIPTION);
-        gc2.setTags(List.of(t2));
-        when(tagServiceMocked.isTagWithNameExists(NAME)).thenReturn(true);
-        when(giftCertificateRepositoryMocked.getGiftCertificatesByTagName(NAME, 1, 10)).thenReturn(List.of(gc, gc2));
-        when(giftCertificateRepositoryMocked.getGiftCertificatesID(gc)).thenReturn(ID1);
-        when(giftCertificateRepositoryMocked.getGiftCertificatesID(gc2)).thenReturn(ID2);
-        assertEquals(List.of(gc, gc2), giftCertificateServiceMocked.getGiftCertificatesByTagName(NAME, 1, 10));
-    }
+        GiftCertificate gc = GiftCertificate.builder()
+                .id(ID1)
+                .name(TEST_CERT)
+                .duration(DURATION_VAL)
+                .price(PRICE)
+                .description(TEST_CERT)
+                .tags(Collections.singletonList(t))
+                .build();
 
+        Tag t2 = Tag.builder()
+                .id(ID2)
+                .name(TEST_TAG)
+                .build();
 
-    @Test
-    void getCertificatesSortedByDateASC() {
-        GiftCertificate gc = new GiftCertificate();
-        Tag t = new Tag();
-        t.setName(TEST_TAG_1);
-        t.setId(ID1);
-        gc.setId(ID1);
-        gc.setName(TEST_CERT_1);
-        gc.setDuration(DURATION);
-        gc.setPrice(PRICE);
-        gc.setDescription(DESCRIPTION);
-        gc.setTags(List.of(t));
+        GiftCertificate gc2 = GiftCertificate.builder()
+                .id(ID2)
+                .name(TEST_CERT)
+                .duration(DURATION_VAL)
+                .price(PRICE)
+                .description(TEST_CERT)
+                .tags(Collections.singletonList(t2))
+                .build();
 
-        GiftCertificate gc2 = new GiftCertificate();
-        Tag t2 = new Tag();
-        t2.setName(TEST_TAG_2);
-        t2.setId(ID2);
-        gc2.setId(ID2);
-        gc2.setName(TEST_CERT_2);
-        gc2.setDuration(DURATION);
-        gc2.setPrice(PRICE);
-        gc2.setDescription(DESCRIPTION);
-        gc2.setTags(List.of(t2));
-        when(giftCertificateRepositoryMocked.getCertificatesSortedByDate(DirectionEnum.ASC, 1, 10)).thenReturn(List.of(gc, gc2));
-        assertEquals(List.of(gc, gc2), giftCertificateServiceMocked.getCertificatesSortedByDate(ASC, 1, 10));
+        when(tagServiceMocked.existsByName(NAME)).thenReturn(true);
+        List<GiftCertificate> gcList = List.of(gc, gc2);
+        Page<GiftCertificate> page = new PageImpl<>(gcList,
+                PageRequest.of(0, 10), gcList.size());
+        when(giftCertificateRepositoryMocked.findByTagsName(NAME, PageRequest.of(0, 10))).thenReturn(page);
+        GiftCertificateDTO gcDTO = entityMapper.toGiftCertificateDTO(gc);
+        when(entityToDtoMapper.toGiftCertificateDTO(gc)).thenReturn(gcDTO);
+        GiftCertificateDTO gcDTO2 = entityMapper.toGiftCertificateDTO(gc2);
+        when(entityToDtoMapper.toGiftCertificateDTO(gc2)).thenReturn(gcDTO2);
+        List<GiftCertificateDTO> dtoList = List.of(gcDTO, gcDTO2);
+        Page<GiftCertificateDTO> pageDTO = new PageImpl<>(dtoList,
+                PageRequest.of(0, 10), gcList.size());
+        assertEquals(pageDTO, giftCertificateServiceMocked.getGiftCertificatesByTagName(NAME, 1,
+                10));
     }
 
     @Test
-    void getCertificatesSortedByDateDESC() {
-        GiftCertificate gc = new GiftCertificate();
-        Tag t = new Tag();
-        t.setName(TEST_TAG_1);
-        t.setId(ID1);
-        gc.setId(ID1);
-        gc.setName(TEST_CERT_1);
-        gc.setDuration(DURATION);
-        gc.setPrice(PRICE);
-        gc.setDescription(DESCRIPTION);
-        gc.setTags(List.of(t));
-
-        GiftCertificate gc2 = new GiftCertificate();
-        Tag t2 = new Tag();
-        t2.setName(TEST_TAG_2);
-        t2.setId(ID2);
-        gc2.setId(ID2);
-        gc2.setName(TEST_CERT_2);
-        gc2.setDuration(DURATION);
-        gc2.setPrice(PRICE);
-        gc2.setDescription(DESCRIPTION);
-        gc2.setTags(List.of(t2));
-        when(giftCertificateRepositoryMocked.getCertificatesSortedByDate(DirectionEnum.DESC, 1, 10)).thenReturn(List.of(gc2, gc));
-        assertEquals(List.of(gc2, gc), giftCertificateServiceMocked.getCertificatesSortedByDate(DESC, 1, 10));
-
+    void getCertificatesSortedThreeParamsError() {
+        ObjectIsInvalidException oie = assertThrows(ObjectIsInvalidException.class, () ->
+                giftCertificateServiceMocked.getCertificatesSortedByParam(WRONG_SORT_PARAM, 1, 10));
+        assertEquals("To many params for sorting", oie.getMessage());
     }
 
     @Test
-    void getCertificatesSortedByNameASC() {
-        GiftCertificate gc = new GiftCertificate();
-        Tag t = new Tag();
-        t.setName(TEST_TAG_1);
-        t.setId(ID1);
-        gc.setId(ID1);
-        gc.setName(TEST_CERT_1);
-        gc.setDuration(DURATION);
-        gc.setPrice(PRICE);
-        gc.setDescription(DESCRIPTION);
-        gc.setTags(List.of(t));
-
-        GiftCertificate gc2 = new GiftCertificate();
-        Tag t2 = new Tag();
-        t2.setName(TEST_TAG_2);
-        t2.setId(ID2);
-        gc2.setId(ID2);
-        gc2.setName(TEST_CERT_2);
-        gc2.setDuration(DURATION);
-        gc2.setPrice(PRICE);
-        gc2.setDescription(DESCRIPTION);
-        gc2.setTags(List.of(t2));
-
-        when(giftCertificateRepositoryMocked.getCertificatesSortedByName(DirectionEnum.ASC, 1, 10)).thenReturn(List.of(gc, gc2));
-        assertEquals(List.of(gc, gc2), giftCertificateServiceMocked.getCertificatesSortedByName(ASC, 1, 10));
+    void getCertificatesSortedParamNamingError() {
+        ObjectIsInvalidException oie = assertThrows(ObjectIsInvalidException.class, () ->
+                giftCertificateServiceMocked.getCertificatesSortedByParam(WRONG_SORT_PARAM_2, 1, 10));
+        assertEquals("Some sort params are invalid.", oie.getMessage());
     }
 
     @Test
-    void getCertificatesSortedByNameDESC() {
-        GiftCertificate gc = new GiftCertificate();
-        Tag t = new Tag();
-        t.setName(TEST_TAG_1);
-        t.setId(ID1);
-        gc.setId(ID1);
-        gc.setName(TEST_CERT_1);
-        gc.setDuration(DURATION);
-        gc.setPrice(PRICE);
-        gc.setDescription(DESCRIPTION);
-        gc.setTags(List.of(t));
+    void getCertificatesSortedByDateASCSuccess() {
+        Tag t = Tag.builder()
+                .id(ID1)
+                .name(TEST_TAG)
+                .build();
 
-        GiftCertificate gc2 = new GiftCertificate();
-        Tag t2 = new Tag();
-        t2.setName(TEST_TAG_2);
-        t2.setId(ID2);
-        gc2.setId(ID2);
-        gc2.setName(TEST_CERT_2);
-        gc2.setDuration(DURATION);
-        gc2.setPrice(PRICE);
-        gc2.setDescription(DESCRIPTION);
-        gc2.setTags(List.of(t2));
-        when(giftCertificateRepositoryMocked.getCertificatesSortedByName(DirectionEnum.DESC, 1, 10)).thenReturn(List.of(gc2, gc));
-        assertEquals(List.of(gc2, gc), giftCertificateServiceMocked.getCertificatesSortedByName(DESC, 1, 10));
+        GiftCertificate gc = GiftCertificate.builder()
+                .id(ID1)
+                .name(TEST_CERT)
+                .duration(DURATION_VAL)
+                .price(PRICE)
+                .description(TEST_CERT)
+                .tags(Collections.singletonList(t))
+                .build();
 
-    }
+        Tag t2 = Tag.builder()
+                .id(ID2)
+                .name(TEST_TAG)
+                .build();
 
+        GiftCertificate gc2 = GiftCertificate.builder()
+                .id(ID2)
+                .name(TEST_CERT)
+                .duration(DURATION_VAL)
+                .price(PRICE)
+                .description(TEST_CERT)
+                .tags(Collections.singletonList(t2))
+                .build();
+        GiftCertificateDTO gcDTO = entityMapper.toGiftCertificateDTO(gc);
 
-    @Test
-    void getCertificatesSortedByDateNameSuccess() {
-        GiftCertificate gc = new GiftCertificate();
-        Tag t = new Tag();
-        t.setName(TEST_TAG_1);
-        t.setId(ID1);
-        gc.setId(ID1);
-        gc.setName(TEST_CERT_1);
-        gc.setDuration(DURATION);
-        gc.setPrice(PRICE);
-        gc.setDescription(DESCRIPTION);
-        gc.setTags(List.of(t));
+        GiftCertificateDTO gcDTO2 = entityMapper.toGiftCertificateDTO(gc2);
 
-        GiftCertificate gc2 = new GiftCertificate();
-        Tag t2 = new Tag();
-        t2.setName(TEST_TAG_2);
-        t2.setId(ID2);
-        gc2.setId(ID2);
-        gc2.setName(TEST_CERT_2);
-        gc2.setDuration(DURATION);
-        gc2.setPrice(PRICE);
-        gc2.setDescription(DESCRIPTION);
-        gc2.setTags(List.of(t2));
-        when(giftCertificateRepositoryMocked.getGiftCertificatesID(gc)).thenReturn(ID1);
-        when(giftCertificateRepositoryMocked.getGiftCertificatesID(gc2)).thenReturn(ID2);
-        when(giftCertificateRepositoryMocked.getCertificatesSortedByDateName(DirectionEnum.ASC, DirectionEnum.ASC, 1, 10)).thenReturn(List.of(gc, gc2));
-        assertEquals(List.of(gc, gc2), giftCertificateServiceMocked.getCertificatesSortedByDateName(ASC, ASC, 1, 10));
+        List<GiftCertificate> gcList = List.of(gc, gc2);
+        List<GiftCertificateDTO> dtoList = List.of(gcDTO, gcDTO2);
+        Page<GiftCertificateDTO> pageDTO =
+                new PageImpl<>(dtoList,
+                        PageRequest.of(0, 10), dtoList.size());
+        Page<GiftCertificate> page =
+                new PageImpl<>(gcList,
+                        PageRequest.of(0, 10), gcList.size());
+        Sort sortBy = Sort.by(Sort.Direction.ASC, "createDate");
+        PageRequest pageRequest = PageRequest.of(0, 10, sortBy);
+        when(giftCertificateRepositoryMocked.findAll(pageRequest)).thenReturn(page);
+        when(entityToDtoMapper.toGiftCertificateDTO(gc)).thenReturn(gcDTO);
+        when(entityToDtoMapper.toGiftCertificateDTO(gc2)).thenReturn(gcDTO2);
+        assertEquals(pageDTO, giftCertificateServiceMocked.getCertificatesSortedByParam("date", 1, 10));
+        sortBy = Sort.by(new Sort.Order(Sort.Direction.ASC, "name"), new Sort.Order(Sort.Direction.ASC, "createDate"));
+        pageRequest = PageRequest.of(0, 10, sortBy);
+        when(giftCertificateRepositoryMocked.findAll(pageRequest)).thenReturn(page);
+        when(entityToDtoMapper.toGiftCertificateDTO(gc)).thenReturn(gcDTO);
+        when(entityToDtoMapper.toGiftCertificateDTO(gc2)).thenReturn(gcDTO2);
+        assertEquals(pageDTO, giftCertificateServiceMocked.getCertificatesSortedByParam("name,date", 1, 10));
 
     }
 
     @Test
-    void getGCBySeveralTags() {
-        GiftCertificate gc = new GiftCertificate();
-        Tag t1 = new Tag();
-        t1.setName(TEST_TAG_1);
-        t1.setId(ID1);
-        Tag t2 = new Tag();
-        t2.setName(TEST_TAG_1);
-        t2.setId(ID2);
-        gc.setId(ID1);
-        gc.setName(TEST_CERT_1);
-        gc.setDuration(DURATION);
-        gc.setPrice(PRICE);
-        gc.setDescription(DESCRIPTION);
-        gc.setTags(List.of(t1, t2));
-        when(giftCertificateRepositoryMocked.getCertificatesBySeveralTags(List.of(ID1, ID2), 1, 10)).thenReturn(Collections.singletonList(gc));
+    void getGCBySeveralTagsSuccess() {
+        Tag t1 = Tag.builder()
+                .id(ID1)
+                .name(TEST_TAG)
+                .build();
 
-        when(giftCertificateRepositoryMocked.getGiftCertificatesID(gc)).thenReturn(ID1);
-        when(giftCertificateServiceMocked.setTagsInCertificates(List.of(gc))).thenReturn(List.of(gc));
-        assertEquals(List.of(gc), giftCertificateServiceMocked.getCertificatesBySeveralTags(List.of(t1.getId(), t2.getId()), 1, 10));
+        Tag t2 = Tag.builder()
+                .id(ID2)
+                .name(TEST_TAG)
+                .build();
+
+        GiftCertificate gc = GiftCertificate.builder()
+                .id(ID1)
+                .name(TEST_CERT)
+                .duration(DURATION_VAL)
+                .price(PRICE)
+                .description(TEST_CERT)
+                .tags(List.of(t1, t2))
+                .build();
+
+
+        List<GiftCertificate> res = List.of(gc);
+        Page<GiftCertificate> page = new PageImpl<>(res, PageRequest.of(0, 10), res.size());
+        when(giftCertificateRepositoryMocked.findByTagsIdIn(List.of(ID1, ID2), PageRequest.of(0, 10))).thenReturn(page);
+        GiftCertificateDTO dtoGC = entityMapper.toGiftCertificateDTO(gc);
+        List<GiftCertificateDTO> resDTO = List.of(dtoGC);
+        when(entityToDtoMapper.toGiftCertificateDTO(gc)).thenReturn(dtoGC);
+        Page<GiftCertificateDTO> pageDTO = new PageImpl<>(resDTO, PageRequest.of(0, 10), resDTO.size());
+
+        assertEquals(pageDTO, giftCertificateServiceMocked.getCertificatesBySeveralTags(List.of(t1.getId(), t2.getId()),
+                1, 10));
+    }
+
+    @Test
+    void getByPartInvalid() {
+        ObjectIsInvalidException thrown = assertThrows(ObjectIsInvalidException.class,
+                () -> giftCertificateServiceMocked.getGiftCertificatesByPart("", 1, 10));
+        assertEquals("Part of description ->  is invalid", thrown.getMessage());
+    }
+
+    @Test
+    void getByPartEmptyResult() {
+        when(giftCertificateRepositoryMocked.findByNameContaining("part", PageRequest.of(0, 10))).thenReturn(Page.empty(PageRequest.of(0,
+                10)));
+        when(giftCertificateRepositoryMocked.findByDescriptionContaining("part", PageRequest.of(0, 10))).thenReturn(Page.empty(PageRequest.of(0,
+                10)));
+        NoSuchItemException thrown = assertThrows(NoSuchItemException.class,
+                () -> giftCertificateServiceMocked.getGiftCertificatesByPart("part", 1, 10));
+        assertEquals("List is empty!", thrown.getMessage());
+    }
+
+    @Test
+    void getByPartNameDescriptionSuccess() {
+        Tag t1 = Tag.builder()
+                .id(ID1)
+                .name(TEST_TAG)
+                .build();
+
+        Tag t2 = Tag.builder()
+                .id(ID2)
+                .name(TEST_TAG)
+                .build();
+
+        GiftCertificate gc = GiftCertificate.builder()
+                .id(ID1)
+                .name(TEST_CERT)
+                .duration(DURATION_VAL)
+                .price(PRICE)
+                .description(TEST_CERT)
+                .tags(List.of(t1, t2))
+                .build();
+
+        List<GiftCertificate> res = List.of(gc);
+        Page<GiftCertificate> page = new PageImpl<>(res, PageRequest.of(0, 10), res.size());
+        GiftCertificateDTO dtoGC = entityMapper.toGiftCertificateDTO(gc);
+        List<GiftCertificateDTO> resDTO = List.of(dtoGC);
+        Page<GiftCertificateDTO> pageDTO = new PageImpl<>(resDTO, PageRequest.of(0, 10), resDTO.size());
+
+        when(giftCertificateRepositoryMocked.findByNameContaining("part", PageRequest.of(0, 10))).thenReturn(page);
+        when(entityToDtoMapper.toGiftCertificateDTO(gc)).thenReturn(dtoGC);
+
+        assertEquals(pageDTO, giftCertificateServiceMocked.getGiftCertificatesByPart("part", 1, 10));
+        when(giftCertificateRepositoryMocked.findByNameContaining("part", PageRequest.of(0, 10))).thenReturn(Page.empty(PageRequest.of(0,
+                10)));
+        when(giftCertificateRepositoryMocked.findByDescriptionContaining("part", PageRequest.of(0, 10))).thenReturn(page);
+        assertEquals(pageDTO, giftCertificateServiceMocked.getGiftCertificatesByPart("part", 1, 10));
+
+    }
+
+    @Test
+    void getAllEmptyError() {
+        when(giftCertificateRepositoryMocked.findAll(PageRequest.of(0, 10))).thenReturn(Page.empty(PageRequest.of(0,
+                10)));
+
+        NoSuchItemException thrown = assertThrows(NoSuchItemException.class,
+                () -> giftCertificateServiceMocked.getAllGiftCertificates(1, 10));
+        assertEquals("List is empty!", thrown.getMessage());
+    }
+
+    @Test
+    void getAllSuccess() {
+        Tag t1 = Tag.builder()
+                .id(ID1)
+                .name(TEST_TAG)
+                .build();
+
+        Tag t2 = Tag.builder()
+                .id(ID2)
+                .name(TEST_TAG)
+                .build();
+
+        GiftCertificate gc = GiftCertificate.builder()
+                .id(ID1)
+                .name(TEST_CERT)
+                .duration(DURATION_VAL)
+                .price(PRICE)
+                .description(TEST_CERT)
+                .tags(List.of(t1, t2))
+                .build();
+
+        List<GiftCertificate> res = List.of(gc);
+        Page<GiftCertificate> page = new PageImpl<>(res, PageRequest.of(0, 10), res.size());
+        GiftCertificateDTO dtoGC = entityMapper.toGiftCertificateDTO(gc);
+        List<GiftCertificateDTO> resDTO = List.of(dtoGC);
+        Page<GiftCertificateDTO> pageDTO = new PageImpl<>(resDTO, PageRequest.of(0, 10), resDTO.size());
+        when(giftCertificateRepositoryMocked.findAll(PageRequest.of(0, 10))).thenReturn(page);
+        when(entityToDtoMapper.toGiftCertificateDTO(gc)).thenReturn(dtoGC);
+        assertEquals(pageDTO, giftCertificateServiceMocked.getAllGiftCertificates(1, 10));
     }
 }

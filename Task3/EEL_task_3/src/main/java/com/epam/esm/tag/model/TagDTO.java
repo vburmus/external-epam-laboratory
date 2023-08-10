@@ -1,22 +1,17 @@
 package com.epam.esm.tag.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
+import org.springframework.hateoas.RepresentationModel;
 
-import javax.persistence.*;
 import java.util.Objects;
 
-@Entity
-@Table(name = "tag")
-@Builder
-@Getter
-@Setter
-@ToString
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-public class Tag {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@AllArgsConstructor
+public class TagDTO extends RepresentationModel<TagDTO> {
     private Long id;
     private String name;
 
@@ -24,8 +19,8 @@ public class Tag {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Tag tag = (Tag) o;
-        return id != null && Objects.equals(id, tag.id);
+        TagDTO tag = (TagDTO) o;
+        return id != null && Objects.equals(id, tag.getId());
     }
 
     @Override

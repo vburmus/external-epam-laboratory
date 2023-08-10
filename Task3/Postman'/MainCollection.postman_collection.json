@@ -1,0 +1,732 @@
+{
+	"info": {
+		"_postman_id": "cb260ef9-bd9c-4141-a4cb-1d03642b8223",
+		"name": "MainCollection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25250646"
+	},
+	"item": [
+		{
+			"name": "GiftCertificate",
+			"item": [
+				{
+					"name": "CreatingCertificate1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Certificate1\",\r\n    \"description\": \"Some description for this gift certificate with number 1\",\r\n    \"price\": 430.2,\r\n    \"duration\": 30,\r\n    \"tags\":[{\r\n        \"name\": \"Tag1\"\r\n    }]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/certificate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"certificate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreatingCertificate2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Certificate8\",\r\n    \"description\": \"Some description for this gift certificate with number 2\",\r\n    \"price\": 660.2,\r\n    \"duration\": 60,\r\n    \"tags\":[\r\n        {\r\n            \"name\": \"Tag1\"\r\n        },\r\n        {\r\n            \"name\": \"Tag2\"\r\n        },\r\n        {\r\n            \"name\": \"Tag3\"\r\n        }\r\n        ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/certificate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"certificate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreatingCertificate3",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Certificate3\",\r\n    \"description\": \"Some description for this gift certificate with number 3\",\r\n    \"price\": 990.2,\r\n    \"duration\": 90,\r\n    \"tags\":[\r\n        {\r\n            \"name\": \"Tag2\"\r\n        },\r\n        {\r\n            \"name\": \"Tag3\"\r\n        }\r\n        ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/certificate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"certificate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ShowAllCerificates",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/certificate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"certificate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ShowCertificateById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/certificate/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"certificate",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ShowCertificatesByTagName",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/certificate/search/by-tag?name=Tag1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"certificate",
+								"search",
+								"by-tag"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Tag1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ShowCertificatesByPart",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/certificate/search/by-part-name-description?part=Cert",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"certificate",
+								"search",
+								"by-part-name-description"
+							],
+							"query": [
+								{
+									"key": "part",
+									"value": "Cert"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ShowCertificatesSorted",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/certificate/sort?sort=name,date",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"certificate",
+								"sort"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "name,date"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SeveralTags",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/certificate/search/by-tags?tagsId=1,2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"certificate",
+								"search",
+								"by-tags"
+							],
+							"query": [
+								{
+									"key": "tagsId",
+									"value": "1,2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateCertificate",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Updated\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/certificate/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"certificate",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteCertificateWithId2",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/certificate/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"certificate",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "HateoasCheck",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/certificate/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"certificate",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tag",
+			"item": [
+				{
+					"name": "CreateTag1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"TestTag1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/tag",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tag"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateTag2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"TestTag2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/tag",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tag"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ShowAllTags",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/tag",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tag"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ShowTagById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/tag/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tag",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ShowMostUsedTag",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/tag/search/most-used",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tag",
+								"search",
+								"most-used"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteTagWithId2",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/tag/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tag",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "ShowAllUsers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ShowUserById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ShowMostUsedTag",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/tag/search/most-used",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tag",
+								"search",
+								"most-used"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateOrder",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\":{\r\n        \"id\":\"2\"\r\n    \r\n    },\r\n     \"giftCertificateHasOrders\": [\r\n    {\r\n      \"giftCertificate\": {\r\n        \"id\": 4\r\n      },\r\n      \"quantity\": 3\r\n    },\r\n    {\r\n      \"giftCertificate\": {\r\n        \"id\": 8\r\n      },\r\n      \"quantity\": 7\r\n    }\r\n  ],\r\n    \"description\":\"S\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/create-order",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"create-order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "HateoasCheck",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "ShowAllOrders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/order",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ShowOrderInformation",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/order/info/70",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"order",
+								"info",
+								"70"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ShowOrdersByUser",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/order/by-user-id/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"order",
+								"by-user-id",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "HateoasCheck",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/order",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"order"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SWAGGER2",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v2/api-docs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v2",
+						"api-docs"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "SWAGGER2",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v2/api-docs",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v2",
+								"api-docs"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 17 Apr 2023 21:49:11 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"swagger\": \"2.0\",\n    \"info\": {\n        \"description\": \"Api Documentation\",\n        \"version\": \"1.0\",\n        \"title\": \"Api Documentation\",\n        \"termsOfService\": \"urn:tos\",\n        \"contact\": {},\n        \"license\": {\n            \"name\": \"Apache 2.0\",\n            \"url\": \"http://www.apache.org/licenses/LICENSE-2.0\"\n        }\n    },\n    \"host\": \"localhost:8080\",\n    \"basePath\": \"/\",\n    \"tags\": [\n        {\n            \"name\": \"basic-error-controller\",\n            \"description\": \"Basic Error Controller\"\n        },\n        {\n            \"name\": \"gift-certificate-hateoas-controller\",\n            \"description\": \"Gift Certificate Hateoas Controller\"\n        },\n        {\n            \"name\": \"order-hateoas-controller\",\n            \"description\": \"Order Hateoas Controller\"\n        },\n        {\n            \"name\": \"tag-controller\",\n            \"description\": \"Tag Controller\"\n        },\n        {\n            \"name\": \"user-hateoas-controller\",\n            \"description\": \"User Hateoas Controller\"\n        }\n    ],\n    \"paths\": {\n        \"/certificate/{id}\": {\n            \"get\": {\n                \"tags\": [\n                    \"gift-certificate-hateoas-controller\"\n                ],\n                \"summary\": \"getById\",\n                \"operationId\": \"getByIdUsingGET\",\n                \"produces\": [\n                    \"*/*\"\n                ],\n                \"parameters\": [\n                    {\n                        \"name\": \"id\",\n                        \"in\": \"path\",\n                        \"description\": \"id\",\n                        \"required\": true,\n                        \"type\": \"integer\",\n                        \"format\": \"int64\"\n                    }\n                ],\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"OK\",\n                        \"schema\": {\n                            \"$ref\": \"#/definitions/EntityModel«GiftCertificateDTO»\"\n                        }\n                    },\n                    \"401\": {\n                        \"description\": \"Unauthorized\"\n                    },\n                    \"403\": {\n                        \"description\": \"Forbidden\"\n                    },\n                    \"404\": {\n                        \"description\": \"Not Found\"\n                    }\n                }\n            }\n        },\n        \"/error\": {\n            \"get\": {\n                \"tags\": [\n                    \"basic-error-controller\"\n                ],\n                \"summary\": \"error\",\n                \"operationId\": \"errorUsingGET\",\n                \"produces\": [\n                    \"*/*\"\n                ],\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"OK\",\n                        \"schema\": {\n                            \"type\": \"object\",\n                            \"additionalProperties\": {\n                                \"type\": \"object\"\n                            }\n                        }\n                    },\n                    \"401\": {\n                        \"description\": \"Unauthorized\"\n                    },\n                    \"403\": {\n                        \"description\": \"Forbidden\"\n                    },\n                    \"404\": {\n                        \"description\": \"Not Found\"\n                    }\n                }\n            },\n            \"head\": {\n                \"tags\": [\n                    \"basic-error-controller\"\n                ],\n                \"summary\": \"error\",\n                \"operationId\": \"errorUsingHEAD\",\n                \"consumes\": [\n                    \"application/json\"\n                ],\n                \"produces\": [\n                    \"*/*\"\n                ],\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"OK\",\n                        \"schema\": {\n                            \"type\": \"object\",\n                            \"additionalProperties\": {\n                                \"type\": \"object\"\n                            }\n                        }\n                    },\n                    \"204\": {\n                        \"description\": \"No Content\"\n                    },\n                    \"401\": {\n                        \"description\": \"Unauthorized\"\n                    },\n                    \"403\": {\n                        \"description\": \"Forbidden\"\n                    }\n                }\n            },\n            \"post\": {\n                \"tags\": [\n                    \"basic-error-controller\"\n                ],\n                \"summary\": \"error\",\n                \"operationId\": \"errorUsingPOST\",\n                \"consumes\": [\n                    \"application/json\"\n                ],\n                \"produces\": [\n                    \"*/*\"\n                ],\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"OK\",\n                        \"schema\": {\n                            \"type\": \"object\",\n                            \"additionalProperties\": {\n                                \"type\": \"object\"\n                            }\n                        }\n                    },\n                    \"201\": {\n                        \"description\": \"Created\"\n                    },\n                    \"401\": {\n                        \"description\": \"Unauthorized\"\n                    },\n                    \"403\": {\n                        \"description\": \"Forbidden\"\n                    },\n                    \"404\": {\n                        \"description\": \"Not Found\"\n                    }\n                }\n            },\n            \"put\": {\n                \"tags\": [\n                    \"basic-error-controller\"\n                ],\n                \"summary\": \"error\",\n                \"operationId\": \"errorUsingPUT\",\n                \"consumes\": [\n                    \"application/json\"\n                ],\n                \"produces\": [\n                    \"*/*\"\n                ],\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"OK\",\n                        \"schema\": {\n                            \"type\": \"object\",\n                            \"additionalProperties\": {\n                                \"type\": \"object\"\n                            }\n                        }\n                    },\n                    \"201\": {\n                        \"description\": \"Created\"\n                    },\n                    \"401\": {\n                        \"description\": \"Unauthorized\"\n                    },\n                    \"403\": {\n                        \"description\": \"Forbidden\"\n                    },\n                    \"404\": {\n                        \"description\": \"Not Found\"\n                    }\n                }\n            },\n            \"delete\": {\n                \"tags\": [\n                    \"basic-error-controller\"\n                ],\n                \"summary\": \"error\",\n                \"operationId\": \"errorUsingDELETE\",\n                \"produces\": [\n                    \"*/*\"\n                ],\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"OK\",\n                        \"schema\": {\n                            \"type\": \"object\",\n                            \"additionalProperties\": {\n                                \"type\": \"object\"\n                            }\n                        }\n                    },\n                    \"204\": {\n                        \"description\": \"No Content\"\n                    },\n                    \"401\": {\n                        \"description\": \"Unauthorized\"\n                    },\n                    \"403\": {\n                        \"description\": \"Forbidden\"\n                    }\n                }\n            },\n            \"options\": {\n                \"tags\": [\n                    \"basic-error-controller\"\n                ],\n                \"summary\": \"error\",\n                \"operationId\": \"errorUsingOPTIONS\",\n                \"consumes\": [\n                    \"application/json\"\n                ],\n                \"produces\": [\n                    \"*/*\"\n                ],\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"OK\",\n                        \"schema\": {\n                            \"type\": \"object\",\n                            \"additionalProperties\": {\n                                \"type\": \"object\"\n                            }\n                        }\n                    },\n                    \"204\": {\n                        \"description\": \"No Content\"\n                    },\n                    \"401\": {\n                        \"description\": \"Unauthorized\"\n                    },\n                    \"403\": {\n                        \"description\": \"Forbidden\"\n                    }\n                }\n            },\n            \"patch\": {\n                \"tags\": [\n                    \"basic-error-controller\"\n                ],\n                \"summary\": \"error\",\n                \"operationId\": \"errorUsingPATCH\",\n                \"consumes\": [\n                    \"application/json\"\n                ],\n                \"produces\": [\n                    \"*/*\"\n                ],\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"OK\",\n                        \"schema\": {\n                            \"type\": \"object\",\n                            \"additionalProperties\": {\n                                \"type\": \"object\"\n                            }\n                        }\n                    },\n                    \"204\": {\n                        \"description\": \"No Content\"\n                    },\n                    \"401\": {\n                        \"description\": \"Unauthorized\"\n                    },\n                    \"403\": {\n                        \"description\": \"Forbidden\"\n                    }\n                }\n            }\n        },\n        \"/order\": {\n            \"get\": {\n                \"tags\": [\n                    \"order-hateoas-controller\"\n                ],\n                \"summary\": \"showAll\",\n                \"operationId\": \"showAllUsingGET\",\n                \"produces\": [\n                    \"*/*\"\n                ],\n                \"parameters\": [\n                    {\n                        \"name\": \"page\",\n                        \"in\": \"query\",\n                        \"description\": \"page\",\n                        \"required\": false,\n                        \"type\": \"integer\",\n                        \"default\": 1,\n                        \"format\": \"int32\"\n                    },\n                    {\n                        \"name\": \"size\",\n                        \"in\": \"query\",\n                        \"description\": \"size\",\n                        \"required\": false,\n                        \"type\": \"integer\",\n                        \"default\": 3,\n                        \"format\": \"int32\"\n                    }\n                ],\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"OK\",\n                        \"schema\": {\n                            \"$ref\": \"#/definitions/CollectionModel«OrderDTO»\"\n                        }\n                    },\n                    \"401\": {\n                        \"description\": \"Unauthorized\"\n                    },\n                    \"403\": {\n                        \"description\": \"Forbidden\"\n                    },\n                    \"404\": {\n                        \"description\": \"Not Found\"\n                    }\n                }\n            }\n        },\n        \"/order/info/{id}\": {\n            \"get\": {\n                \"tags\": [\n                    \"order-hateoas-controller\"\n                ],\n                \"summary\": \"getOrdersInfoByID\",\n                \"operationId\": \"getOrdersInfoByIDUsingGET\",\n                \"produces\": [\n                    \"*/*\"\n                ],\n                \"parameters\": [\n                    {\n                        \"name\": \"id\",\n                        \"in\": \"path\",\n                        \"description\": \"id\",\n                        \"required\": true,\n                        \"type\": \"integer\",\n                        \"format\": \"int64\"\n                    }\n                ],\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"OK\",\n                        \"schema\": {\n                            \"type\": \"object\"\n                        }\n                    },\n                    \"401\": {\n                        \"description\": \"Unauthorized\"\n                    },\n                    \"403\": {\n                        \"description\": \"Forbidden\"\n                    },\n                    \"404\": {\n                        \"description\": \"Not Found\"\n                    }\n                }\n            }\n        },\n        \"/tag\": {\n            \"get\": {\n                \"tags\": [\n                    \"tag-controller\"\n                ],\n                \"summary\": \"showAllTags\",\n                \"operationId\": \"showAllTagsUsingGET\",\n                \"produces\": [\n                    \"*/*\"\n                ],\n                \"parameters\": [\n                    {\n                        \"name\": \"page\",\n                        \"in\": \"query\",\n                        \"description\": \"page\",\n                        \"required\": false,\n                        \"type\": \"integer\",\n                        \"default\": 1,\n                        \"format\": \"int32\"\n                    },\n                    {\n                        \"name\": \"size\",\n                        \"in\": \"query\",\n                        \"description\": \"size\",\n                        \"required\": false,\n                        \"type\": \"integer\",\n                        \"default\": 3,\n                        \"format\": \"int32\"\n                    }\n                ],\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"OK\",\n                        \"schema\": {\n                            \"type\": \"object\"\n                        }\n                    },\n                    \"401\": {\n                        \"description\": \"Unauthorized\"\n                    },\n                    \"403\": {\n                        \"description\": \"Forbidden\"\n                    },\n                    \"404\": {\n                        \"description\": \"Not Found\"\n                    }\n                }\n            },\n            \"post\": {\n                \"tags\": [\n                    \"tag-controller\"\n                ],\n                \"summary\": \"createTag\",\n                \"operationId\": \"createTagUsingPOST\",\n                \"consumes\": [\n                    \"application/json\"\n                ],\n                \"produces\": [\n                    \"*/*\"\n                ],\n                \"parameters\": [\n                    {\n                        \"in\": \"body\",\n                        \"name\": \"tagDTO\",\n                        \"description\": \"tagDTO\",\n                        \"required\": true,\n                        \"schema\": {\n                            \"$ref\": \"#/definitions/TagDTO\"\n                        }\n                    }\n                ],\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"OK\",\n                        \"schema\": {\n                            \"type\": \"object\"\n                        }\n                    },\n                    \"201\": {\n                        \"description\": \"Created\"\n                    },\n                    \"401\": {\n                        \"description\": \"Unauthorized\"\n                    },\n                    \"403\": {\n                        \"description\": \"Forbidden\"\n                    },\n                    \"404\": {\n                        \"description\": \"Not Found\"\n                    }\n                }\n            }\n        },\n        \"/tag/search/most-used\": {\n            \"get\": {\n                \"tags\": [\n                    \"tag-controller\"\n                ],\n                \"summary\": \"getMostUsed\",\n                \"operationId\": \"getMostUsedUsingGET\",\n                \"produces\": [\n                    \"*/*\"\n                ],\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"OK\",\n                        \"schema\": {\n                            \"type\": \"object\"\n                        }\n                    },\n                    \"401\": {\n                        \"description\": \"Unauthorized\"\n                    },\n                    \"403\": {\n                        \"description\": \"Forbidden\"\n                    },\n                    \"404\": {\n                        \"description\": \"Not Found\"\n                    }\n                }\n            }\n        },\n        \"/tag/{id}\": {\n            \"get\": {\n                \"tags\": [\n                    \"tag-controller\"\n                ],\n                \"summary\": \"getById\",\n                \"operationId\": \"getByIdUsingGET_1\",\n                \"produces\": [\n                    \"*/*\"\n                ],\n                \"parameters\": [\n                    {\n                        \"name\": \"id\",\n                        \"in\": \"path\",\n                        \"description\": \"id\",\n                        \"required\": true,\n                        \"type\": \"integer\",\n                        \"format\": \"int64\"\n                    }\n                ],\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"OK\",\n                        \"schema\": {\n                            \"type\": \"object\"\n                        }\n                    },\n                    \"401\": {\n                        \"description\": \"Unauthorized\"\n                    },\n                    \"403\": {\n                        \"description\": \"Forbidden\"\n                    },\n                    \"404\": {\n                        \"description\": \"Not Found\"\n                    }\n                }\n            },\n            \"delete\": {\n                \"tags\": [\n                    \"tag-controller\"\n                ],\n                \"summary\": \"delete\",\n                \"operationId\": \"deleteUsingDELETE\",\n                \"produces\": [\n                    \"*/*\"\n                ],\n                \"parameters\": [\n                    {\n                        \"name\": \"id\",\n                        \"in\": \"path\",\n                        \"description\": \"id\",\n                        \"required\": true,\n                        \"type\": \"integer\",\n                        \"format\": \"int64\"\n                    }\n                ],\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"OK\",\n                        \"schema\": {\n                            \"type\": \"object\"\n                        }\n                    },\n                    \"204\": {\n                        \"description\": \"No Content\"\n                    },\n                    \"401\": {\n                        \"description\": \"Unauthorized\"\n                    },\n                    \"403\": {\n                        \"description\": \"Forbidden\"\n                    }\n                }\n            }\n        },\n        \"/user\": {\n            \"get\": {\n                \"tags\": [\n                    \"user-hateoas-controller\"\n                ],\n                \"summary\": \"showAll\",\n                \"operationId\": \"showAllUsingGET_1\",\n                \"produces\": [\n                    \"*/*\"\n                ],\n                \"parameters\": [\n                    {\n                        \"name\": \"page\",\n                        \"in\": \"query\",\n                        \"description\": \"page\",\n                        \"required\": false,\n                        \"type\": \"integer\",\n                        \"default\": 1,\n                        \"format\": \"int32\"\n                    },\n                    {\n                        \"name\": \"size\",\n                        \"in\": \"query\",\n                        \"description\": \"size\",\n                        \"required\": false,\n                        \"type\": \"integer\",\n                        \"default\": 3,\n                        \"format\": \"int32\"\n                    }\n                ],\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"OK\",\n                        \"schema\": {\n                            \"$ref\": \"#/definitions/CollectionModel«UserDTO»\"\n                        }\n                    },\n                    \"401\": {\n                        \"description\": \"Unauthorized\"\n                    },\n                    \"403\": {\n                        \"description\": \"Forbidden\"\n                    },\n                    \"404\": {\n                        \"description\": \"Not Found\"\n                    }\n                }\n            }\n        },\n        \"/user/search/{id}\": {\n            \"get\": {\n                \"tags\": [\n                    \"user-hateoas-controller\"\n                ],\n                \"summary\": \"getUserById\",\n                \"operationId\": \"getUserByIdUsingGET\",\n                \"produces\": [\n                    \"*/*\"\n                ],\n                \"parameters\": [\n                    {\n                        \"name\": \"id\",\n                        \"in\": \"path\",\n                        \"description\": \"id\",\n                        \"required\": true,\n                        \"type\": \"integer\",\n                        \"format\": \"int64\"\n                    }\n                ],\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"OK\",\n                        \"schema\": {\n                            \"$ref\": \"#/definitions/RepresentationModel«object»\"\n                        }\n                    },\n                    \"401\": {\n                        \"description\": \"Unauthorized\"\n                    },\n                    \"403\": {\n                        \"description\": \"Forbidden\"\n                    },\n                    \"404\": {\n                        \"description\": \"Not Found\"\n                    }\n                }\n            }\n        }\n    },\n    \"definitions\": {\n        \"CollectionModel«OrderDTO»\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"content\": {\n                    \"type\": \"array\",\n                    \"items\": {\n                        \"$ref\": \"#/definitions/OrderDTO\"\n                    }\n                },\n                \"links\": {\n                    \"$ref\": \"#/definitions/Links\"\n                }\n            },\n            \"title\": \"CollectionModel«OrderDTO»\"\n        },\n        \"CollectionModel«UserDTO»\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"content\": {\n                    \"type\": \"array\",\n                    \"items\": {\n                        \"$ref\": \"#/definitions/UserDTO\"\n                    }\n                },\n                \"links\": {\n                    \"$ref\": \"#/definitions/Links\"\n                }\n            },\n            \"title\": \"CollectionModel«UserDTO»\"\n        },\n        \"EntityModel«GiftCertificateDTO»\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"createDate\": {\n                    \"type\": \"string\",\n                    \"format\": \"date-time\"\n                },\n                \"description\": {\n                    \"type\": \"string\"\n                },\n                \"duration\": {\n                    \"type\": \"integer\",\n                    \"format\": \"int32\"\n                },\n                \"id\": {\n                    \"type\": \"integer\",\n                    \"format\": \"int64\"\n                },\n                \"lastUpdateDate\": {\n                    \"type\": \"string\",\n                    \"format\": \"date-time\"\n                },\n                \"links\": {\n                    \"$ref\": \"#/definitions/Links\"\n                },\n                \"name\": {\n                    \"type\": \"string\"\n                },\n                \"price\": {\n                    \"type\": \"number\"\n                },\n                \"tags\": {\n                    \"type\": \"array\",\n                    \"items\": {\n                        \"$ref\": \"#/definitions/Tag\"\n                    }\n                }\n            },\n            \"title\": \"EntityModel«GiftCertificateDTO»\"\n        },\n        \"GiftCertificate\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"createDate\": {\n                    \"type\": \"string\",\n                    \"format\": \"date-time\"\n                },\n                \"description\": {\n                    \"type\": \"string\"\n                },\n                \"duration\": {\n                    \"type\": \"integer\",\n                    \"format\": \"int32\"\n                },\n                \"id\": {\n                    \"type\": \"integer\",\n                    \"format\": \"int64\"\n                },\n                \"lastUpdateDate\": {\n                    \"type\": \"string\",\n                    \"format\": \"date-time\"\n                },\n                \"name\": {\n                    \"type\": \"string\"\n                },\n                \"price\": {\n                    \"type\": \"number\"\n                },\n                \"tags\": {\n                    \"type\": \"array\",\n                    \"items\": {\n                        \"$ref\": \"#/definitions/Tag\"\n                    }\n                }\n            },\n            \"title\": \"GiftCertificate\"\n        },\n        \"GiftCertificateDTO\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"createDate\": {\n                    \"type\": \"string\",\n                    \"format\": \"date-time\"\n                },\n                \"description\": {\n                    \"type\": \"string\"\n                },\n                \"duration\": {\n                    \"type\": \"integer\",\n                    \"format\": \"int32\"\n                },\n                \"id\": {\n                    \"type\": \"integer\",\n                    \"format\": \"int64\"\n                },\n                \"lastUpdateDate\": {\n                    \"type\": \"string\",\n                    \"format\": \"date-time\"\n                },\n                \"links\": {\n                    \"$ref\": \"#/definitions/Links\"\n                },\n                \"name\": {\n                    \"type\": \"string\"\n                },\n                \"price\": {\n                    \"type\": \"number\"\n                },\n                \"tags\": {\n                    \"type\": \"array\",\n                    \"items\": {\n                        \"$ref\": \"#/definitions/Tag\"\n                    }\n                }\n            },\n            \"title\": \"GiftCertificateDTO\"\n        },\n        \"GiftCertificateHasOrder\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"giftCertificate\": {\n                    \"$ref\": \"#/definitions/GiftCertificate\"\n                },\n                \"id\": {\n                    \"$ref\": \"#/definitions/GiftCertificateOrderID\"\n                },\n                \"order\": {\n                    \"$ref\": \"#/definitions/Order\"\n                },\n                \"quantity\": {\n                    \"type\": \"integer\",\n                    \"format\": \"int32\"\n                }\n            },\n            \"title\": \"GiftCertificateHasOrder\"\n        },\n        \"GiftCertificateOrderID\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"giftCertificateId\": {\n                    \"type\": \"integer\",\n                    \"format\": \"int64\"\n                },\n                \"orderId\": {\n                    \"type\": \"integer\",\n                    \"format\": \"int64\"\n                }\n            },\n            \"title\": \"GiftCertificateOrderID\"\n        },\n        \"Link\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"deprecation\": {\n                    \"type\": \"string\"\n                },\n                \"href\": {\n                    \"type\": \"string\"\n                },\n                \"hreflang\": {\n                    \"type\": \"string\"\n                },\n                \"media\": {\n                    \"type\": \"string\"\n                },\n                \"name\": {\n                    \"type\": \"string\"\n                },\n                \"profile\": {\n                    \"type\": \"string\"\n                },\n                \"rel\": {\n                    \"$ref\": \"#/definitions/LinkRelation\"\n                },\n                \"title\": {\n                    \"type\": \"string\"\n                },\n                \"type\": {\n                    \"type\": \"string\"\n                }\n            },\n            \"title\": \"Link\"\n        },\n        \"LinkRelation\": {\n            \"type\": \"object\",\n            \"title\": \"LinkRelation\"\n        },\n        \"Links\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"empty\": {\n                    \"type\": \"boolean\"\n                }\n            },\n            \"title\": \"Links\"\n        },\n        \"ModelAndView\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"empty\": {\n                    \"type\": \"boolean\"\n                },\n                \"model\": {\n                    \"type\": \"object\"\n                },\n                \"modelMap\": {\n                    \"type\": \"object\",\n                    \"additionalProperties\": {\n                        \"type\": \"object\"\n                    }\n                },\n                \"reference\": {\n                    \"type\": \"boolean\"\n                },\n                \"status\": {\n                    \"type\": \"string\",\n                    \"enum\": [\n                        \"ACCEPTED\",\n                        \"ALREADY_REPORTED\",\n                        \"BAD_GATEWAY\",\n                        \"BAD_REQUEST\",\n                        \"BANDWIDTH_LIMIT_EXCEEDED\",\n                        \"CHECKPOINT\",\n                        \"CONFLICT\",\n                        \"CONTINUE\",\n                        \"CREATED\",\n                        \"DESTINATION_LOCKED\",\n                        \"EXPECTATION_FAILED\",\n                        \"FAILED_DEPENDENCY\",\n                        \"FORBIDDEN\",\n                        \"FOUND\",\n                        \"GATEWAY_TIMEOUT\",\n                        \"GONE\",\n                        \"HTTP_VERSION_NOT_SUPPORTED\",\n                        \"IM_USED\",\n                        \"INSUFFICIENT_SPACE_ON_RESOURCE\",\n                        \"INSUFFICIENT_STORAGE\",\n                        \"INTERNAL_SERVER_ERROR\",\n                        \"I_AM_A_TEAPOT\",\n                        \"LENGTH_REQUIRED\",\n                        \"LOCKED\",\n                        \"LOOP_DETECTED\",\n                        \"METHOD_FAILURE\",\n                        \"METHOD_NOT_ALLOWED\",\n                        \"MOVED_PERMANENTLY\",\n                        \"MOVED_TEMPORARILY\",\n                        \"MULTIPLE_CHOICES\",\n                        \"MULTI_STATUS\",\n                        \"NETWORK_AUTHENTICATION_REQUIRED\",\n                        \"NON_AUTHORITATIVE_INFORMATION\",\n                        \"NOT_ACCEPTABLE\",\n                        \"NOT_EXTENDED\",\n                        \"NOT_FOUND\",\n                        \"NOT_IMPLEMENTED\",\n                        \"NOT_MODIFIED\",\n                        \"NO_CONTENT\",\n                        \"OK\",\n                        \"PARTIAL_CONTENT\",\n                        \"PAYLOAD_TOO_LARGE\",\n                        \"PAYMENT_REQUIRED\",\n                        \"PERMANENT_REDIRECT\",\n                        \"PRECONDITION_FAILED\",\n                        \"PRECONDITION_REQUIRED\",\n                        \"PROCESSING\",\n                        \"PROXY_AUTHENTICATION_REQUIRED\",\n                        \"REQUESTED_RANGE_NOT_SATISFIABLE\",\n                        \"REQUEST_ENTITY_TOO_LARGE\",\n                        \"REQUEST_HEADER_FIELDS_TOO_LARGE\",\n                        \"REQUEST_TIMEOUT\",\n                        \"REQUEST_URI_TOO_LONG\",\n                        \"RESET_CONTENT\",\n                        \"SEE_OTHER\",\n                        \"SERVICE_UNAVAILABLE\",\n                        \"SWITCHING_PROTOCOLS\",\n                        \"TEMPORARY_REDIRECT\",\n                        \"TOO_EARLY\",\n                        \"TOO_MANY_REQUESTS\",\n                        \"UNAUTHORIZED\",\n                        \"UNAVAILABLE_FOR_LEGAL_REASONS\",\n                        \"UNPROCESSABLE_ENTITY\",\n                        \"UNSUPPORTED_MEDIA_TYPE\",\n                        \"UPGRADE_REQUIRED\",\n                        \"URI_TOO_LONG\",\n                        \"USE_PROXY\",\n                        \"VARIANT_ALSO_NEGOTIATES\"\n                    ]\n                },\n                \"view\": {\n                    \"$ref\": \"#/definitions/View\"\n                },\n                \"viewName\": {\n                    \"type\": \"string\"\n                }\n            },\n            \"title\": \"ModelAndView\"\n        },\n        \"Order\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"cost\": {\n                    \"type\": \"number\"\n                },\n                \"createDate\": {\n                    \"type\": \"string\",\n                    \"format\": \"date-time\"\n                },\n                \"description\": {\n                    \"type\": \"string\"\n                },\n                \"id\": {\n                    \"type\": \"integer\",\n                    \"format\": \"int64\"\n                },\n                \"isClosed\": {\n                    \"type\": \"integer\",\n                    \"format\": \"int32\"\n                },\n                \"lastUpdateDate\": {\n                    \"type\": \"string\",\n                    \"format\": \"date-time\"\n                },\n                \"user\": {\n                    \"$ref\": \"#/definitions/User\"\n                }\n            },\n            \"title\": \"Order\"\n        },\n        \"OrderDTO\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"cost\": {\n                    \"type\": \"number\"\n                },\n                \"createDate\": {\n                    \"type\": \"string\",\n                    \"format\": \"date-time\"\n                },\n                \"description\": {\n                    \"type\": \"string\"\n                },\n                \"giftCertificateHasOrders\": {\n                    \"type\": \"array\",\n                    \"items\": {\n                        \"$ref\": \"#/definitions/GiftCertificateHasOrder\"\n                    }\n                },\n                \"id\": {\n                    \"type\": \"integer\",\n                    \"format\": \"int64\"\n                },\n                \"isClosed\": {\n                    \"type\": \"integer\",\n                    \"format\": \"int32\"\n                },\n                \"lastUpdateDate\": {\n                    \"type\": \"string\",\n                    \"format\": \"date-time\"\n                },\n                \"links\": {\n                    \"$ref\": \"#/definitions/Links\"\n                },\n                \"user\": {\n                    \"$ref\": \"#/definitions/User\"\n                }\n            },\n            \"title\": \"OrderDTO\"\n        },\n        \"RepresentationModel«object»\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"links\": {\n                    \"$ref\": \"#/definitions/Links\"\n                }\n            },\n            \"title\": \"RepresentationModel«object»\"\n        },\n        \"Tag\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"id\": {\n                    \"type\": \"integer\",\n                    \"format\": \"int64\"\n                },\n                \"name\": {\n                    \"type\": \"string\"\n                }\n            },\n            \"title\": \"Tag\"\n        },\n        \"TagDTO\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"id\": {\n                    \"type\": \"integer\",\n                    \"format\": \"int64\"\n                },\n                \"links\": {\n                    \"type\": \"array\",\n                    \"items\": {\n                        \"$ref\": \"#/definitions/Link\"\n                    }\n                },\n                \"name\": {\n                    \"type\": \"string\"\n                }\n            },\n            \"title\": \"TagDTO\"\n        },\n        \"User\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"id\": {\n                    \"type\": \"integer\",\n                    \"format\": \"int64\"\n                },\n                \"name\": {\n                    \"type\": \"string\"\n                },\n                \"number\": {\n                    \"type\": \"string\"\n                },\n                \"orders\": {\n                    \"type\": \"array\",\n                    \"items\": {\n                        \"$ref\": \"#/definitions/Order\"\n                    }\n                },\n                \"surname\": {\n                    \"type\": \"string\"\n                }\n            },\n            \"title\": \"User\"\n        },\n        \"UserDTO\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"id\": {\n                    \"type\": \"integer\",\n                    \"format\": \"int64\"\n                },\n                \"links\": {\n                    \"$ref\": \"#/definitions/Links\"\n                },\n                \"name\": {\n                    \"type\": \"string\"\n                },\n                \"number\": {\n                    \"type\": \"string\"\n                },\n                \"orders\": {\n                    \"type\": \"array\",\n                    \"items\": {\n                        \"$ref\": \"#/definitions/Order\"\n                    }\n                },\n                \"surname\": {\n                    \"type\": \"string\"\n                }\n            },\n            \"title\": \"UserDTO\"\n        },\n        \"View\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"contentType\": {\n                    \"type\": \"string\"\n                }\n            },\n            \"title\": \"View\"\n        }\n    }\n}"
+				}
+			]
+		}
+	]
+}

@@ -1,8 +1,9 @@
 package com.epam.esm.order.controller;
 
-import com.epam.esm.order.model.Order;
+import com.epam.esm.order.model.OrderHateoas;
 import com.epam.esm.order.service.OrderService;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Page;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
@@ -29,22 +30,19 @@ public class OrderHateoasController {
     }
 
     @GetMapping
-    public CollectionModel<Order> showAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page, @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
+    public CollectionModel<OrderHateoas> showAll(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page,
+                                                 @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
 
-        List<Order> orders = orderService.getAllOrders(page, size);
-
-        for (final Order order : orders) {
-            Link selfLink = linkTo(methodOn(OrderHateoasController.class).getOrdersInfoByID(order.getId())).withSelfRel();
-            order.add(selfLink);
-        }
+        Page<OrderHateoas> ordersPage = orderService.getAllOrders(--page, size).map(OrderHateoas::new);
 
         List<Link> links = new ArrayList<>();
         links.add(linkTo(methodOn(OrderHateoasController.class).showAll(page, size)).withSelfRel());
         if (page != 1)
             links.add(linkTo(methodOn(OrderHateoasController.class).showAll(page - 1, size)).withSelfRel());
-        links.add(linkTo(methodOn(OrderHateoasController.class).showAll(page + 1, size)).withSelfRel());
+        if (ordersPage.hasNext())
+            links.add(linkTo(methodOn(OrderHateoasController.class).showAll(page + 1, size)).withSelfRel());
 
-        return CollectionModel.of(orders, links);
+        return CollectionModel.of(ordersPage, links);
     }
 
 

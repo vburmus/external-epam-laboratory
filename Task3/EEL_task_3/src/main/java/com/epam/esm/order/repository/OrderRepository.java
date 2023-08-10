@@ -1,20 +1,13 @@
 package com.epam.esm.order.repository;
 
-import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.order.model.Order;
+import com.epam.esm.user.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface OrderRepository {
-    List<Order> getAllOrders(Integer page,Integer size);
-    List<Order> getOrdersByUserID(long id, Integer page, Integer size);
-    Order getOrderByID(long id);
-    long getOrderID(Order order);
-    boolean isOrderExist(Order order);
-
-    boolean createOrder(Order order);
-    boolean setCertificateIntoOrder(GiftCertificate gc, Order order);
-    boolean isCertificateExistsInOrder(GiftCertificate gc, Order order);
-
-    boolean incrementQuantity(GiftCertificate gc, Order order);
+@Repository
+public interface OrderRepository extends JpaRepository<Order, Long> {
+    Page<Order> findAllByUser(User user, Pageable pageable);
 }

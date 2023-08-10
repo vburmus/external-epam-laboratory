@@ -1,98 +1,110 @@
 package com.epam.esm.tag.repository;
 
+import com.epam.esm.giftcertificate.model.GiftCertificate;
+import com.epam.esm.giftcertificatehasorder.model.GiftCertificateHasOrder;
+import com.epam.esm.giftcertificatehasorder.model.GiftCertificateOrderID;
+import com.epam.esm.order.model.Order;
 import com.epam.esm.tag.model.Tag;
-import org.junit.jupiter.api.AfterEach;
+import com.epam.esm.user.model.User;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.Example;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static com.epam.esm.Constants.*;
 
+@DataJpaTest
+@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 class TagRepositoryTest {
 
-    public static final String TAG_NAME = "TagName";
-    public static final String TAG_1 = "Tag1";
-    public static final long ID = 1L;
-    public static final long ID1 = 2L;
-    public static final String TAG_2 = "Tag2";
+
+    @Autowired
     private TagRepository tagRepository;
-    private EmbeddedDatabase embeddedDatabase;
+    @Autowired
+    private TestEntityManager entityManager;
 
     @BeforeEach
-    public void init(){
-        this.embeddedDatabase = new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.H2)
-                .addScript("embeddedDB/task_3.sql")
-                .addScript("embeddedDB/insert-some-data.sql")
+    private void setUp() {
+        Tag tag1 = Tag.builder().name(TAG_1).build();
+        Tag tag2 = Tag.builder().name(TAG_2).build();
+        entityManager.persist(tag1);
+        entityManager.persist(tag2);
+        GiftCertificate gc1 = GiftCertificate.builder()
+                .name(GC_1)
+                .tags(List.of(tag1, tag2))
+                .price(new BigDecimal(5))
+                .description(TEST_DESCRIPTION)
+                .duration(5)
                 .build();
-        this.tagRepository = new TagRepositoryImpl(new JdbcTemplate(embeddedDatabase));
+        entityManager.persist(gc1);
+        GiftCertificate gc2 = GiftCertificate.builder()
+                .name(GC_1)
+                .tags(List.of(tag2))
+                .price(new BigDecimal(5))
+                .description(TEST_DESCRIPTION)
+                .duration(5)
+                .build();
+        entityManager.persist(gc2);
+        User user1 = User.builder()
+                .name(USER_1)
+                .surname(USER_1)
+                .build();
+        entityManager.persist(user1);
+        Order order1 = Order.builder()
+                .description(ORDER_1)
+                .isClosed(0)
+                .cost(new BigDecimal(5))
+                .user(user1)
+                .build();
+        entityManager.persist(order1);
+        GiftCertificateOrderID giftCertificateOrderID = new GiftCertificateOrderID();
+        giftCertificateOrderID.setGiftCertificateId(gc1.getId());
+        giftCertificateOrderID.setOrderId(order1.getId());
+        GiftCertificateHasOrder giftCertificateHasOrder =
+                GiftCertificateHasOrder.builder()
+                        .id(giftCertificateOrderID)
+                        .giftCertificate(gc1)
+                        .quantity(5)
+                        .order(order1)
+                        .build();
+
+        entityManager.persist(giftCertificateHasOrder);
+        order1.setGiftCertificateHasOrders(List.of(giftCertificateHasOrder));
+
+        Order order2 = Order.builder().description(ORDER_2).isClosed(0).cost(new BigDecimal(5)).user(user1).build();
+        entityManager.persist(order2);
+        GiftCertificateOrderID giftCertificateOrderID2 = new GiftCertificateOrderID();
+        giftCertificateOrderID.setGiftCertificateId(gc2.getId());
+        giftCertificateOrderID.setOrderId(order2.getId());
+        GiftCertificateHasOrder giftCertificateHasOrder2 =
+                GiftCertificateHasOrder.builder()
+                        .id(giftCertificateOrderID2)
+                        .giftCertificate(gc2)
+                        .quantity(5)
+                        .order(order2)
+                        .build();
+
+        entityManager.persist(giftCertificateHasOrder2);
+        order2.setGiftCertificateHasOrders(List.of(giftCertificateHasOrder2));
     }
 
     @Test
-    void createTagGetTagByName() {
-        Tag tag = new Tag();
-        tag.setName(TAG_NAME);
-        boolean result = tagRepository.createTag(tag);
-        assertTrue(result);
-        Tag tagRes = tagRepository.getTagByName(TAG_NAME);
-        assertEquals(tag.getName(), tagRes.getName());
+    void existsByName() {
+        Assertions.assertTrue(tagRepository.existsByName(TAG_1));
     }
 
     @Test
-    void getAllTags() {
-        Tag tag1 = new Tag();
-        tag1.setName(TAG_1);
-        tag1.setId(ID);
-        Tag tag2 = new Tag();
-        tag2.setName(TAG_2);
-        tag2.setId(ID1);
-        List<Tag> expectedTagList = List.of(tag1,tag2);
-        List<Tag> actualTagList = tagRepository.getAllTags(1,10);
-
-        //then
-        assertEquals(expectedTagList, actualTagList);
-    }
-
-    @Test
-    void getTagByID() {
-        Tag tag1 = new Tag();
-        tag1.setName(TAG_1);
-        tag1.setId(ID);
-        assertEquals(tag1,tagRepository.getTagByID(ID));
-    }
-
-
-
-    @Test
-    void isExistsGetTagsIdAndDeleteTagByID() {
-        Tag tag = new Tag();
-        tag.setName(TAG_1);
-        assertTrue(tagRepository.isTagExists(TAG_1));
-        assertTrue(tagRepository.deleteTagByID(tagRepository.getTagID(tag)));
-        assertFalse(tagRepository.isTagExists(TAG_1));
-    }
-
-    @Test
-    void getAllTagsByCertificateID() {
-        Tag tag = new Tag();
-        tag.setName(TAG_2);
-        tag.setId(ID1);
-        assertEquals(List.of(tag), tagRepository.getAllTagsByCertificateID(ID1));
-    }
-    @Test
-    void getMostUsedTag(){
-        Tag t = new Tag();
-        t.setId(ID1);
-        t.setName("Tag2");
-        assertEquals(t,tagRepository.getMostUsedTag());
-    }
-    @AfterEach
-    public void drop(){
-        embeddedDatabase.shutdown();
+    void getMostUsedTag() {
+        Optional<Tag> tag = tagRepository.findOne(Example.of(Tag.builder().name(TAG_2).build()));
+        Assertions.assertEquals(tag, tagRepository.getMostUsedTag());
     }
 }
