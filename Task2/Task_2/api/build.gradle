@@ -1,8 +1,0 @@
-repositories {
-    mavenCentral()
-
-}
-dependencies{
-    implementation project(":core")
-    implementation 'org.apache.commons:commons-lang3:3.0'
-}
