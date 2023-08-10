@@ -1,4 +1,0 @@
-rootProject.name = 'Task_2'
-include 'core'
-include 'api'
-
