@@ -53,6 +53,21 @@ function reloadCertificates() {
     addCertificateCards(currentCertificatePage)
 }
 
+const handleInfiniteScroll = _.throttle(() => {
+    const endOfPage = document.body.offsetHeight - (window.innerHeight + window.pageYOffset) <= 150;
+
+    if (endOfPage) {
+        addCertificateCards(++currentCertificatePage);
+    }
+}, 700);
+
+
+const removeInfiniteScroll = () => {
+    document.querySelector(".loader").style.display = "none";
+    window.removeEventListener("scroll", handleInfiniteScroll);
+};
+
+
 
 /***
  * @param date - date, until certificate is valid
@@ -128,7 +143,10 @@ const addCertificateCards = (pageIndex) => {
     for (let i = startRange; i <= endRange - 1; i++) {
         createCertificateCard(i);
     }
-
+    //remove infinite scroll when last page become visible
+    if (pageIndex === certificatePageCount) {
+        removeInfiniteScroll()
+    }
 };
 
 
