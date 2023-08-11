@@ -49,3 +49,7 @@ ORM stands for Object Relational Mapping. Itâ€™s a bit of an abstract concept â€
 1. Hibernate should be used as a JPA implementation for data access.
 2. Spring Transaction should be used in all necessary areas of the application.
 3. Audit data should be populated using JPA features (an example can be found in materials).
+
+##How to run?
+1. Host your db.
+2. Put link, password,and user in properties
