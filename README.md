@@ -1,4 +1,4 @@
-# EPAM Laboratory Repository Task 7
+# Task 7 HTML & CSS & JS
 ## In this task, you need to create basic pages for your future web application.
 1. All pages must be created using plain HTML and CSS.
 2. Similar styles between the pages might be extracted into separate files to avoid copy-paste.
