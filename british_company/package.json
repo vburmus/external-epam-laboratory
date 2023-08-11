@@ -1,0 +1,11 @@
+{
+  "name": "british_company",
+  "version": "1.0.0",
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "tsc --build --clean"
+  }
+}
