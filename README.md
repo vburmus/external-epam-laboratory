@@ -1,4 +1,4 @@
-# Authentication & Spring Security
+# Task 4 Authentication & Spring Security
 ### Task
 
 This module is an extension of the REST API Advanced module and covers the following topics:
