@@ -7,6 +7,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.zalando.problem.Problem;
@@ -64,6 +65,12 @@ public class RestExceptionHandler {
     public ResponseEntity<Problem> handleWrongInstanceDetectedException(RuntimeException ex) {
         Problem problem = buildProblem(Status.FORBIDDEN, WRONG_AUTHENTICATION_INSTANCE, ex.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(problem);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Problem> handleBadCredentialsException(RuntimeException ex) {
+        Problem problem = buildProblem(Status.UNAUTHORIZED, ex.getMessage(), "Wrong email or password");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(problem);
     }
 
     private Problem buildProblem(Status status, String title, String detail) {
