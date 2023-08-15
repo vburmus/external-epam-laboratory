@@ -3,6 +3,7 @@ package com.epam.esm.tag.controller;
 
 import com.epam.esm.tag.model.TagDTO;
 import com.epam.esm.tag.service.TagService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,6 +15,7 @@ import static com.epam.esm.utils.Constants.DEFAULT_SIZE;
 
 @RestController
 @RequestMapping(value = "/tag", produces = MediaType.APPLICATION_JSON_VALUE)
+@Profile("default")
 public class TagController {
 
     private final TagService tagService;
