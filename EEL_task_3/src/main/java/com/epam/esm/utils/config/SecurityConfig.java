@@ -96,12 +96,10 @@ public class SecurityConfig {
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .oauth2ResourceServer(server -> server.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtToUserConverter)))
-                .oauth2Login(login -> {
-                    login.userInfoEndpoint(info -> info.userService(customOauth2UserService)
-                            .oidcUserService(customOidcUserService));
-                    login.defaultSuccessUrl("/");
-                });
+                .oauth2Login(login -> login
+                        .userInfoEndpoint(info -> info.userService(customOauth2UserService)
+                                .oidcUserService(customOidcUserService)))
+                .oauth2ResourceServer(server -> server.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtToUserConverter)));
         return http.build();
 
     }
@@ -115,7 +113,8 @@ public class SecurityConfig {
     @Bean
     @Primary
     JwtEncoder jwtAccessTokenEncoder() {
-        JWK jwk = new RSAKey.Builder(keyUtils.getAccessTokenPublicKey()).privateKey(keyUtils.getAccessTokenPrivateKey()).build();
+        JWK jwk =
+                new RSAKey.Builder(keyUtils.getAccessTokenPublicKey()).privateKey(keyUtils.getAccessTokenPrivateKey()).build();
         JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwks);
     }
@@ -129,7 +128,8 @@ public class SecurityConfig {
     @Bean
     @Qualifier("jwtRefreshTokenDecoder")
     JwtEncoder jwtRefreshTokenEncoder() {
-        JWK jwk = new RSAKey.Builder(keyUtils.getRefreshTokenPublicKey()).privateKey(keyUtils.getRefreshTokenPrivateKey()).build();
+        JWK jwk =
+                new RSAKey.Builder(keyUtils.getRefreshTokenPublicKey()).privateKey(keyUtils.getRefreshTokenPrivateKey()).build();
         JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwks);
     }
