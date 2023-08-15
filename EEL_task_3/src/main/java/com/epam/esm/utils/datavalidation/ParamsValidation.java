@@ -3,6 +3,7 @@ package com.epam.esm.utils.datavalidation;
 import com.epam.esm.exceptionhandler.exceptions.rest.NoSuchItemException;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.tag.model.Tag;
+import lombok.experimental.UtilityClass;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 
@@ -11,9 +12,8 @@ import java.util.List;
 
 import static com.epam.esm.utils.Constants.*;
 
-
+@UtilityClass
 public class ParamsValidation {
-
     public static boolean isTagValid(Tag tag) {
         return tag != null && tag.getName() != null && !tag.getName().isEmpty();
     }

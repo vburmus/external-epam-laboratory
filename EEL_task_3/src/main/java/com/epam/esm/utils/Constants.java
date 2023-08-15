@@ -1,13 +1,9 @@
 package com.epam.esm.utils;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class Constants {
-    public static final String TAG = "Tag: ";
-    public static final String ORDER = "Order:";
-    public static final String USER = "User:";
-    public static final String RESULT = "Result:";
-    public static final String INFO = "Info:";
-    public static final String OBJECTS = "Objects: ";
-    public static final String GIFT_CERTIFICATE = "Gift certificate: ";
     public static final String DEFAULT_PAGE = "1";
     public static final String DEFAULT_SIZE = "3";
     public static final String NAME = "name";
