@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -34,10 +33,6 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    private Date extractExpirationDate(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
-
     public long extractId(String token) {
         return extractClaim(token, claims -> claims.get(ID, Long.class));
     }
@@ -55,45 +50,26 @@ public class JwtService {
         return Jwts.parserBuilder().setSigningKey(keyUtils.getAccessTokenPublicKey()).build().parseClaimsJws(token).getBody();
     }
 
-
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String email = extractUsername(token);
-
-        return email.equals(userDetails.getUsername()) && !isTokenExpired(token) && !isTokenBanned(token);
-    }
-
-    public boolean isTokenExpired(String token) {
-        return extractExpirationDate(token).before(new Date());
+        return email.equals(userDetails.getUsername()) && !isTokenBanned(token);
     }
 
     public boolean isTokenBanned(String token) {
-
         final long id = extractId(token);
-
-        List<?> actualizedJwt = actualizeCache(id);
-        return actualizedJwt.stream().anyMatch(o -> o.equals(token));
-
-    }
-
-    private List<?> actualizeCache(long id) {
         Cache blackList = cacheManager.getCache(BLACK_LIST);
         if (blackList == null) {
             throw new CacheError(CACHE_NOT_FOUND);
         }
-        var cache = blackList.get(id);
-        if (cache != null) {
-            var bannedJwt = cache.get();
-            if (bannedJwt instanceof List) {
-                List<?> actualizedJwt = ((List<?>) bannedJwt).stream().filter(jwt -> !isTokenExpired((String) jwt)).toList();
-                blackList.put(id, actualizedJwt);
-                return actualizedJwt;
-            }
+        var bannedUserTokensCache = blackList.get(id);
+        List<String> bannedJwt = (List<String>) (bannedUserTokensCache != null ? bannedUserTokensCache.get() : null);
+        if (bannedJwt == null) {
+            return false;
         }
-        return new ArrayList<>();
+        return bannedJwt.stream().anyMatch(o -> o.equals(token));
     }
 
     public void invalidateTokenIfExist(long userId, TokenType tokenType) throws IncorrectTokenTypeException {
-
         Cache cache;
         if (tokenType == TokenType.ACCESS_TOKEN) {
             cache = cacheManager.getCache(ACCESS_TOKENS);
@@ -107,10 +83,10 @@ public class JwtService {
             throw new CacheError(CACHE_NOT_FOUND);
         }
 
-        var oldToken = cache.get(userId);
+        var oldTokens = cache.get(userId);
 
-        if (oldToken != null) {
-            String cachedJwt = (String) oldToken.get();
+        if (oldTokens != null) {
+            String cachedJwt = (String) oldTokens.get();
             addTokenToBlackList(userId, cachedJwt);
         }
     }
@@ -118,15 +94,17 @@ public class JwtService {
     private void addTokenToBlackList(long userId, String cachedJwt) {
 
         Cache blackList = cacheManager.getCache(BLACK_LIST);
-
         if (blackList == null) {
             throw new CacheError(CACHE_NOT_FOUND);
         }
-        List<String> jwtList = (List<String>) blackList.get(userId);
 
-        if (jwtList == null) {
-            jwtList = new ArrayList<>();
+        var bannedUserTokensCache = blackList.get(userId);
+        List<String> jwtList = new ArrayList<>();
+        if (bannedUserTokensCache != null) {
+            var help = bannedUserTokensCache.get();
+            jwtList = help == null ? new ArrayList<>(): (List<String>) help;
         }
+
         jwtList.add(cachedJwt);
         blackList.put(userId, jwtList);
     }

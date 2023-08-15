@@ -19,6 +19,7 @@ import org.zalando.problem.jackson.ProblemModule;
 import org.zalando.problem.violations.ConstraintViolationProblemModule;
 
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 import static com.epam.esm.utils.Constants.*;
 
@@ -49,7 +50,7 @@ public class ApplicationConfig {
 
     @Bean
     public Caffeine<Object, Object> caffeineConfig() {
-        return Caffeine.newBuilder();
+        return Caffeine.newBuilder().expireAfterWrite(2, TimeUnit.DAYS);
     }
 
     @Bean

@@ -42,9 +42,9 @@ public class TokenGenerator {
                 .claim(TYPE, tokenType)
                 .issuedAt(now);
         if (tokenType == TokenType.ACCESS_TOKEN) {
-            return jwtClaimsSet.expiresAt(now.plus(60, ChronoUnit.SECONDS)).build();
+            return jwtClaimsSet.expiresAt(now.plus(60, ChronoUnit.MINUTES)).build();
         } else if (tokenType == TokenType.REFRESH_TOKEN) {
-            return jwtClaimsSet.expiresAt(now.plus(7, ChronoUnit.DAYS)).build();
+            return jwtClaimsSet.expiresAt(now.plus(2, ChronoUnit.DAYS)).build();
         }
         throw new IncorrectTokenTypeException();
     }
