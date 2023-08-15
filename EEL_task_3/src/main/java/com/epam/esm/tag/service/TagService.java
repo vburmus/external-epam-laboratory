@@ -64,10 +64,9 @@ public class TagService {
         return entityToDtoMapper.toTagDTO(tag.get());
     }
 
-    public boolean deleteTag(long id) {
+    public void deleteTag(long id) {
         if (!tagRepository.existsById(id)) throw new NoSuchItemException(THERE_IS_NO_GC_WITH_ID + id );
         tagRepository.deleteById(id);
-        return true;
     }
 
     @Transactional

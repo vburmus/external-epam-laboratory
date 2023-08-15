@@ -17,7 +17,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.fge.jsonpatch.JsonPatchException;
 import com.github.fge.jsonpatch.mergepatch.JsonMergePatch;
 import org.springframework.data.domain.*;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -104,7 +103,8 @@ public class GiftCertificateService {
         Page<GiftCertificate> certificates = giftCertificateRepository.findByNameContaining(part, pageRequest);
         if (!certificates.isEmpty())
             return certificates.map(entityToDtoMapper::toGiftCertificateDTO);
-        Page<GiftCertificate> gcByDescription = giftCertificateRepository.findByDescriptionContaining(part, pageRequest);
+        Page<GiftCertificate> gcByDescription = giftCertificateRepository.findByDescriptionContaining(part,
+                pageRequest);
         return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(gcByDescription).map(entityToDtoMapper::toGiftCertificateDTO);
     }
 
@@ -144,8 +144,8 @@ public class GiftCertificateService {
     }
 
     @Transactional
-    @Modifying
-    public GiftCertificateDTO updateCertificate(long id, JsonMergePatch jsonPatch) throws JsonPatchException, JsonProcessingException {
+    public GiftCertificateDTO updateCertificate(long id, JsonMergePatch jsonPatch) throws JsonPatchException,
+            JsonProcessingException {
         Optional<GiftCertificate> gc = giftCertificateRepository.findById(id);
         if (gc.isEmpty()) throw new NoSuchItemException(THERE_IS_NO_GC_WITH_ID + id);
 
@@ -167,10 +167,9 @@ public class GiftCertificateService {
         return entityToDtoMapper.toGiftCertificateDTO(savedGc);
     }
 
-    @Modifying
-    public boolean deleteCertificate(Long id) {
+
+    public void deleteCertificate(Long id) {
         if (!giftCertificateRepository.existsById(id)) throw new NoSuchItemException(THERE_IS_NO_GC_WITH_ID + id);
         giftCertificateRepository.deleteById(id);
-        return true;
     }
 }
