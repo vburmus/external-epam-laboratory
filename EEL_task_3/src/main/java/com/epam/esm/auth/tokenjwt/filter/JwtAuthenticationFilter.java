@@ -27,8 +27,6 @@ import static com.epam.esm.utils.Constants.AUTHORIZATION_HEADER;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
-
     private final JwtService jwtService;
     private final CustomUserDetailsService customUserDetailsService;
 
@@ -58,7 +56,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             userDetails.getAuthorities()
                     );
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 } else {
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
@@ -70,8 +67,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.getWriter().write(e.getMessage());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-
-
         }
     }
 

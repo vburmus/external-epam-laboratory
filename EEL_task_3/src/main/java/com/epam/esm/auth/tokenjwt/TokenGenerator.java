@@ -63,7 +63,8 @@ public class TokenGenerator {
         return encodeAndPutJwt(user, jwtClaimSet, jwtAccessTokenEncoder, ACCESS_TOKENS);
     }
 
-    private String encodeAndPutJwt(User user, JwtClaimsSet jwtClaimSet, JwtEncoder jwtAccessTokenEncoder, String accessTokens) {
+    private String encodeAndPutJwt(User user, JwtClaimsSet jwtClaimSet, JwtEncoder jwtAccessTokenEncoder,
+                                   String accessTokens) {
         String jwt = jwtAccessTokenEncoder.encode(JwtEncoderParameters.from(jwtClaimSet)).getTokenValue();
         var cache = cacheManager.getCache(accessTokens);
         if (cache == null) {
@@ -87,7 +88,6 @@ public class TokenGenerator {
     }
 
     public TokenDTO createToken(Authentication authentication) {
-
         if (!(authentication.getPrincipal() instanceof User user)) {
             throw new WrongAuthenticationInstanceException(OTHER_INSTANCE_DETECTED);
         }

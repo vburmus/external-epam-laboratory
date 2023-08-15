@@ -11,7 +11,6 @@ import static com.epam.esm.utils.Constants.GET_MOST_USED_TAG;
 
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Long> {
-
     boolean existsByName(String tagName);
 
     @Query(nativeQuery = true, value = GET_MOST_USED_TAG)

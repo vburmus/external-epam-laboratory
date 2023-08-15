@@ -17,7 +17,6 @@ import static com.epam.esm.utils.Constants.DEFAULT_SIZE;
 @RequestMapping(value = "/tag", produces = MediaType.APPLICATION_JSON_VALUE)
 @Profile("default")
 public class TagController {
-
     private final TagService tagService;
 
     public TagController(TagService tagService) {

@@ -26,7 +26,6 @@ import static com.epam.esm.utils.Constants.*;
 @Component
 @RequiredArgsConstructor
 public class KeyUtils {
-
     private final Environment environment;
 
     @Value("${access-token.private}")

@@ -18,7 +18,6 @@ import static com.epam.esm.utils.Constants.DEFAULT_SIZE;
 @RequestMapping(value = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
 @Profile("default")
 public class UserController {
-
     private final UserService userService;
     private final OrderService orderService;
 

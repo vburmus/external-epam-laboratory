@@ -27,7 +27,6 @@ import static com.epam.esm.utils.Constants.*;
 @RequiredArgsConstructor
 @EnableCaching
 public class ApplicationConfig {
-
     private final CustomUserDetailsService userService;
 
     @Bean
@@ -60,6 +59,7 @@ public class ApplicationConfig {
         cacheManager.setCaffeine(caffeine);
         return cacheManager;
     }
+
     @Bean
     public ObjectMapper objectMapper() {
         return new ObjectMapper().registerModules(
