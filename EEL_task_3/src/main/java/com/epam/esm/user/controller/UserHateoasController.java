@@ -23,6 +23,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class UserHateoasController {
 
     private final UserService userService;
+
     public UserHateoasController(UserService userService) {
         this.userService = userService;
     }
@@ -42,7 +43,7 @@ public class UserHateoasController {
     }
 
     @GetMapping("/search/{id}")
-    public RepresentationModel<?> getUserById(@PathVariable("id") long id) {
+    public RepresentationModel<UserHateoas> getUserById(@PathVariable("id") long id) {
         return new UserHateoas(userService.getUserById(id));
     }
 }
