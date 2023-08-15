@@ -31,8 +31,7 @@ import java.util.Optional;
 import static com.epam.esm.Constants.*;
 import static com.epam.esm.utils.Constants.THERE_IS_NO_GC_WITH_ID;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.exact;
 
 @ExtendWith(MockitoExtension.class)
@@ -119,8 +118,8 @@ class GiftCertificateServiceTest {
     void deleteCertificateSuccess() {
         when(giftCertificateRepositoryMocked.existsById(ID1)).thenReturn(true);
         doNothing().when(giftCertificateRepositoryMocked).deleteById(ID1);
-        assertTrue(giftCertificateServiceMocked.deleteCertificate(ID1));
-
+        giftCertificateServiceMocked.deleteCertificate(ID1);
+        verify(giftCertificateRepositoryMocked).deleteById(ID1);
     }
 
     @Test

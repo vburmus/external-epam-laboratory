@@ -26,8 +26,7 @@ import java.util.Optional;
 import static com.epam.esm.Constants.*;
 import static com.epam.esm.utils.Constants.THERE_IS_NO_GC_WITH_ID;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TagServiceTest {
@@ -110,7 +109,9 @@ class TagServiceTest {
     void deleteTagSuccess() {
         when(tagRepositoryMocked.existsById(ID1)).thenReturn(true);
         doNothing().when(tagRepositoryMocked).deleteById(ID1);
-        assertTrue(tagServiceMocked.deleteTag(ID1));
+
+        tagServiceMocked.deleteTag(ID1);
+        verify(tagRepositoryMocked).deleteById(ID1);
     }
 
     @Test
