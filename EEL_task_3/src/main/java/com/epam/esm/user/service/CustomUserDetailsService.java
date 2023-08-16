@@ -1,6 +1,5 @@
 package com.epam.esm.user.service;
 
-import com.epam.esm.exceptionhandler.exceptions.rest.ObjectNotFoundException;
 import com.epam.esm.exceptionhandler.exceptions.rest.UserCreationFailureException;
 import com.epam.esm.user.model.Role;
 import com.epam.esm.user.model.User;
@@ -24,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username).orElseThrow(() -> new ObjectNotFoundException("User not found"));
+        return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     public User createUserFromAttributes(Map<String, Object> attributes, String provider) {
@@ -42,6 +41,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                     .build();
             userRepository.save(newUser);
         }
-        return userRepository.findByEmail(email).orElseThrow(() -> new UserCreationFailureException("Failed to create or retrieve user"));
+        return userRepository.findByEmail(email).orElseThrow(() -> new UserCreationFailureException("Failed to create" +
+                " or retrieve user"));
     }
 }
