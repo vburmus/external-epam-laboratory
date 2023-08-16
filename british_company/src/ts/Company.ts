@@ -3,7 +3,6 @@ import {Employee} from "./Employee.js";
 import {ILocation} from "./ILocation.js";
 
 export class Company<L extends ILocation> {
-    protected projects: Project[]
     private location: L | null
 
     constructor();
@@ -12,13 +11,8 @@ export class Company<L extends ILocation> {
     constructor(...args: any[]) {
         if (args.length == 0) {
             this.location = null
-            this.projects = []
         } else if (args.length == 1) {
             this.location = args[0] as L
-            this.projects = []
-        } else if (args.length == 2) {
-            this.location = args[0] as L
-            this.projects = args[1] as Project[]
         } else {
             throw new Error('Invalid constructor arguments');
         }
@@ -31,7 +25,15 @@ export class Company<L extends ILocation> {
     }
 
     public getProjectList(): Project[] {
-        return this.projects
+        const projects: Project[] = []
+        this.location?.employees.forEach(employee => {
+            const project = employee.getCurrentProject();
+            const projectNames = projects.map(existingProject => existingProject.getName())
+            if (project && !projectNames.includes(project.getName())) {
+                projects.push(project)
+            }
+        });
+        return projects;
     }
 
     public getEmployeeNameList(): string[] {

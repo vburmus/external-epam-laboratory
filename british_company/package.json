@@ -4,6 +4,7 @@
   "devDependencies": {
     "typescript": "^5.1.6"
   },
+  "type": "module",
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean"

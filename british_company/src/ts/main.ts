@@ -13,10 +13,9 @@ function main() {
     const britishLocation = new CompanyLocationArray("UK");
     const americaLocation = new CompanyLocationLocalStorage("USA");
 
-    let companyEurope: Company<Location>;
-    companyEurope = new Company<Location>(europeLocation,projects);
-    const companyBritish = new Company<CompanyLocationArray>(britishLocation,projects);
-   //const companyAmerica = new Company<CompanyLocationLocalStorage>(americaLocation);
+    const companyEurope: Company<Location> = new Company<CompanyLocationArray>(europeLocation);
+    const companyBritish = new Company<CompanyLocationArray>(britishLocation);
+    const companyAmerica = new Company<CompanyLocationLocalStorage>(americaLocation);
 
     const employee1 = new Employee("John",projects[0]);
     const employee2 = new Employee("Jane",projects[0]);
@@ -24,16 +23,17 @@ function main() {
 
     companyEurope.addEmployee(employee1);
     companyBritish.addEmployee(employee2);
-    //companyAmerica.addEmployee(employee3);
+    companyAmerica.addEmployee(employee3);
 
-    const employee4 = new Employee("John",projects[1]);
-    const employee5 = new Employee("Jane",projects[1]);
-    const employee6 = new Employee("Michael",projects[1]);
+    const employee4 = new Employee("Jack",projects[1]);
+    const employee5 = new Employee("Paul",projects[1]);
+    const employee6 = new Employee("James",projects[1]);
 
     companyEurope.addEmployee(employee4);
     companyBritish.addEmployee(employee5);
-    //companyAmerica.addEmployee(employee6);
+    companyAmerica.addEmployee(employee6);
     console.log("Employees:", companyEurope.getEmployeeNameList(), " , projects: ", companyEurope.getProjectList())
     console.log("Employees:", companyBritish.getEmployeeNameList(), " , projects: ", companyBritish.getProjectList())
+    console.log("Employees:", companyAmerica.getEmployeeNameList(), " , projects: ", companyAmerica.getProjectList())
 }
 main()
