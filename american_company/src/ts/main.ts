@@ -5,7 +5,7 @@ import {BackendDeveloper} from "./BackendDeveloper";
 
 function main() {
     let projects: Project[] = [new Project("Book store"), new Project("Car service")]
-    let company: Company = new Company(projects)
+    let company: Company = new Company()
 
     company.addEmployee(new FrontendDeveloper("John", projects[0],"Angular"))
     company.addEmployee(new BackendDeveloper("Markus", projects[0],"Java"))
