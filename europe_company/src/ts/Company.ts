@@ -2,8 +2,8 @@ import {Project} from "./Project";
 import {Employee} from "./Employee";
 
 class Company {
-
     private employees: Employee[]
+    private projects: Project[]
 
     constructor();
     constructor(projects: Project[]);
@@ -12,8 +12,13 @@ class Company {
     constructor(...args: any[]) {
         if (args.length == 0) {
             this.employees = []
+            this.projects = []
         } else if (args.length == 1) {
             this.employees = args[0] as Employee[]
+            this.projects = []
+        } else if (args.length == 2) {
+            this.employees = args[0] as Employee[]
+            this.projects = args[1] as Project[]
         } else {
             throw new Error('Invalid constructor arguments');
         }
@@ -21,18 +26,12 @@ class Company {
 
     public addEmployee(employee: Employee) {
         this.employees.push(employee)
+        const employeeProject = employee.getCurrentProject()
+        if (!this.projects.includes(employeeProject)) this.projects.push(employeeProject)
     }
 
     public getProjectList(): Project[] {
-        const projects: Project[] = []
-        this.employees.forEach(employee => {
-            const project = employee.getCurrentProject();
-            const projectNames = projects.map(existingProject => existingProject.getName())
-            if (project && !projectNames.includes(project.getName())) {
-                projects.push(project)
-            }
-        });
-        return projects;
+        return this.projects
     }
 
     public getEmployeeNameList(): string[] {

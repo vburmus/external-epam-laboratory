@@ -32,6 +32,14 @@ function main() {
     companyEurope.addEmployee(employee4);
     companyBritish.addEmployee(employee5);
     companyAmerica.addEmployee(employee6);
+
+    const employee7 = new Employee("Michael",projects[1]);
+    const employee8 = new Employee("Stew",projects[1]);
+    const employee9 = new Employee("Adrian",projects[1]);
+
+    companyEurope.addEmployee(employee7);
+    companyBritish.addEmployee(employee8);
+    companyAmerica.addEmployee(employee9);
     console.log("Employees:", companyEurope.getEmployeeNameList(), " , projects: ", companyEurope.getProjectList())
     console.log("Employees:", companyBritish.getEmployeeNameList(), " , projects: ", companyBritish.getProjectList())
     console.log("Employees:", companyAmerica.getEmployeeNameList(), " , projects: ", companyAmerica.getProjectList())
