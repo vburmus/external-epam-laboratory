@@ -2,6 +2,7 @@ package com.epam.esm.utils.config;
 
 import com.epam.esm.user.service.CustomUserDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.CacheManager;
@@ -64,6 +65,7 @@ public class ApplicationConfig {
     public ObjectMapper objectMapper() {
         return new ObjectMapper().registerModules(
                 new ProblemModule(),
-                new ConstraintViolationProblemModule());
+                new ConstraintViolationProblemModule(),
+                new JavaTimeModule());
     }
 }
