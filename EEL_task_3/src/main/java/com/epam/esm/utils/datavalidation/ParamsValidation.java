@@ -1,13 +1,16 @@
 package com.epam.esm.utils.datavalidation;
 
+import com.epam.esm.exceptionhandler.exceptions.rest.InvalidFileException;
 import com.epam.esm.exceptionhandler.exceptions.rest.NoSuchItemException;
 import com.epam.esm.giftcertificate.model.GiftCertificate;
 import com.epam.esm.tag.model.Tag;
 import lombok.experimental.UtilityClass;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.epam.esm.utils.Constants.*;
@@ -30,7 +33,7 @@ public class ParamsValidation {
     }
 
     public static boolean isValidCertificate(GiftCertificate giftCertificate) {
-        return giftCertificate.getName() != null && !giftCertificate.getName().isEmpty() && giftCertificate.getDuration() != null && giftCertificate.getDuration() >= 0 && giftCertificate.getDescription() != null && !giftCertificate.getDescription().isEmpty() && giftCertificate.getPrice() != null && giftCertificate.getPrice().compareTo(BigDecimal.ZERO) > 0 && isValidTags(giftCertificate.getTags());
+        return giftCertificate.getName() != null && !giftCertificate.getName().isEmpty() && giftCertificate.getDurationDate() != null && (LocalDateTime.now()).isBefore(giftCertificate.getDurationDate()) && giftCertificate.getDescription() != null && !giftCertificate.getDescription().isEmpty() && giftCertificate.getPrice() != null && giftCertificate.getPrice().compareTo(BigDecimal.ZERO) > 0 && isValidTags(giftCertificate.getTags());
     }
 
 
@@ -51,5 +54,20 @@ public class ParamsValidation {
 
     public static boolean isPartValidForSearch(String part) {
         return part != null && !part.isEmpty();
+    }
+
+    public static String validateFileExtension(MultipartFile file) {
+        List<String> allowedImageExtension = List.of("jpg", "jpeg", "png", "gif");
+        String fileName = file.getOriginalFilename();
+        if (fileName == null) throw new InvalidFileException("Invalid file name");
+        int index = fileName.lastIndexOf('.');
+        String extension = "";
+        if (index > 0) {
+            extension = fileName.substring(index + 1);
+        }
+        if (extension.isEmpty() || !allowedImageExtension.contains(extension)) {
+            throw new InvalidFileException("Invalid file extension");
+        }
+        return extension;
     }
 }

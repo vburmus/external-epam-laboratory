@@ -18,7 +18,6 @@ import static com.epam.esm.utils.Constants.*;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class RestExceptionHandler {
-
     @ExceptionHandler({NoSuchItemException.class, PageException.class, ObjectNotFoundException.class})
     public ResponseEntity<Problem> handleNotFoundException(RuntimeException ex) {
         Problem problem = buildProblem(Status.NOT_FOUND, NOT_FOUND, ex.getMessage());
@@ -69,7 +68,13 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Problem> handleBadCredentialsException(RuntimeException ex) {
-        Problem problem = buildProblem(Status.UNAUTHORIZED, ex.getMessage(), "Wrong email or password");
+        Problem problem = buildProblem(Status.UNAUTHORIZED, ex.getMessage(), WRONG_EMAIL_OR_PASSWORD);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(problem);
+    }
+
+    @ExceptionHandler(InvalidFileException.class)
+    public ResponseEntity<Problem> handleInvalidFileException(RuntimeException ex) {
+        Problem problem = buildProblem(Status.UNPROCESSABLE_ENTITY,FILE_HAD_WRONG_FORMAT , ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(problem);
     }
 

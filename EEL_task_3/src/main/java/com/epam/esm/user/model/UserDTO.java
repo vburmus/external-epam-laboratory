@@ -19,6 +19,7 @@ public class UserDTO extends RepresentationModel<UserDTO> {
     private String email;
     private Role role;
     private String provider;
+    private String imageURL;
 
     @Override
     public boolean equals(Object o) {

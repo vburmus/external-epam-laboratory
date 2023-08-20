@@ -91,4 +91,7 @@ public class Constants {
             "  order by cost desc limit 1 ) group by user_id, tag_id order by tag_count desc limit 1) subquery join tag on tag.id = " +
             "subquery.tag_id;";
 
+    public static final String DEFAULT_PROFILE_IMG = "https://mjc-content.s3.eu-north-1.amazonaws.com/user/975ce2c8-7d04-467c-832d-f41d002dc935.png";
+    public static final String FILE_HAD_WRONG_FORMAT = "File had wrong format";
+    public static final String WRONG_EMAIL_OR_PASSWORD = "Wrong email or password";
 }
