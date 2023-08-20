@@ -24,6 +24,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -58,7 +59,7 @@ class GiftCertificateServiceTest {
         GiftCertificate gc = GiftCertificate.builder()
                 .id(ID1)
                 .name(TEST_CERT)
-                .duration(DURATION_VAL)
+                .durationDate(LocalDateTime.MAX)
                 .price(PRICE)
                 .description(TEST_CERT)
                 .tags(Collections.singletonList(t))
@@ -81,7 +82,7 @@ class GiftCertificateServiceTest {
         GiftCertificateDTO gcDTO = new GiftCertificateDTO();
         gcDTO.setId(ID1);
         gcDTO.setName(TEST_CERT);
-        gcDTO.setDuration(DURATION_VAL);
+        gcDTO.setDurationDate(LocalDateTime.MAX);
         GiftCertificate gc = entityMapper.toGiftCertificate(gcDTO);
 
         when(entityToDtoMapper.toGiftCertificate(gcDTO)).thenReturn(gc);
@@ -89,7 +90,7 @@ class GiftCertificateServiceTest {
         when(giftCertificateRepositoryMocked.exists(getGiftCertificateExample(gc))).thenReturn(false);
         ObjectIsInvalidException thrown = assertThrows(ObjectIsInvalidException.class,
                 () -> giftCertificateServiceMocked.createCertificate(gcDTO));
-        assertEquals("Gift certificate with name = " + TEST_CERT + ", duration = " + DURATION_VAL + " is invalid, please check your params",
+        assertEquals("Gift certificate with name = " + TEST_CERT + ", duration = " + LocalDateTime.MAX + " is invalid, please check your params",
                 thrown.getMessage());
     }
 
@@ -132,7 +133,7 @@ class GiftCertificateServiceTest {
         GiftCertificate gc = GiftCertificate.builder()
                 .id(ID1)
                 .name(TEST_CERT)
-                .duration(DURATION_VAL)
+                .durationDate(LocalDateTime.MAX)
                 .price(PRICE)
                 .description(TEST_CERT)
                 .tags(Collections.singletonList(t))
@@ -162,7 +163,7 @@ class GiftCertificateServiceTest {
         GiftCertificate gc = GiftCertificate.builder()
                 .id(ID1)
                 .name(TEST_CERT)
-                .duration(DURATION_VAL)
+                .durationDate(LocalDateTime.MAX)
                 .price(PRICE)
                 .description(TEST_CERT)
                 .tags(Collections.singletonList(t))
@@ -195,7 +196,7 @@ class GiftCertificateServiceTest {
         GiftCertificate gc = GiftCertificate.builder()
                 .id(ID1)
                 .name(TEST_CERT)
-                .duration(DURATION_VAL)
+                .durationDate(LocalDateTime.MAX)
                 .price(PRICE)
                 .description(TEST_CERT)
                 .tags(Collections.singletonList(t))
@@ -246,7 +247,7 @@ class GiftCertificateServiceTest {
         GiftCertificate gc = GiftCertificate.builder()
                 .id(ID1)
                 .name(TEST_CERT)
-                .duration(DURATION_VAL)
+                .durationDate(LocalDateTime.MAX)
                 .price(PRICE)
                 .description(TEST_CERT)
                 .tags(Collections.singletonList(t))
@@ -260,7 +261,7 @@ class GiftCertificateServiceTest {
         GiftCertificate gc2 = GiftCertificate.builder()
                 .id(ID2)
                 .name(TEST_CERT)
-                .duration(DURATION_VAL)
+                .durationDate(LocalDateTime.MAX)
                 .price(PRICE)
                 .description(TEST_CERT)
                 .tags(Collections.singletonList(t2))
@@ -306,7 +307,7 @@ class GiftCertificateServiceTest {
         GiftCertificate gc = GiftCertificate.builder()
                 .id(ID1)
                 .name(TEST_CERT)
-                .duration(DURATION_VAL)
+                .durationDate(LocalDateTime.MAX)
                 .price(PRICE)
                 .description(TEST_CERT)
                 .tags(Collections.singletonList(t))
@@ -320,7 +321,7 @@ class GiftCertificateServiceTest {
         GiftCertificate gc2 = GiftCertificate.builder()
                 .id(ID2)
                 .name(TEST_CERT)
-                .duration(DURATION_VAL)
+                .durationDate(LocalDateTime.MAX)
                 .price(PRICE)
                 .description(TEST_CERT)
                 .tags(Collections.singletonList(t2))
@@ -367,7 +368,7 @@ class GiftCertificateServiceTest {
         GiftCertificate gc = GiftCertificate.builder()
                 .id(ID1)
                 .name(TEST_CERT)
-                .duration(DURATION_VAL)
+                .durationDate(LocalDateTime.MAX)
                 .price(PRICE)
                 .description(TEST_CERT)
                 .tags(List.of(t1, t2))
@@ -419,7 +420,7 @@ class GiftCertificateServiceTest {
         GiftCertificate gc = GiftCertificate.builder()
                 .id(ID1)
                 .name(TEST_CERT)
-                .duration(DURATION_VAL)
+                .durationDate(LocalDateTime.MAX)
                 .price(PRICE)
                 .description(TEST_CERT)
                 .tags(List.of(t1, t2))
@@ -467,7 +468,7 @@ class GiftCertificateServiceTest {
         GiftCertificate gc = GiftCertificate.builder()
                 .id(ID1)
                 .name(TEST_CERT)
-                .duration(DURATION_VAL)
+                .durationDate(LocalDateTime.MAX)
                 .price(PRICE)
                 .description(TEST_CERT)
                 .tags(List.of(t1, t2))

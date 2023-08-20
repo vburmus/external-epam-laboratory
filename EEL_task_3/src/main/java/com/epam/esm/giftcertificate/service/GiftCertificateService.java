@@ -54,10 +54,10 @@ public class GiftCertificateService {
 
         if (giftCertificateRepository.exists(providedGC))
             throw new ObjectAlreadyExistsException(GIFT_CERTIFICATE_WITH_NAME + giftCertificate.getName() +
-                    DURATION1 + giftCertificate.getDuration() + ALREADY_EXISTS);
+                    DURATION1 + giftCertificate.getDurationDate() + ALREADY_EXISTS);
         if (!ParamsValidation.isValidCertificate(giftCertificate))
             throw new ObjectIsInvalidException(GIFT_CERTIFICATE_WITH_NAME + giftCertificate.getName() +
-                    DURATION1 + giftCertificate.getDuration() + IS_INVALID_PLEASE_CHECK_YOUR_PARAMS);
+                    DURATION1 + giftCertificate.getDurationDate() + IS_INVALID_PLEASE_CHECK_YOUR_PARAMS);
 
         giftCertificate.setCreateDate(LocalDateTime.now());
         giftCertificate.setLastUpdateDate(LocalDateTime.now());
@@ -159,7 +159,7 @@ public class GiftCertificateService {
 
         giftCertificateFromDB.setPrice(updatedGiftCertificate.getPrice());
         giftCertificateFromDB.setName(updatedGiftCertificate.getName());
-        giftCertificateFromDB.setDuration(updatedGiftCertificate.getDuration());
+        giftCertificateFromDB.setDurationDate(updatedGiftCertificate.getDurationDate());
         giftCertificateFromDB.setTags(tagService.checkTagsAndSaveIfDontExist(updatedGiftCertificate));
         giftCertificateFromDB.setDescription(updatedGiftCertificate.getDescription());
 

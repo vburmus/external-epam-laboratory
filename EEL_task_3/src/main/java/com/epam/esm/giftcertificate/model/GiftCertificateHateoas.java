@@ -27,7 +27,7 @@ public class GiftCertificateHateoas extends RepresentationModel<GiftCertificateH
     private String name;
     private String description;
     private BigDecimal price;
-    private Integer duration;
+    private LocalDateTime durationDate;
     private List<Tag> tags;
     private LocalDateTime createDate;
     private LocalDateTime lastUpdateDate;
@@ -37,7 +37,7 @@ public class GiftCertificateHateoas extends RepresentationModel<GiftCertificateH
         this.name = giftCertificateDTO.getName();
         this.description = giftCertificateDTO.getDescription();
         this.price = giftCertificateDTO.getPrice();
-        this.duration = giftCertificateDTO.getDuration();
+        this.durationDate = giftCertificateDTO.getDurationDate();
         this.tags = giftCertificateDTO.getTags();
         this.createDate = giftCertificateDTO.getCreateDate();
         this.lastUpdateDate = giftCertificateDTO.getLastUpdateDate();
