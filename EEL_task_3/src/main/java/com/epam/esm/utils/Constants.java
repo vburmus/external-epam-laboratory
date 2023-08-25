@@ -90,6 +90,11 @@ public class Constants {
             "  join purchase on purchase.id = gift_certificate_has_order.order_id where purchase.user_id = ( select user_id from purchase" +
             "  order by cost desc limit 1 ) group by user_id, tag_id order by tag_count desc limit 1) subquery join tag on tag.id = " +
             "subquery.tag_id;";
+    public static final String GET_GC_BY_TAGS_AND_PART = "SELECT id,name,description,price,duration_date," +
+            "create_date,last_update_date FROM " +
+            "gift_certificate AS gc LEFT JOIN gift_certificate_has_tag AS t ON gc.id= " +
+            "t.gift_certificate_id WHERE tag_id IN :tags and " +
+            "(description LIKE %:partial% OR name LIKE  %:partial%)";
 
     public static final String DEFAULT_PROFILE_IMG = "https://mjc-content.s3.eu-north-1.amazonaws.com/user/default-user.png";
     public static final String DEFAULT_TAG_IMG = "https://mjc-content.s3.eu-north-1.amazonaws.com/tag/default_tag.jpg";

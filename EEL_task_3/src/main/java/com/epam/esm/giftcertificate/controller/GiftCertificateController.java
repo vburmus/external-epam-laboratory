@@ -92,6 +92,21 @@ public class GiftCertificateController {
                 HttpStatus.OK);
     }
 
+    @GetMapping({"/search/by-tags-and-part"})
+    public ResponseEntity<Page<GiftCertificateDTO>> searchForCertificatesByTagsAndDescr(@RequestParam("tagsId") List<Long> tagsId,
+                                                                                        @RequestParam(
+                                                                                                "part") String part,
+                                                                                        @RequestParam(required = false
+                                                                                                , defaultValue =
+                                                                                                DEFAULT_PAGE) Integer page,
+                                                                                        @RequestParam(required = false
+                                                                                                , defaultValue =
+                                                                                                DEFAULT_SIZE) Integer size) {
+        return new ResponseEntity<>(giftCertificateService.getCertificatesByTagsAndDescriptionOrNamePart(tagsId, part,
+                page, size),
+                HttpStatus.OK);
+    }
+
     @PatchMapping(value = "/{id}", consumes = "application/json-patch+json")
     public ResponseEntity<GiftCertificateDTO> updateCertificate(@PathVariable("id") long id,
                                                                 @RequestBody JsonMergePatch patch) throws JsonPatchException, JsonProcessingException {

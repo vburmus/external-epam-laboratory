@@ -33,7 +33,11 @@ public class ParamsValidation {
     }
 
     public static boolean isValidCertificate(GiftCertificate giftCertificate) {
-        return giftCertificate.getName() != null && !giftCertificate.getName().isEmpty() && giftCertificate.getDurationDate() != null && (LocalDateTime.now()).isBefore(giftCertificate.getDurationDate()) && giftCertificate.getDescription() != null && !giftCertificate.getDescription().isEmpty() && giftCertificate.getPrice() != null && giftCertificate.getPrice().compareTo(BigDecimal.ZERO) > 0 && isValidTags(giftCertificate.getTags());
+        return giftCertificate.getName() != null && !giftCertificate.getName().isEmpty() &&
+                giftCertificate.getDurationDate() != null &&
+                (LocalDateTime.now()).isBefore(giftCertificate.getDurationDate()) &&
+                giftCertificate.getPrice() != null && giftCertificate.getPrice().compareTo(BigDecimal.ZERO) > 0 &&
+                isValidTags(giftCertificate.getTags());
     }
 
 
@@ -48,7 +52,7 @@ public class ParamsValidation {
 
     public static String getSortParam(String s) {
         if (s.contains(DATE))
-            return CREATE_DATE;
+            return DURATION_DATE;
         return s.contains("-") ? s.substring(1) : s;
     }
 
