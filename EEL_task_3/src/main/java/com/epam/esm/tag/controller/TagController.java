@@ -6,9 +6,11 @@ import com.epam.esm.tag.service.TagService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.annotation.Nullable;
 
 import static com.epam.esm.utils.Constants.DEFAULT_PAGE;
 import static com.epam.esm.utils.Constants.DEFAULT_SIZE;
@@ -23,9 +25,10 @@ public class TagController {
         this.tagService = tagService;
     }
 
-    @PostMapping
-    public ResponseEntity<TagDTO> createTag(@RequestBody TagDTO tagDTO) {
-        return new ResponseEntity<>(tagService.createTag(tagDTO), HttpStatus.CREATED);
+    @PostMapping(consumes = "multipart/form-data")
+    public ResponseEntity<TagDTO> createTag(@ModelAttribute TagDTO tagDTO,
+                                            @RequestParam @Nullable MultipartFile image) {
+        return new ResponseEntity<>(tagService.createTag(tagDTO, image), HttpStatus.CREATED);
     }
 
     @GetMapping

@@ -14,7 +14,7 @@ import java.util.Objects;
 public class TagDTO extends RepresentationModel<TagDTO> {
     private Long id;
     private String name;
-
+    private String imageURL;
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
