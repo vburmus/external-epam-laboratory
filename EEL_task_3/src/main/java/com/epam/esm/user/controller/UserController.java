@@ -7,7 +7,6 @@ import com.epam.esm.user.service.UserService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +14,7 @@ import static com.epam.esm.utils.Constants.DEFAULT_PAGE;
 import static com.epam.esm.utils.Constants.DEFAULT_SIZE;
 
 @RestController
-@RequestMapping(value = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/user")
 @Profile("default")
 public class UserController {
     private final UserService userService;

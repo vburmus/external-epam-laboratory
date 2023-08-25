@@ -14,7 +14,7 @@ import static com.epam.esm.utils.Constants.DEFAULT_PAGE;
 import static com.epam.esm.utils.Constants.DEFAULT_SIZE;
 
 @RestController
-@RequestMapping(value = "/tag", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/tag")
 @Profile("default")
 public class TagController {
     private final TagService tagService;
@@ -31,7 +31,7 @@ public class TagController {
     @GetMapping
     public ResponseEntity<Page<TagDTO>> showAllTags(@RequestParam(required = false, defaultValue = DEFAULT_PAGE) Integer page,
                                                     @RequestParam(required = false, defaultValue = DEFAULT_SIZE) Integer size) {
-        return new ResponseEntity<>(tagService.getAllTags(--page, size), HttpStatus.OK);
+        return new ResponseEntity<>(tagService.getAllTags(page, size), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

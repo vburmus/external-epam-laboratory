@@ -5,7 +5,6 @@ import com.epam.esm.order.service.OrderService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +12,7 @@ import static com.epam.esm.utils.Constants.DEFAULT_PAGE;
 import static com.epam.esm.utils.Constants.DEFAULT_SIZE;
 
 @RestController
-@RequestMapping(value = "/order", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/order")
 @Profile("default")
 public class OrderController {
 

@@ -18,7 +18,7 @@ import java.util.List;
 import static com.epam.esm.utils.Constants.*;
 
 @RestController
-@RequestMapping(value = "/certificate", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/certificate")
 @Profile("default")
 public class GiftCertificateController {
 
