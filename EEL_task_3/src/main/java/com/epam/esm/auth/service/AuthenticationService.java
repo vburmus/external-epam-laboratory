@@ -1,13 +1,5 @@
 package com.epam.esm.auth.service;
 
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.epam.esm.auth.models.AuthenticationRequest;
 import com.epam.esm.auth.models.RegisterRequest;
 import com.epam.esm.auth.tokenjwt.TokenGenerator;
@@ -20,11 +12,10 @@ import com.epam.esm.user.model.Role;
 import com.epam.esm.user.model.User;
 import com.epam.esm.user.repository.UserRepository;
 import com.epam.esm.user.service.CustomUserDetailsService;
-import com.epam.esm.utils.datavalidation.ParamsValidation;
+import com.epam.esm.utils.AwsUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,10 +23,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.UUID;
 
 import static com.epam.esm.utils.Constants.*;
 
@@ -49,10 +36,6 @@ public class AuthenticationService {
     private final TokenGenerator tokenGenerator;
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtService jwtService;
-    @Value("${aws.access}")
-    private String accessKey;
-    @Value("${aws.secret}")
-    private String secretKey;
 
     @Transactional
     public TokenDTO register(RegisterRequest request, MultipartFile image) {
@@ -71,27 +54,7 @@ public class AuthenticationService {
                 .build();
 
         if (image != null) {
-            String extension = ParamsValidation.validateFileExtension(image);
-            try (InputStream imageInputStream = image.getInputStream()) {
-                Regions region = Regions.EU_NORTH_1;
-                BasicAWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
-                AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
-                        .withRegion(region)
-                        .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                        .build();
-
-                String bucket = "mjc-content";
-                String imageId = UUID.randomUUID().toString();
-                ObjectMetadata metadata = new ObjectMetadata();
-                metadata.setContentType(image.getContentType());
-                metadata.setContentLength(image.getSize());
-
-                String objectKey = "user/" + imageId + "." + extension;
-                s3Client.putObject(new PutObjectRequest(bucket, objectKey, imageInputStream, metadata));
-                user.setImageURL("https://" + bucket + ".s3." + region.getName() + ".amazonaws.com/" + objectKey);
-            } catch (IOException e) {
-                throw new AmazonS3Exception(e.getMessage());
-            }
+            user.setImageURL(AwsUtils.loadImage(image, "/user"));
         } else {
             user.setImageURL(DEFAULT_PROFILE_IMG);
         }
@@ -110,7 +73,7 @@ public class AuthenticationService {
                 userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException(USER_DOESNT_EXIST));
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(user,
-                request.getPassword());
+                        request.getPassword());
 
         return tokenGenerator.createToken(usernamePasswordAuthenticationToken);
     }
@@ -126,7 +89,7 @@ public class AuthenticationService {
         }
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(userDetails,
-                userDetails.getAuthorities());
+                        userDetails.getAuthorities());
         return tokenGenerator.createAccessToken(usernamePasswordAuthenticationToken);
     }
 }
