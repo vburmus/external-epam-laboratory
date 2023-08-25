@@ -20,9 +20,11 @@ import java.util.Objects;
 public class GiftCertificateDTO {
     private Long id;
     private String name;
-    private String description;
+    private String shortDescription;
+    private String longDescription;
     private BigDecimal price;
     private List<Tag> tags;
+    private String imageURL;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime durationDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")

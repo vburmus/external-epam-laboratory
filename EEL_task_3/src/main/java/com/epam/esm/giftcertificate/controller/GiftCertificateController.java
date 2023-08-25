@@ -9,10 +9,11 @@ import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 import static com.epam.esm.utils.Constants.*;
@@ -28,9 +29,10 @@ public class GiftCertificateController {
         this.giftCertificateService = giftCertificateService;
     }
 
-    @PostMapping
-    public ResponseEntity<GiftCertificateDTO> createCertificate(@RequestBody GiftCertificateDTO giftCertificateDTO) {
-        return new ResponseEntity<>(giftCertificateService.createCertificate(giftCertificateDTO),
+    @PostMapping(consumes = "multipart/form-data")
+    public ResponseEntity<GiftCertificateDTO> createCertificate(@ModelAttribute GiftCertificateDTO giftCertificateDTO,
+                                                                @RequestParam @Nullable MultipartFile image) {
+        return new ResponseEntity<>(giftCertificateService.createCertificate(giftCertificateDTO, image),
                 HttpStatus.CREATED);
     }
 

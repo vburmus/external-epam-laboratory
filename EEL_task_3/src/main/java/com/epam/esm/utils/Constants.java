@@ -10,7 +10,7 @@ public class Constants {
     public static final String SURNAME = "surname";
     public static final String DESCRIPTION = "description";
     public static final String DURATION = "duration";
-    public static final String CREATE_DATE = "createDate";
+    public static final String DURATION_DATE = "durationDate";
     public static final String DATE = "date";
     public static final String LAST_UPDATE_DATE = "lastUpdateDate";
     public static final String ID = "id";
@@ -91,7 +91,11 @@ public class Constants {
             "  order by cost desc limit 1 ) group by user_id, tag_id order by tag_count desc limit 1) subquery join tag on tag.id = " +
             "subquery.tag_id;";
 
-    public static final String DEFAULT_PROFILE_IMG = "https://mjc-content.s3.eu-north-1.amazonaws.com/user/975ce2c8-7d04-467c-832d-f41d002dc935.png";
+    public static final String DEFAULT_PROFILE_IMG = "https://mjc-content.s3.eu-north-1.amazonaws.com/user/default-user.png";
+    public static final String DEFAULT_TAG_IMG = "https://mjc-content.s3.eu-north-1.amazonaws.com/tag/default_tag.jpg";
+    public static final String DEFAULT_CERTIFICATE_IMG = "https://mjc-content.s3.eu-north-1.amazonaws" +
+            ".com/gift-certificate/default_certificate.jpg";
+
     public static final String FILE_HAD_WRONG_FORMAT = "File had wrong format";
     public static final String WRONG_EMAIL_OR_PASSWORD = "Wrong email or password";
 }

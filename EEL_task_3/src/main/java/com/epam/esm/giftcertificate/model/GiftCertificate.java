@@ -28,7 +28,8 @@ public class GiftCertificate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String description;
+    private String shortDescription;
+    private String longDescription;
     private BigDecimal price;
     @ManyToMany
     @ToString.Exclude
@@ -36,6 +37,7 @@ public class GiftCertificate {
             joinColumns = @JoinColumn(name = "gift_certificate_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private List<Tag> tags;
+    private String imageURL;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime durationDate;
     @CreatedDate
