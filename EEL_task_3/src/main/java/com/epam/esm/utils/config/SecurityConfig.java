@@ -75,7 +75,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET,
                         "/certificate",
                         "/certificate/*",
-                        "/certificate/**")
+                        "/certificate/**",
+                        "/tag")
                 .permitAll()
                 .requestMatchers(HttpMethod.GET,
                         "/**",
