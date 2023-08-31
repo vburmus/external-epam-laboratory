@@ -4,17 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
-import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Objects;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TagDTO extends RepresentationModel<TagDTO> {
+public class TagDTO {
     private Long id;
     private String name;
     private String imageURL;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
