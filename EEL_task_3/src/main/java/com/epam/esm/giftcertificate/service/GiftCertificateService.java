@@ -160,7 +160,7 @@ public class GiftCertificateService {
 
 
     @Transactional
-    public GiftCertificateDTO updateCertificate(long id, JsonMergePatch jsonPatch) throws JsonPatchException,
+    public GiftCertificateDTO updateCertificate(long id, JsonMergePatch jsonPatch,MultipartFile image) throws JsonPatchException,
             JsonProcessingException {
         Optional<GiftCertificate> gc = giftCertificateRepository.findById(id);
         if (gc.isEmpty()) throw new NoSuchItemException(THERE_IS_NO_GC_WITH_ID + id);
@@ -179,7 +179,8 @@ public class GiftCertificateService {
         giftCertificateFromDB.setTags(tagService.checkTagsAndSaveIfDontExist(updatedGiftCertificate));
         giftCertificateFromDB.setShortDescription(updatedGiftCertificate.getShortDescription());
         giftCertificateFromDB.setLongDescription(updatedGiftCertificate.getLongDescription());
-
+        if (image != null)
+            giftCertificateFromDB.setImageURL(AwsUtils.loadImage(image,"/user"));
         GiftCertificate savedGc = giftCertificateRepository.save(giftCertificateFromDB);
         return entityToDtoMapper.toGiftCertificateDTO(savedGc);
     }
