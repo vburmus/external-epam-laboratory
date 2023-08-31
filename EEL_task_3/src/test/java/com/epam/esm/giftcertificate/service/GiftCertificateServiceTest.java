@@ -74,7 +74,7 @@ class GiftCertificateServiceTest {
         when(giftCertificateRepositoryMocked.save(gc)).thenReturn(gc);
         when(entityToDtoMapper.toGiftCertificateDTO(gc)).thenReturn(giftCertificateDTO);
 
-        assertEquals(giftCertificateDTO, giftCertificateServiceMocked.createCertificate(giftCertificateDTO));
+        assertEquals(giftCertificateDTO, giftCertificateServiceMocked.createCertificate(giftCertificateDTO,null));
     }
 
     @Test
@@ -89,7 +89,7 @@ class GiftCertificateServiceTest {
 
         when(giftCertificateRepositoryMocked.exists(getGiftCertificateExample(gc))).thenReturn(false);
         ObjectIsInvalidException thrown = assertThrows(ObjectIsInvalidException.class,
-                () -> giftCertificateServiceMocked.createCertificate(gcDTO));
+                () -> giftCertificateServiceMocked.createCertificate(gcDTO,null));
         assertEquals("Gift certificate with name = " + TEST_CERT + ", duration = " + LocalDateTime.MAX + " is invalid, please check your params",
                 thrown.getMessage());
     }
@@ -101,7 +101,7 @@ class GiftCertificateServiceTest {
         when(entityToDtoMapper.toGiftCertificate(gcDTO)).thenReturn(gc);
         when(giftCertificateRepositoryMocked.exists(getGiftCertificateExample(gc))).thenReturn(true);
         ObjectAlreadyExistsException thrown = assertThrows(ObjectAlreadyExistsException.class,
-                () -> giftCertificateServiceMocked.createCertificate(gcDTO));
+                () -> giftCertificateServiceMocked.createCertificate(gcDTO,null));
         assertEquals("Gift certificate with name = " + null + ", duration = " + null + " already exists", thrown.getMessage());
 
     }
@@ -148,7 +148,7 @@ class GiftCertificateServiceTest {
     void updateCertificateObjectIsInvalidCertificate() {
         when(giftCertificateRepositoryMocked.findById(ID1)).thenReturn(Optional.empty());
         NoSuchItemException thrown = assertThrows(NoSuchItemException.class,
-                () -> giftCertificateServiceMocked.updateCertificate(ID1, null));
+                () -> giftCertificateServiceMocked.updateCertificate(ID1, null,null));
         assertEquals(THERE_IS_NO_GC_WITH_ID + ID1, thrown.getMessage());
 
     }
@@ -179,7 +179,7 @@ class GiftCertificateServiceTest {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
             JsonMergePatch jsonMergePatch = JsonMergePatch.fromJson(objectMapper.convertValue(gc, JsonNode.class));
-            assertEquals(gcDTO, giftCertificateServiceMocked.updateCertificate(ID1, jsonMergePatch));
+            assertEquals(gcDTO, giftCertificateServiceMocked.updateCertificate(ID1, jsonMergePatch,null));
         } catch (JsonPatchException | JsonProcessingException e) {
             throw new RuntimeException(e);
         }

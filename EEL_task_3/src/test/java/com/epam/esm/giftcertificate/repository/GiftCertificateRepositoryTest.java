@@ -32,16 +32,16 @@ class GiftCertificateRepositoryTest {
     @BeforeEach
     public void setUp() {
         GiftCertificate gc1 =
-                GiftCertificate.builder().name(GC_1).price(new BigDecimal(5)).longDescription(TEST_DESCRIPTION).durationDate(LocalDateTime.MAX).build();
+                GiftCertificate.builder().name(GC_1).price(new BigDecimal(5)).shortDescription(TEST_DESCRIPTION).durationDate(LocalDateTime.MAX).build();
         entityManager.persist(gc1);
         Tag tag = Tag.builder().name(TAG_1).build();
         tag = entityManager.persist(tag);
         GiftCertificate gc2 =
-                GiftCertificate.builder().name(GC_2).price(new BigDecimal(5)).tags(List.of(tag)).longDescription(
+                GiftCertificate.builder().name(GC_2).price(new BigDecimal(5)).tags(List.of(tag)).shortDescription(
                         TEST_DESCRIPTION).durationDate(LocalDateTime.MAX).build();
         entityManager.persist(gc2);
         GiftCertificate gc3 =
-                GiftCertificate.builder().name(GC_3).price(new BigDecimal(5)).longDescription(OTHER_DESCRIPTION).durationDate(LocalDateTime.MAX).build();
+                GiftCertificate.builder().name(GC_3).price(new BigDecimal(5)).shortDescription(OTHER_DESCRIPTION).durationDate(LocalDateTime.MAX).build();
         entityManager.persist(gc3);
     }
 
@@ -70,5 +70,4 @@ class GiftCertificateRepositoryTest {
         certificates = page.getContent();
         Assertions.assertEquals(1, certificates.size());
     }
-
 }

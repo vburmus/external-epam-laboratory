@@ -48,7 +48,7 @@ class TagServiceTest {
         when(entityToDtoMapper.toTag(tagDTO)).thenReturn(tag);
         when(tagRepositoryMocked.exists(Example.of(tag))).thenReturn(true);
         ObjectAlreadyExistsException thrown = assertThrows(ObjectAlreadyExistsException.class,
-                () -> tagServiceMocked.createTag(tagDTO));
+                () -> tagServiceMocked.createTag(tagDTO,null));
         assertEquals("Tag with name = " + TEST_TAG + " already exists", thrown.getMessage());
 
     }
@@ -60,7 +60,7 @@ class TagServiceTest {
         when(entityToDtoMapper.toTag(tagDTO)).thenReturn(tag);
         when(tagRepositoryMocked.exists(Example.of(tag))).thenReturn(false);
         ObjectIsInvalidException thrown = assertThrows(ObjectIsInvalidException.class,
-                () -> tagServiceMocked.createTag(tagDTO));
+                () -> tagServiceMocked.createTag(tagDTO,null));
         assertEquals("Tag with name = " + null + " is invalid", thrown.getMessage());
 
     }
@@ -74,7 +74,7 @@ class TagServiceTest {
         when(tagRepositoryMocked.exists(Example.of(tag))).thenReturn(false);
         when(tagRepositoryMocked.save(tag)).thenReturn(tag);
         when(entityToDtoMapper.toTagDTO(tag)).thenReturn(tagDTO);
-        assertEquals(tagDTO, tagServiceMocked.createTag(tagDTO));
+        assertEquals(tagDTO, tagServiceMocked.createTag(tagDTO,null));
 
     }
 
