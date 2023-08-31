@@ -52,7 +52,7 @@ public class ParamsValidation {
 
     public static String getSortParam(String s) {
         if (s.contains(DATE))
-            return DURATION_DATE;
+            return CREATE_DATE;
         return s.contains("-") ? s.substring(1) : s;
     }
 

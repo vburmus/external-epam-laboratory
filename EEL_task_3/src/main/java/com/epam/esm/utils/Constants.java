@@ -10,7 +10,7 @@ public class Constants {
     public static final String SURNAME = "surname";
     public static final String DESCRIPTION = "description";
     public static final String DURATION = "duration";
-    public static final String DURATION_DATE = "durationDate";
+    public static final String CREATE_DATE = "createDate";
     public static final String DATE = "date";
     public static final String LAST_UPDATE_DATE = "lastUpdateDate";
     public static final String ID = "id";

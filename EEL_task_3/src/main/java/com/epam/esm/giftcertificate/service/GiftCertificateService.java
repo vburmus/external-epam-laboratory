@@ -48,7 +48,7 @@ public class GiftCertificateService {
     public GiftCertificateDTO createCertificate(GiftCertificateDTO giftCertificateDTO, MultipartFile image) {
         GiftCertificate giftCertificate = entityToDtoMapper.toGiftCertificate(giftCertificateDTO);
         ExampleMatcher gcMatcher = ExampleMatcher.matching()
-                .withIgnorePaths(DURATION_DATE, LAST_UPDATE_DATE, ID, TAGS, PRICE)
+                .withIgnorePaths(CREATE_DATE, LAST_UPDATE_DATE, ID, TAGS, PRICE)
                 .withMatcher(NAME, exact())
                 .withMatcher(DESCRIPTION, exact())
                 .withMatcher(DURATION, exact());
