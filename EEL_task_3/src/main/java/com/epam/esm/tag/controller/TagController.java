@@ -26,7 +26,7 @@ public class TagController {
     }
 
     @PostMapping(consumes = "multipart/form-data")
-    public ResponseEntity<TagDTO> createTag(@ModelAttribute TagDTO tagDTO,
+    public ResponseEntity<TagDTO> createTag(@RequestPart("tag") TagDTO tagDTO,
                                             @RequestParam @Nullable MultipartFile image) {
         return new ResponseEntity<>(tagService.createTag(tagDTO, image), HttpStatus.CREATED);
     }

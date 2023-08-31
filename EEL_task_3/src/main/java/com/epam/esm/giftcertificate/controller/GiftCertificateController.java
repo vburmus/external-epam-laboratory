@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,8 +30,8 @@ public class GiftCertificateController {
         this.giftCertificateService = giftCertificateService;
     }
 
-    @PostMapping(consumes = "multipart/form-data")
-    public ResponseEntity<GiftCertificateDTO> createCertificate(@ModelAttribute GiftCertificateDTO giftCertificateDTO,
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<GiftCertificateDTO> createCertificate(@RequestPart("certificate") GiftCertificateDTO giftCertificateDTO,
                                                                 @RequestParam @Nullable MultipartFile image) {
         return new ResponseEntity<>(giftCertificateService.createCertificate(giftCertificateDTO, image),
                 HttpStatus.CREATED);
@@ -109,10 +110,12 @@ public class GiftCertificateController {
                 HttpStatus.OK);
     }
 
-    @PatchMapping(value = "/{id}", consumes = "application/json-patch+json")
-    public ResponseEntity<GiftCertificateDTO> updateCertificate(@PathVariable("id") long id,
-                                                                @RequestBody JsonMergePatch patch) throws JsonPatchException, JsonProcessingException {
-        return new ResponseEntity<>(giftCertificateService.updateCertificate(id, patch), HttpStatus.OK);
+    @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<GiftCertificateDTO> updateCertificate(
+            @PathVariable("id") long id,
+            @RequestPart(value = "patch") JsonMergePatch patch,
+            @RequestPart(value = "image", required = false) MultipartFile image) throws JsonPatchException, JsonProcessingException {
+        return new ResponseEntity<>(giftCertificateService.updateCertificate(id, patch,image), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

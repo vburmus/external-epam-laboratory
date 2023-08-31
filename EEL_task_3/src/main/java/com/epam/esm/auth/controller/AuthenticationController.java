@@ -25,7 +25,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping(path = "/register", consumes = "multipart/form-data")
-    public ResponseEntity<AuthenticationResponse> register(@ModelAttribute RegisterRequest request,
+    public ResponseEntity<AuthenticationResponse> register(@RequestPart("request") RegisterRequest request,
                                                            @RequestParam @Nullable MultipartFile image) {
         return ResponseEntity.ok(new AuthenticationResponse(authenticationService.register(request, image)));
     }
