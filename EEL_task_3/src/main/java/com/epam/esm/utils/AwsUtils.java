@@ -9,22 +9,22 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.epam.esm.exceptionhandler.exceptions.rest.InvalidFileException;
 import com.epam.esm.utils.datavalidation.ParamsValidation;
-import lombok.experimental.UtilityClass;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
-@UtilityClass
+@Component
 public class AwsUtils {
     @Value("${aws.access}")
-    private String accessKey;
+    private static String accessKey;
     @Value("${aws.secret}")
-    private String secretKey;
+    private static String secretKey;
 
-    public static String loadImage(MultipartFile image,String directory) {
+    public static String loadImage(MultipartFile image, String directory) {
         String extension = ParamsValidation.validateFileExtension(image);
         try (InputStream imageInputStream = image.getInputStream()) {
             Regions region = Regions.EU_NORTH_1;
@@ -46,5 +46,15 @@ public class AwsUtils {
         } catch (IOException e) {
             throw new InvalidFileException(e.getMessage());
         }
+    }
+
+    @Value("${aws.access}")
+    public void setAccessKey(String access) {
+        AwsUtils.accessKey = access;
+    }
+
+    @Value("${aws.secret}")
+    public void setSecretKey(String secret) {
+        AwsUtils.secretKey = secret;
     }
 }

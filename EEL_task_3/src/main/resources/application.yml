@@ -57,3 +57,6 @@ server:
     encoding:
       force: true
   port: 8082
+aws:
+  access: ${AWS_ACCESS}
+  secret: ${AWS_SECRET}
