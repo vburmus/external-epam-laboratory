@@ -83,7 +83,8 @@ public class Constants {
     public static final String INVALID_TOKEN = "Invalid Token";
     public static final String WRONG_AUTHENTICATION_INSTANCE = "Wrong Authentication Instance";
 
-    public static final String GET_MOST_USED_TAG = "select tag.id,tag.name from (select user_id, tag_id, count(*) as tag_count from " +
+    public static final String GET_MOST_USED_TAG = "select tag.id,tag.name,tag.imageurl from (select user_id, tag_id," +
+            " count(*) as tag_count from " +
             "gift_certificate_has_tag " +
             "  join gift_certificate_has_order on gift_certificate_has_order.gift_certificate_id = gift_certificate_has_tag" +
             ".gift_certificate_id " +
