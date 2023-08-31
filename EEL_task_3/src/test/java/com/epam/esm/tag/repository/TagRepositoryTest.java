@@ -43,7 +43,7 @@ class TagRepositoryTest {
                 .name(GC_1)
                 .tags(List.of(tag1, tag2))
                 .price(new BigDecimal(5))
-                .description(TEST_DESCRIPTION)
+                .longDescription(TEST_DESCRIPTION)
                 .durationDate(LocalDateTime.MAX)
                 .build();
         entityManager.persist(gc1);
@@ -51,7 +51,7 @@ class TagRepositoryTest {
                 .name(GC_1)
                 .tags(List.of(tag2))
                 .price(new BigDecimal(5))
-                .description(TEST_DESCRIPTION)
+                .longDescription(TEST_DESCRIPTION)
                 .durationDate(LocalDateTime.MAX)
                 .build();
         entityManager.persist(gc2);
