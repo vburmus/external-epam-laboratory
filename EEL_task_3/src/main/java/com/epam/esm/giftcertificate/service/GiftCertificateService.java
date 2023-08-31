@@ -148,12 +148,13 @@ public class GiftCertificateService {
         Page<GiftCertificate> gcsByTags = giftCertificateRepository.findByTagsIdIn(tagsId, pageRequest);
         return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(gcsByTags).map(entityToDtoMapper::toGiftCertificateDTO);
     }
-    public Page<GiftCertificateDTO> getCertificatesByTagsAndDescriptionOrNamePart(List<Long> tagsId,
-                                                                             String partialDescription,
-                                                                 Integer page, Integer size) {
+    public Page<GiftCertificateDTO> getCertificatesByTagsAndShortDescriptionOrNamePart(List<Long> tagsId,
+                                                                                       String partialShortDescription,
+                                                                                       Integer page, Integer size) {
         PageRequest pageRequest = PageRequest.of(--page, size);
-        Page<GiftCertificate> gcsByTags = giftCertificateRepository.findByTagsIdInAndDescriptionOrNameContaining(tagsId,
-                partialDescription, pageRequest);
+        Page<GiftCertificate> gcsByTags =
+                giftCertificateRepository.findByTagsIdInAndShortDescriptionOrNameContaining(tagsId,
+                partialShortDescription, pageRequest);
         return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(gcsByTags).map(entityToDtoMapper::toGiftCertificateDTO);
     }
 

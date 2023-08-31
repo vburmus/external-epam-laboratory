@@ -23,6 +23,6 @@ public interface GiftCertificateRepository extends JpaRepository<GiftCertificate
 
     Page<GiftCertificate> findByTagsIdIn(List<Long> tags, Pageable pageable);
     @Query(nativeQuery = true, value = GET_GC_BY_TAGS_AND_PART)
-    Page<GiftCertificate> findByTagsIdInAndDescriptionOrNameContaining(List<Long> tags,String partial,
+    Page<GiftCertificate> findByTagsIdInAndShortDescriptionOrNameContaining(List<Long> tags,String partial,
                                                                  Pageable pageable);
 }

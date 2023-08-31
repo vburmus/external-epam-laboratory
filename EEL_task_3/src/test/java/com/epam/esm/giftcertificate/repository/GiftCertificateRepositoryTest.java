@@ -32,16 +32,16 @@ class GiftCertificateRepositoryTest {
     @BeforeEach
     public void setUp() {
         GiftCertificate gc1 =
-                GiftCertificate.builder().name(GC_1).price(new BigDecimal(5)).description(TEST_DESCRIPTION).durationDate(LocalDateTime.MAX).build();
+                GiftCertificate.builder().name(GC_1).price(new BigDecimal(5)).longDescription(TEST_DESCRIPTION).durationDate(LocalDateTime.MAX).build();
         entityManager.persist(gc1);
         Tag tag = Tag.builder().name(TAG_1).build();
         tag = entityManager.persist(tag);
         GiftCertificate gc2 =
-                GiftCertificate.builder().name(GC_2).price(new BigDecimal(5)).tags(List.of(tag)).description(
+                GiftCertificate.builder().name(GC_2).price(new BigDecimal(5)).tags(List.of(tag)).longDescription(
                         TEST_DESCRIPTION).durationDate(LocalDateTime.MAX).build();
         entityManager.persist(gc2);
         GiftCertificate gc3 =
-                GiftCertificate.builder().name(GC_3).price(new BigDecimal(5)).description(OTHER_DESCRIPTION).durationDate(LocalDateTime.MAX).build();
+                GiftCertificate.builder().name(GC_3).price(new BigDecimal(5)).longDescription(OTHER_DESCRIPTION).durationDate(LocalDateTime.MAX).build();
         entityManager.persist(gc3);
     }
 
@@ -54,7 +54,7 @@ class GiftCertificateRepositoryTest {
         Assertions.assertEquals(3, certificates.size());
         Assertions.assertEquals(GC_1, certificates.get(0).getName());
 
-        page = repository.findByDescriptionContaining(PARTIAL_DESCRIPTION, PageRequest.of(0, 10));
+        page = repository.findByShortDescriptionContaining(PARTIAL_DESCRIPTION, PageRequest.of(0, 10));
         certificates = page.getContent();
 
         Assertions.assertEquals(2, certificates.size());

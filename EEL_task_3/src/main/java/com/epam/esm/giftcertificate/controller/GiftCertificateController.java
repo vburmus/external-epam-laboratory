@@ -93,7 +93,8 @@ public class GiftCertificateController {
     }
 
     @GetMapping({"/search/by-tags-and-part"})
-    public ResponseEntity<Page<GiftCertificateDTO>> searchForCertificatesByTagsAndDescr(@RequestParam("tagsId") List<Long> tagsId,
+    public ResponseEntity<Page<GiftCertificateDTO>> searchForCertificatesByTagsAndShortDescription(@RequestParam(
+            "tagsId") List<Long> tagsId,
                                                                                         @RequestParam(
                                                                                                 "part") String part,
                                                                                         @RequestParam(required = false
@@ -102,7 +103,8 @@ public class GiftCertificateController {
                                                                                         @RequestParam(required = false
                                                                                                 , defaultValue =
                                                                                                 DEFAULT_SIZE) Integer size) {
-        return new ResponseEntity<>(giftCertificateService.getCertificatesByTagsAndDescriptionOrNamePart(tagsId, part,
+        return new ResponseEntity<>(giftCertificateService.getCertificatesByTagsAndShortDescriptionOrNamePart(tagsId,
+                part,
                 page, size),
                 HttpStatus.OK);
     }
