@@ -47,6 +47,15 @@ public class TagController {
         return new ResponseEntity<>(tagService.getMostUsedTag(), HttpStatus.OK);
     }
 
+    @GetMapping("/search/by-name-part")
+    public ResponseEntity<Page<TagDTO>> getByNamePart(@RequestParam("part") String namePart,
+                                                @RequestParam(required = false,
+                                                        defaultValue = DEFAULT_PAGE) Integer page,
+                                                @RequestParam(required = false,
+                                                        defaultValue = DEFAULT_SIZE) Integer size) {
+        return new ResponseEntity<>(tagService.getTagByNamePart(namePart, page, size), HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") long id) {
         tagService.deleteTag(id);

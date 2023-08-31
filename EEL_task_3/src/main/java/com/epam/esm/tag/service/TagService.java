@@ -70,6 +70,14 @@ public class TagService {
         return entityToDtoMapper.toTagDTO(tag.get());
     }
 
+    public Page<TagDTO> getTagByNamePart(String namePart, Integer page, Integer size) {
+        PageRequest pageRequest = PageRequest.of(--page, size);
+        Page<Tag> tagsByNameContaining = tagRepository.getTagsByNameContaining(namePart, pageRequest);
+        return ParamsValidation.isListIsNotEmptyOrElseThrowNoSuchItem(tagsByNameContaining).map(entityToDtoMapper::toTagDTO);
+
+    }
+
+
     public void deleteTag(long id) {
         if (!tagRepository.existsById(id)) throw new NoSuchItemException(THERE_IS_NO_GC_WITH_ID + id );
         tagRepository.deleteById(id);
