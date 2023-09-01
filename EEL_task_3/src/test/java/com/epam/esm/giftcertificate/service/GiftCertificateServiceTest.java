@@ -24,6 +24,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -31,8 +32,7 @@ import java.util.Optional;
 import static com.epam.esm.Constants.*;
 import static com.epam.esm.utils.Constants.THERE_IS_NO_GC_WITH_ID;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.exact;
 
 @ExtendWith(MockitoExtension.class)
@@ -59,9 +59,9 @@ class GiftCertificateServiceTest {
         GiftCertificate gc = GiftCertificate.builder()
                 .id(ID1)
                 .name(TEST_CERT)
-                .duration(DURATION_VAL)
+                .durationDate(LocalDateTime.MAX)
                 .price(PRICE)
-                .description(TEST_CERT)
+                .longDescription(TEST_CERT)
                 .tags(Collections.singletonList(t))
                 .build();
         GiftCertificateDTO giftCertificateDTO = entityMapper.toGiftCertificateDTO(gc);
@@ -74,7 +74,7 @@ class GiftCertificateServiceTest {
         when(giftCertificateRepositoryMocked.save(gc)).thenReturn(gc);
         when(entityToDtoMapper.toGiftCertificateDTO(gc)).thenReturn(giftCertificateDTO);
 
-        assertEquals(giftCertificateDTO, giftCertificateServiceMocked.createCertificate(giftCertificateDTO));
+        assertEquals(giftCertificateDTO, giftCertificateServiceMocked.createCertificate(giftCertificateDTO,null));
     }
 
     @Test
@@ -82,15 +82,15 @@ class GiftCertificateServiceTest {
         GiftCertificateDTO gcDTO = new GiftCertificateDTO();
         gcDTO.setId(ID1);
         gcDTO.setName(TEST_CERT);
-        gcDTO.setDuration(DURATION_VAL);
+        gcDTO.setDurationDate(LocalDateTime.MAX);
         GiftCertificate gc = entityMapper.toGiftCertificate(gcDTO);
 
         when(entityToDtoMapper.toGiftCertificate(gcDTO)).thenReturn(gc);
 
         when(giftCertificateRepositoryMocked.exists(getGiftCertificateExample(gc))).thenReturn(false);
         ObjectIsInvalidException thrown = assertThrows(ObjectIsInvalidException.class,
-                () -> giftCertificateServiceMocked.createCertificate(gcDTO));
-        assertEquals("Gift certificate with name = " + TEST_CERT + ", duration = " + DURATION_VAL + " is invalid, please check your params",
+                () -> giftCertificateServiceMocked.createCertificate(gcDTO,null));
+        assertEquals("Gift certificate with name = " + TEST_CERT + ", duration = " + LocalDateTime.MAX + " is invalid, please check your params",
                 thrown.getMessage());
     }
 
@@ -101,7 +101,7 @@ class GiftCertificateServiceTest {
         when(entityToDtoMapper.toGiftCertificate(gcDTO)).thenReturn(gc);
         when(giftCertificateRepositoryMocked.exists(getGiftCertificateExample(gc))).thenReturn(true);
         ObjectAlreadyExistsException thrown = assertThrows(ObjectAlreadyExistsException.class,
-                () -> giftCertificateServiceMocked.createCertificate(gcDTO));
+                () -> giftCertificateServiceMocked.createCertificate(gcDTO,null));
         assertEquals("Gift certificate with name = " + null + ", duration = " + null + " already exists", thrown.getMessage());
 
     }
@@ -119,8 +119,8 @@ class GiftCertificateServiceTest {
     void deleteCertificateSuccess() {
         when(giftCertificateRepositoryMocked.existsById(ID1)).thenReturn(true);
         doNothing().when(giftCertificateRepositoryMocked).deleteById(ID1);
-        assertTrue(giftCertificateServiceMocked.deleteCertificate(ID1));
-
+        giftCertificateServiceMocked.deleteCertificate(ID1);
+        verify(giftCertificateRepositoryMocked).deleteById(ID1);
     }
 
     @Test
@@ -133,9 +133,9 @@ class GiftCertificateServiceTest {
         GiftCertificate gc = GiftCertificate.builder()
                 .id(ID1)
                 .name(TEST_CERT)
-                .duration(DURATION_VAL)
+                .durationDate(LocalDateTime.MAX)
                 .price(PRICE)
-                .description(TEST_CERT)
+                .longDescription(TEST_CERT)
                 .tags(Collections.singletonList(t))
                 .build();
         when(giftCertificateRepositoryMocked.existsById(gc.getId())).thenReturn(false);
@@ -148,7 +148,7 @@ class GiftCertificateServiceTest {
     void updateCertificateObjectIsInvalidCertificate() {
         when(giftCertificateRepositoryMocked.findById(ID1)).thenReturn(Optional.empty());
         NoSuchItemException thrown = assertThrows(NoSuchItemException.class,
-                () -> giftCertificateServiceMocked.updateCertificate(ID1, null));
+                () -> giftCertificateServiceMocked.updateCertificate(ID1, null,null));
         assertEquals(THERE_IS_NO_GC_WITH_ID + ID1, thrown.getMessage());
 
     }
@@ -163,9 +163,9 @@ class GiftCertificateServiceTest {
         GiftCertificate gc = GiftCertificate.builder()
                 .id(ID1)
                 .name(TEST_CERT)
-                .duration(DURATION_VAL)
+                .durationDate(LocalDateTime.MAX)
                 .price(PRICE)
-                .description(TEST_CERT)
+                .longDescription(TEST_CERT)
                 .tags(Collections.singletonList(t))
                 .build();
         when(giftCertificateRepositoryMocked.findById(ID1)).thenReturn(Optional.of(gc));
@@ -179,7 +179,7 @@ class GiftCertificateServiceTest {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
             JsonMergePatch jsonMergePatch = JsonMergePatch.fromJson(objectMapper.convertValue(gc, JsonNode.class));
-            assertEquals(gcDTO, giftCertificateServiceMocked.updateCertificate(ID1, jsonMergePatch));
+            assertEquals(gcDTO, giftCertificateServiceMocked.updateCertificate(ID1, jsonMergePatch,null));
         } catch (JsonPatchException | JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -196,9 +196,9 @@ class GiftCertificateServiceTest {
         GiftCertificate gc = GiftCertificate.builder()
                 .id(ID1)
                 .name(TEST_CERT)
-                .duration(DURATION_VAL)
+                .durationDate(LocalDateTime.MAX)
                 .price(PRICE)
-                .description(TEST_CERT)
+                .longDescription(TEST_CERT)
                 .tags(Collections.singletonList(t))
                 .build();
         when(giftCertificateRepositoryMocked.findById(ID1)).thenReturn(Optional.of(gc));
@@ -247,9 +247,9 @@ class GiftCertificateServiceTest {
         GiftCertificate gc = GiftCertificate.builder()
                 .id(ID1)
                 .name(TEST_CERT)
-                .duration(DURATION_VAL)
+                .durationDate(LocalDateTime.MAX)
                 .price(PRICE)
-                .description(TEST_CERT)
+                .longDescription(TEST_CERT)
                 .tags(Collections.singletonList(t))
                 .build();
 
@@ -261,9 +261,9 @@ class GiftCertificateServiceTest {
         GiftCertificate gc2 = GiftCertificate.builder()
                 .id(ID2)
                 .name(TEST_CERT)
-                .duration(DURATION_VAL)
+                .durationDate(LocalDateTime.MAX)
                 .price(PRICE)
-                .description(TEST_CERT)
+                .longDescription(TEST_CERT)
                 .tags(Collections.singletonList(t2))
                 .build();
 
@@ -307,9 +307,9 @@ class GiftCertificateServiceTest {
         GiftCertificate gc = GiftCertificate.builder()
                 .id(ID1)
                 .name(TEST_CERT)
-                .duration(DURATION_VAL)
+                .durationDate(LocalDateTime.MAX)
                 .price(PRICE)
-                .description(TEST_CERT)
+                .longDescription(TEST_CERT)
                 .tags(Collections.singletonList(t))
                 .build();
 
@@ -321,9 +321,9 @@ class GiftCertificateServiceTest {
         GiftCertificate gc2 = GiftCertificate.builder()
                 .id(ID2)
                 .name(TEST_CERT)
-                .duration(DURATION_VAL)
+                .durationDate(LocalDateTime.MAX)
                 .price(PRICE)
-                .description(TEST_CERT)
+                .longDescription(TEST_CERT)
                 .tags(Collections.singletonList(t2))
                 .build();
         GiftCertificateDTO gcDTO = entityMapper.toGiftCertificateDTO(gc);
@@ -368,9 +368,9 @@ class GiftCertificateServiceTest {
         GiftCertificate gc = GiftCertificate.builder()
                 .id(ID1)
                 .name(TEST_CERT)
-                .duration(DURATION_VAL)
+                .durationDate(LocalDateTime.MAX)
                 .price(PRICE)
-                .description(TEST_CERT)
+                .longDescription(TEST_CERT)
                 .tags(List.of(t1, t2))
                 .build();
 
@@ -398,7 +398,7 @@ class GiftCertificateServiceTest {
     void getByPartEmptyResult() {
         when(giftCertificateRepositoryMocked.findByNameContaining("part", PageRequest.of(0, 10))).thenReturn(Page.empty(PageRequest.of(0,
                 10)));
-        when(giftCertificateRepositoryMocked.findByDescriptionContaining("part", PageRequest.of(0, 10))).thenReturn(Page.empty(PageRequest.of(0,
+        when(giftCertificateRepositoryMocked.findByShortDescriptionContaining("part", PageRequest.of(0, 10))).thenReturn(Page.empty(PageRequest.of(0,
                 10)));
         NoSuchItemException thrown = assertThrows(NoSuchItemException.class,
                 () -> giftCertificateServiceMocked.getGiftCertificatesByPart("part", 1, 10));
@@ -420,9 +420,9 @@ class GiftCertificateServiceTest {
         GiftCertificate gc = GiftCertificate.builder()
                 .id(ID1)
                 .name(TEST_CERT)
-                .duration(DURATION_VAL)
+                .durationDate(LocalDateTime.MAX)
                 .price(PRICE)
-                .description(TEST_CERT)
+                .longDescription(TEST_CERT)
                 .tags(List.of(t1, t2))
                 .build();
 
@@ -438,7 +438,7 @@ class GiftCertificateServiceTest {
         assertEquals(pageDTO, giftCertificateServiceMocked.getGiftCertificatesByPart("part", 1, 10));
         when(giftCertificateRepositoryMocked.findByNameContaining("part", PageRequest.of(0, 10))).thenReturn(Page.empty(PageRequest.of(0,
                 10)));
-        when(giftCertificateRepositoryMocked.findByDescriptionContaining("part", PageRequest.of(0, 10))).thenReturn(page);
+        when(giftCertificateRepositoryMocked.findByShortDescriptionContaining("part", PageRequest.of(0, 10))).thenReturn(page);
         assertEquals(pageDTO, giftCertificateServiceMocked.getGiftCertificatesByPart("part", 1, 10));
 
     }
@@ -468,9 +468,9 @@ class GiftCertificateServiceTest {
         GiftCertificate gc = GiftCertificate.builder()
                 .id(ID1)
                 .name(TEST_CERT)
-                .duration(DURATION_VAL)
+                .durationDate(LocalDateTime.MAX)
                 .price(PRICE)
-                .description(TEST_CERT)
+                .longDescription(TEST_CERT)
                 .tags(List.of(t1, t2))
                 .build();
 

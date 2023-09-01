@@ -17,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.Example;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,16 +43,16 @@ class TagRepositoryTest {
                 .name(GC_1)
                 .tags(List.of(tag1, tag2))
                 .price(new BigDecimal(5))
-                .description(TEST_DESCRIPTION)
-                .duration(5)
+                .longDescription(TEST_DESCRIPTION)
+                .durationDate(LocalDateTime.MAX)
                 .build();
         entityManager.persist(gc1);
         GiftCertificate gc2 = GiftCertificate.builder()
                 .name(GC_1)
                 .tags(List.of(tag2))
                 .price(new BigDecimal(5))
-                .description(TEST_DESCRIPTION)
-                .duration(5)
+                .longDescription(TEST_DESCRIPTION)
+                .durationDate(LocalDateTime.MAX)
                 .build();
         entityManager.persist(gc2);
         User user1 = User.builder()

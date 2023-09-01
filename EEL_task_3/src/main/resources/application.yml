@@ -43,7 +43,7 @@ springdoc:
 logging:
   level:
     root: info
-    org.springdoc: info
+
 
 access-token:
   private: ${ACCESS_TOKEN_PRIVATE_KEY}
@@ -56,3 +56,7 @@ server:
   servlet:
     encoding:
       force: true
+  port: 8082
+aws:
+  access: ${AWS_ACCESS}
+  secret: ${AWS_SECRET}

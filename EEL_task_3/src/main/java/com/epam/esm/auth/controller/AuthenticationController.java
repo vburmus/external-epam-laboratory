@@ -10,10 +10,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.annotation.Nullable;
 
 import static com.epam.esm.utils.Constants.AUTHENTICATION_BEARER_TOKEN;
 import static com.epam.esm.utils.Constants.AUTHORIZATION_HEADER;
@@ -24,15 +24,16 @@ import static com.epam.esm.utils.Constants.AUTHORIZATION_HEADER;
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
-    @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
-        AuthenticationResponse registerResponse = new AuthenticationResponse(authenticationService.register(request));
-        return ResponseEntity.ok(registerResponse);
+    @PostMapping(path = "/register", consumes = "multipart/form-data")
+    public ResponseEntity<AuthenticationResponse> register(@RequestPart("request") RegisterRequest request,
+                                                           @RequestParam @Nullable MultipartFile image) {
+        return ResponseEntity.ok(new AuthenticationResponse(authenticationService.register(request, image)));
     }
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-        AuthenticationResponse authenticationResponse = new AuthenticationResponse(authenticationService.authenticate(request));
+        AuthenticationResponse authenticationResponse =
+                new AuthenticationResponse(authenticationService.authenticate(request));
         return ResponseEntity.ok(authenticationResponse);
     }
 

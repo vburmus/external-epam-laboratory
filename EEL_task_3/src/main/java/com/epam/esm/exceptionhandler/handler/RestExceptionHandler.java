@@ -7,6 +7,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.zalando.problem.Problem;
@@ -17,7 +18,6 @@ import static com.epam.esm.utils.Constants.*;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class RestExceptionHandler {
-
     @ExceptionHandler({NoSuchItemException.class, PageException.class, ObjectNotFoundException.class})
     public ResponseEntity<Problem> handleNotFoundException(RuntimeException ex) {
         Problem problem = buildProblem(Status.NOT_FOUND, NOT_FOUND, ex.getMessage());
@@ -64,6 +64,18 @@ public class RestExceptionHandler {
     public ResponseEntity<Problem> handleWrongInstanceDetectedException(RuntimeException ex) {
         Problem problem = buildProblem(Status.FORBIDDEN, WRONG_AUTHENTICATION_INSTANCE, ex.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(problem);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Problem> handleBadCredentialsException(RuntimeException ex) {
+        Problem problem = buildProblem(Status.UNAUTHORIZED, ex.getMessage(), WRONG_EMAIL_OR_PASSWORD);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(problem);
+    }
+
+    @ExceptionHandler(InvalidFileException.class)
+    public ResponseEntity<Problem> handleInvalidFileException(RuntimeException ex) {
+        Problem problem = buildProblem(Status.UNPROCESSABLE_ENTITY,FILE_HAD_WRONG_FORMAT , ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(problem);
     }
 
     private Problem buildProblem(Status status, String title, String detail) {

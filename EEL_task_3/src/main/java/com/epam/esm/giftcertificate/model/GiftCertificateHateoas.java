@@ -25,19 +25,22 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class GiftCertificateHateoas extends RepresentationModel<GiftCertificateHateoas> {
     private Long id;
     private String name;
-    private String description;
+    private String shortDescription;
+    private String longDescription;
     private BigDecimal price;
-    private Integer duration;
     private List<Tag> tags;
+    private String imageURL;
+    private LocalDateTime durationDate;
     private LocalDateTime createDate;
     private LocalDateTime lastUpdateDate;
 
     public GiftCertificateHateoas(GiftCertificateDTO giftCertificateDTO) {
         this.id = giftCertificateDTO.getId();
         this.name = giftCertificateDTO.getName();
-        this.description = giftCertificateDTO.getDescription();
+        this.shortDescription = giftCertificateDTO.getShortDescription();
+        this.longDescription = giftCertificateDTO.getLongDescription();
         this.price = giftCertificateDTO.getPrice();
-        this.duration = giftCertificateDTO.getDuration();
+        this.durationDate = giftCertificateDTO.getDurationDate();
         this.tags = giftCertificateDTO.getTags();
         this.createDate = giftCertificateDTO.getCreateDate();
         this.lastUpdateDate = giftCertificateDTO.getLastUpdateDate();

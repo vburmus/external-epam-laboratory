@@ -26,8 +26,7 @@ import java.util.Optional;
 import static com.epam.esm.Constants.*;
 import static com.epam.esm.utils.Constants.THERE_IS_NO_GC_WITH_ID;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TagServiceTest {
@@ -49,7 +48,7 @@ class TagServiceTest {
         when(entityToDtoMapper.toTag(tagDTO)).thenReturn(tag);
         when(tagRepositoryMocked.exists(Example.of(tag))).thenReturn(true);
         ObjectAlreadyExistsException thrown = assertThrows(ObjectAlreadyExistsException.class,
-                () -> tagServiceMocked.createTag(tagDTO));
+                () -> tagServiceMocked.createTag(tagDTO,null));
         assertEquals("Tag with name = " + TEST_TAG + " already exists", thrown.getMessage());
 
     }
@@ -61,7 +60,7 @@ class TagServiceTest {
         when(entityToDtoMapper.toTag(tagDTO)).thenReturn(tag);
         when(tagRepositoryMocked.exists(Example.of(tag))).thenReturn(false);
         ObjectIsInvalidException thrown = assertThrows(ObjectIsInvalidException.class,
-                () -> tagServiceMocked.createTag(tagDTO));
+                () -> tagServiceMocked.createTag(tagDTO,null));
         assertEquals("Tag with name = " + null + " is invalid", thrown.getMessage());
 
     }
@@ -75,7 +74,7 @@ class TagServiceTest {
         when(tagRepositoryMocked.exists(Example.of(tag))).thenReturn(false);
         when(tagRepositoryMocked.save(tag)).thenReturn(tag);
         when(entityToDtoMapper.toTagDTO(tag)).thenReturn(tagDTO);
-        assertEquals(tagDTO, tagServiceMocked.createTag(tagDTO));
+        assertEquals(tagDTO, tagServiceMocked.createTag(tagDTO,null));
 
     }
 
@@ -110,7 +109,9 @@ class TagServiceTest {
     void deleteTagSuccess() {
         when(tagRepositoryMocked.existsById(ID1)).thenReturn(true);
         doNothing().when(tagRepositoryMocked).deleteById(ID1);
-        assertTrue(tagServiceMocked.deleteTag(ID1));
+
+        tagServiceMocked.deleteTag(ID1);
+        verify(tagRepositoryMocked).deleteById(ID1);
     }
 
     @Test

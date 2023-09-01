@@ -1,6 +1,5 @@
 package com.epam.esm.user.model;
 
-import com.epam.esm.order.model.Order;
 import com.epam.esm.user.controller.UserHateoasController;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -9,7 +8,6 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Objects;
-import java.util.Set;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -27,7 +25,6 @@ public class UserHateoas extends RepresentationModel<UserHateoas> {
     private String password;
     private Role role;
     private String provider;
-    private Set<Order> orders;
 
     public UserHateoas(UserDTO userDTO) {
         this.id = userDTO.getId();
@@ -35,9 +32,7 @@ public class UserHateoas extends RepresentationModel<UserHateoas> {
         this.surname = userDTO.getSurname();
         this.number = userDTO.getNumber();
         this.email = userDTO.getEmail();
-        this.password = userDTO.getPassword();
         this.role = userDTO.getRole();
-        this.orders = userDTO.getOrders();
         this.provider = userDTO.getProvider();
         Link selfLink = linkTo(methodOn(UserHateoasController.class).getUserById(userDTO.getId())).withSelfRel();
         this.add(selfLink);

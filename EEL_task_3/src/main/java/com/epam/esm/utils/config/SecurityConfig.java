@@ -14,6 +14,7 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -29,6 +30,12 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Collections;
+import java.util.List;
 
 
 @Configuration
@@ -42,15 +49,15 @@ public class SecurityConfig {
     private final CustomOauth2UserService customOauth2UserService;
     private final JwtToUserConverter jwtToUserConverter;
     private final KeyUtils keyUtils;
+    @Value("${allowed.origins}")
+    private String allowedOrigins;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         http
                 .csrf()
                 .disable()
-                .cors()
-                .disable()
+                .cors().and()
                 .authorizeHttpRequests()
                 .requestMatchers(
                         "/",
@@ -62,12 +69,14 @@ public class SecurityConfig {
                         "/webjars/**",
                         "/swagger-ui.html",
                         "/error",
-                        "/refresh-token")
+                        "/refresh-token",
+                        "/actuator/**")
                 .permitAll()
                 .requestMatchers(HttpMethod.GET,
                         "/certificate",
                         "/certificate/*",
-                        "/certificate/**")
+                        "/certificate/**",
+                        "/tag")
                 .permitAll()
                 .requestMatchers(HttpMethod.GET,
                         "/**",
@@ -88,12 +97,10 @@ public class SecurityConfig {
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .oauth2ResourceServer(server -> server.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtToUserConverter)))
-                .oauth2Login(login -> {
-                    login.userInfoEndpoint(info -> info.userService(customOauth2UserService)
-                            .oidcUserService(customOidcUserService));
-                    login.defaultSuccessUrl("/");
-                });
+                .oauth2Login(login -> login
+                        .userInfoEndpoint(info -> info.userService(customOauth2UserService)
+                                .oidcUserService(customOidcUserService)))
+                .oauth2ResourceServer(server -> server.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtToUserConverter)));
         return http.build();
 
     }
@@ -107,7 +114,8 @@ public class SecurityConfig {
     @Bean
     @Primary
     JwtEncoder jwtAccessTokenEncoder() {
-        JWK jwk = new RSAKey.Builder(keyUtils.getAccessTokenPublicKey()).privateKey(keyUtils.getAccessTokenPrivateKey()).build();
+        JWK jwk =
+                new RSAKey.Builder(keyUtils.getAccessTokenPublicKey()).privateKey(keyUtils.getAccessTokenPrivateKey()).build();
         JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwks);
     }
@@ -121,7 +129,8 @@ public class SecurityConfig {
     @Bean
     @Qualifier("jwtRefreshTokenDecoder")
     JwtEncoder jwtRefreshTokenEncoder() {
-        JWK jwk = new RSAKey.Builder(keyUtils.getRefreshTokenPublicKey()).privateKey(keyUtils.getRefreshTokenPrivateKey()).build();
+        JWK jwk =
+                new RSAKey.Builder(keyUtils.getRefreshTokenPublicKey()).privateKey(keyUtils.getRefreshTokenPrivateKey()).build();
         JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwks);
     }
@@ -132,5 +141,17 @@ public class SecurityConfig {
         JwtAuthenticationProvider provider = new JwtAuthenticationProvider(jwtRefreshTokenDecoder());
         provider.setJwtAuthenticationConverter(jwtToUserConverter);
         return provider;
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Collections.singletonList(allowedOrigins));
+        configuration.setAllowedMethods(List.of("*"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setExposedHeaders(List.of("Authorization"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

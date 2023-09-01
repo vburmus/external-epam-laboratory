@@ -2,6 +2,7 @@ package com.epam.esm.order.model;
 
 import com.epam.esm.giftcertificatehasorder.model.GiftCertificateHasOrder;
 import com.epam.esm.user.model.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,9 @@ public class OrderDTO {
     private String description;
     private int isClosed;
     private BigDecimal cost;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime lastUpdateDate;
     private User user;
     private List<GiftCertificateHasOrder> giftCertificateHasOrders;

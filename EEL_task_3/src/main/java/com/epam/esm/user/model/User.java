@@ -35,6 +35,7 @@ public class User implements UserDetails {
     private Role role;
     private String password;
     private String provider;
+    private String imageURL;
     @OneToMany
     @ToString.Exclude
     private transient Set<Order> orders;

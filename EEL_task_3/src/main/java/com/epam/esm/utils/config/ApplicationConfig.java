@@ -2,6 +2,7 @@ package com.epam.esm.utils.config;
 
 import com.epam.esm.user.service.CustomUserDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.CacheManager;
@@ -19,6 +20,7 @@ import org.zalando.problem.jackson.ProblemModule;
 import org.zalando.problem.violations.ConstraintViolationProblemModule;
 
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 import static com.epam.esm.utils.Constants.*;
 
@@ -26,7 +28,6 @@ import static com.epam.esm.utils.Constants.*;
 @RequiredArgsConstructor
 @EnableCaching
 public class ApplicationConfig {
-
     private final CustomUserDetailsService userService;
 
     @Bean
@@ -49,7 +50,7 @@ public class ApplicationConfig {
 
     @Bean
     public Caffeine<Object, Object> caffeineConfig() {
-        return Caffeine.newBuilder();
+        return Caffeine.newBuilder().expireAfterWrite(2, TimeUnit.DAYS);
     }
 
     @Bean
@@ -59,10 +60,12 @@ public class ApplicationConfig {
         cacheManager.setCaffeine(caffeine);
         return cacheManager;
     }
+
     @Bean
     public ObjectMapper objectMapper() {
         return new ObjectMapper().registerModules(
                 new ProblemModule(),
-                new ConstraintViolationProblemModule());
+                new ConstraintViolationProblemModule(),
+                new JavaTimeModule());
     }
 }

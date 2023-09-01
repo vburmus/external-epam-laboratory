@@ -45,7 +45,7 @@ public class GiftCertificateHateoasController {
     }
 
     @GetMapping("/{id}")
-    public RepresentationModel<?> getById(@PathVariable("id") long id) {
+    public RepresentationModel<GiftCertificateHateoas> getById(@PathVariable("id") long id) {
         return new GiftCertificateHateoas(giftCertificateService.getCertificateById(id));
     }
 }

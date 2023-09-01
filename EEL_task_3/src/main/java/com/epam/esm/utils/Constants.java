@@ -1,13 +1,9 @@
 package com.epam.esm.utils;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class Constants {
-    public static final String TAG = "Tag: ";
-    public static final String ORDER = "Order:";
-    public static final String USER = "User:";
-    public static final String RESULT = "Result:";
-    public static final String INFO = "Info:";
-    public static final String OBJECTS = "Objects: ";
-    public static final String GIFT_CERTIFICATE = "Gift certificate: ";
     public static final String DEFAULT_PAGE = "1";
     public static final String DEFAULT_SIZE = "3";
     public static final String NAME = "name";
@@ -87,12 +83,27 @@ public class Constants {
     public static final String INVALID_TOKEN = "Invalid Token";
     public static final String WRONG_AUTHENTICATION_INSTANCE = "Wrong Authentication Instance";
 
-    public static final String GET_MOST_USED_TAG = "select tag.id,tag.name from (select user_id, tag_id, count(*) as tag_count from " +
+    public static final String GET_MOST_USED_TAG = "select tag.id,tag.name,tag.imageurl from (select user_id, tag_id," +
+            " count(*) as tag_count from " +
             "gift_certificate_has_tag " +
             "  join gift_certificate_has_order on gift_certificate_has_order.gift_certificate_id = gift_certificate_has_tag" +
             ".gift_certificate_id " +
             "  join purchase on purchase.id = gift_certificate_has_order.order_id where purchase.user_id = ( select user_id from purchase" +
             "  order by cost desc limit 1 ) group by user_id, tag_id order by tag_count desc limit 1) subquery join tag on tag.id = " +
             "subquery.tag_id;";
+    public static final String GET_GC_BY_TAGS_AND_PART = "SELECT DISTINCT id,name,short_description,long_description," +
+            "price," +
+            "imageurl,duration_date," +
+            "create_date,last_update_date FROM " +
+            "gift_certificate AS gc LEFT JOIN gift_certificate_has_tag AS t ON gc.id= " +
+            "t.gift_certificate_id WHERE tag_id IN :tags and " +
+            "(short_description LIKE %:partial% OR name LIKE  %:partial%)";
 
+    public static final String DEFAULT_PROFILE_IMG = "https://mjc-content.s3.eu-north-1.amazonaws.com/user/default-user.png";
+    public static final String DEFAULT_TAG_IMG = "https://mjc-content.s3.eu-north-1.amazonaws.com/tag/default_tag.jpg";
+    public static final String DEFAULT_CERTIFICATE_IMG = "https://mjc-content.s3.eu-north-1.amazonaws" +
+            ".com/gift-certificate/default_certificate.jpg";
+
+    public static final String FILE_HAD_WRONG_FORMAT = "File had wrong format";
+    public static final String WRONG_EMAIL_OR_PASSWORD = "Wrong email or password";
 }

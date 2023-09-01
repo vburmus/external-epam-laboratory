@@ -23,6 +23,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -90,8 +91,8 @@ class OrderServiceTest {
                 .name(GC_1)
                 .tags(List.of(tag1, tag2))
                 .price(new BigDecimal(5))
-                .description(TEST_DESCRIPTION)
-                .duration(5)
+                .longDescription(TEST_DESCRIPTION)
+                .durationDate(LocalDateTime.MAX)
                 .build();
         User user1 = User.builder()
                 .id(ID1)

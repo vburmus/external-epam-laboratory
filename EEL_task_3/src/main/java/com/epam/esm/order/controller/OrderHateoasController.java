@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import static com.epam.esm.utils.Constants.*;
+import static com.epam.esm.utils.Constants.DEFAULT_PAGE;
+import static com.epam.esm.utils.Constants.DEFAULT_SIZE;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -45,7 +45,7 @@ public class OrderHateoasController {
     }
 
     @GetMapping("/info/{id}")
-    public ResponseEntity<?> getOrdersInfoByID(@PathVariable("id") long id) {
-        return new ResponseEntity<>(Map.of(INFO, orderService.getOrderInfoByID(id)), HttpStatus.OK);
+    public ResponseEntity<String> getOrdersInfoByID(@PathVariable("id") long id) {
+        return new ResponseEntity<>(orderService.getOrderInfoByID(id), HttpStatus.OK);
     }
 }

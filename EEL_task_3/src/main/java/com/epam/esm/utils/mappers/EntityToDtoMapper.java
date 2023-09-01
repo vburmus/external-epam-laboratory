@@ -12,7 +12,6 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface EntityToDtoMapper {
-
     GiftCertificateDTO toGiftCertificateDTO(GiftCertificate giftCertificate);
 
     GiftCertificate toGiftCertificate(GiftCertificateDTO giftCertificateDTO);
