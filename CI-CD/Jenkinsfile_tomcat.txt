@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    git branch: 'sonar_task', url: 'https://github.com/vburmus/External-Lab-Epam'
+                }
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                dir('Task3/EEL_task_3') {
+                    bat 'gradle clean build'
+                }
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                dir('Task3/EEL_task_3') {
+                   bat 'gradle test'
+                }
+            }
+        }
+        
+        stage('Scan') {
+            steps {
+                script {
+                    withSonarQubeEnv(installationName: 'sq1') {
+                        dir('Task3/EEL_task_3') {
+                                bat 'gradle sonar'
+                        }
+                    }
+                } 
+            }
+        }
+        stage('Deploy'){
+            steps{
+                deploy adapters: [tomcat9(credentialsId: 'cc502f72-da7b-438e-9a3a-9b2270caa77c', path: '', url: 'http://localhost:8081/')], contextPath: '/sonar-app', war: '**/EEL_task_3.war'
+            }
+        }
+    }
+    post {
+        success {
+            jacoco(
+                execPattern: '**/build/jacoco/*.exec',
+                classPattern: '**/build/classes/java/main',
+                sourcePattern: '**/src/main'
+            )
+        }
+    }
+}

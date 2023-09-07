@@ -1,0 +1,79 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    git branch: 'sonar_task_2', url: 'https://github.com/vburmus/External-Lab-Epam'
+                }
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                dir('Task3/EEL_task_3') {
+                    bat 'gradle clean build'
+                }
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                dir('Task3/EEL_task_3') {
+                   bat 'gradle test'
+                }
+            }
+        }
+        
+        stage('Scan') {
+            steps {
+                script {
+                    withSonarQubeEnv(installationName: 'sq1') {
+                        dir('Task3/EEL_task_3') {
+                                bat 'gradle sonar'
+                        }
+                    }
+                } 
+            }
+        }
+       
+        
+        stage('Deploy') {
+            steps {
+                dir('Task3/EEL_task_3') {
+                    bat 'docker build -t mjc-sonar:latest .' 
+                    bat 'docker run -d -p 8082:8082 --mount type=bind,source=env_variables mjc-sonar'
+                    script {
+              
+                sleep time: 90, unit: 'SECONDS'
+                
+               
+                def response = bat(script: 'curl -sSf http://localhost:8082/actuator/health', returnStdout: true).trim()
+                
+                if (response.contains('UP')) {
+                   
+                    echo 'Application started successfully'
+                } else {
+                   
+                    error 'Failed to start application'
+                }
+                }
+            }
+        }
+        }
+       
+    }
+
+        
+
+    post {
+        success {
+            jacoco(
+                execPattern: '**/build/jacoco/*.exec',
+                classPattern: '**/build/classes/java/main',
+                sourcePattern: '**/src/main'
+            )
+        }
+    }
+}
